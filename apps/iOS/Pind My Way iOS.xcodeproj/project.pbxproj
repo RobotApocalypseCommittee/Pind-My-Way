@@ -315,7 +315,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -326,7 +326,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		32DCEE7461F584F24F96155D /* [CP] Copy Pods Resources */ = {
@@ -337,7 +337,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-resources.sh",
 				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -348,7 +348,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
