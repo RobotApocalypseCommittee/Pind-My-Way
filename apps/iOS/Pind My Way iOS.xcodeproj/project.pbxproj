@@ -1,0 +1,697 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		297BBFCF2161097B00A3026E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFCE2161097B00A3026E /* AppDelegate.swift */; };
+		297BBFD12161097B00A3026E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFD02161097B00A3026E /* ViewController.swift */; };
+		297BBFD42161097B00A3026E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 297BBFD22161097B00A3026E /* Main.storyboard */; };
+		297BBFD62161097E00A3026E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 297BBFD52161097E00A3026E /* Assets.xcassets */; };
+		297BBFD92161097E00A3026E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 297BBFD72161097E00A3026E /* LaunchScreen.storyboard */; };
+		297BBFE42161097E00A3026E /* Pind_My_Way_MapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFE32161097E00A3026E /* Pind_My_Way_MapTests.swift */; };
+		297BBFEF2161097E00A3026E /* Pind_My_Way_MapUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFEE2161097E00A3026E /* Pind_My_Way_MapUITests.swift */; };
+		297BBFFD216118E900A3026E /* DirectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFFC216118E900A3026E /* DirectionManager.swift */; };
+		297BBFFF21611B8A00A3026E /* Singleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFFE21611B8A00A3026E /* Singleton.swift */; };
+		81CD71EAAFAD8858CD70B456 /* Pods_Pind_My_Way_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E15403167219507B2A6A8364 /* Pods_Pind_My_Way_iOS.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		297BBFE02161097E00A3026E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 297BBFC32161097B00A3026E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 297BBFCA2161097B00A3026E;
+			remoteInfo = "Pind-My-Way-Map";
+		};
+		297BBFEB2161097E00A3026E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 297BBFC32161097B00A3026E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 297BBFCA2161097B00A3026E;
+			remoteInfo = "Pind-My-Way-Map";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		297BBFCB2161097B00A3026E /* Pind My Way iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pind My Way iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		297BBFCE2161097B00A3026E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		297BBFD02161097B00A3026E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		297BBFD32161097B00A3026E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		297BBFD52161097E00A3026E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		297BBFD82161097E00A3026E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		297BBFDA2161097E00A3026E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		297BBFDF2161097E00A3026E /* Pind My Way iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Pind My Way iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		297BBFE32161097E00A3026E /* Pind_My_Way_MapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pind_My_Way_MapTests.swift; sourceTree = "<group>"; };
+		297BBFE52161097E00A3026E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		297BBFEA2161097E00A3026E /* Pind My Way iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Pind My Way iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		297BBFEE2161097E00A3026E /* Pind_My_Way_MapUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pind_My_Way_MapUITests.swift; sourceTree = "<group>"; };
+		297BBFF02161097E00A3026E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		297BBFFC216118E900A3026E /* DirectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionManager.swift; sourceTree = "<group>"; };
+		297BBFFE21611B8A00A3026E /* Singleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Singleton.swift; sourceTree = "<group>"; };
+		98BA2840BCB006D5535F2E2C /* Pods-Pind My Way iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pind My Way iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS.debug.xcconfig"; sourceTree = "<group>"; };
+		BCD620F4FBA825665D82A8BE /* Pods-Pind My Way iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pind My Way iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS.release.xcconfig"; sourceTree = "<group>"; };
+		E15403167219507B2A6A8364 /* Pods_Pind_My_Way_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pind_My_Way_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		297BBFC82161097B00A3026E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81CD71EAAFAD8858CD70B456 /* Pods_Pind_My_Way_iOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		297BBFDC2161097E00A3026E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		297BBFE72161097E00A3026E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		297BBFC22161097B00A3026E = {
+			isa = PBXGroup;
+			children = (
+				297BBFCD2161097B00A3026E /* Pind My Way iOS */,
+				297BBFE22161097E00A3026E /* Pind My Way iOSTests */,
+				297BBFED2161097E00A3026E /* Pind My Way iOSUITests */,
+				297BBFCC2161097B00A3026E /* Products */,
+				C1EB5660DAE52388C30B597F /* Pods */,
+				829B9EE2D76E05E340733560 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		297BBFCC2161097B00A3026E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				297BBFCB2161097B00A3026E /* Pind My Way iOS.app */,
+				297BBFDF2161097E00A3026E /* Pind My Way iOSTests.xctest */,
+				297BBFEA2161097E00A3026E /* Pind My Way iOSUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		297BBFCD2161097B00A3026E /* Pind My Way iOS */ = {
+			isa = PBXGroup;
+			children = (
+				297BBFCE2161097B00A3026E /* AppDelegate.swift */,
+				297BBFFE21611B8A00A3026E /* Singleton.swift */,
+				297BBFD02161097B00A3026E /* ViewController.swift */,
+				297BBFFC216118E900A3026E /* DirectionManager.swift */,
+				297BBFD22161097B00A3026E /* Main.storyboard */,
+				297BBFD52161097E00A3026E /* Assets.xcassets */,
+				297BBFD72161097E00A3026E /* LaunchScreen.storyboard */,
+				297BBFDA2161097E00A3026E /* Info.plist */,
+			);
+			path = "Pind My Way iOS";
+			sourceTree = "<group>";
+		};
+		297BBFE22161097E00A3026E /* Pind My Way iOSTests */ = {
+			isa = PBXGroup;
+			children = (
+				297BBFE32161097E00A3026E /* Pind_My_Way_MapTests.swift */,
+				297BBFE52161097E00A3026E /* Info.plist */,
+			);
+			path = "Pind My Way iOSTests";
+			sourceTree = "<group>";
+		};
+		297BBFED2161097E00A3026E /* Pind My Way iOSUITests */ = {
+			isa = PBXGroup;
+			children = (
+				297BBFEE2161097E00A3026E /* Pind_My_Way_MapUITests.swift */,
+				297BBFF02161097E00A3026E /* Info.plist */,
+			);
+			path = "Pind My Way iOSUITests";
+			sourceTree = "<group>";
+		};
+		829B9EE2D76E05E340733560 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E15403167219507B2A6A8364 /* Pods_Pind_My_Way_iOS.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C1EB5660DAE52388C30B597F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				98BA2840BCB006D5535F2E2C /* Pods-Pind My Way iOS.debug.xcconfig */,
+				BCD620F4FBA825665D82A8BE /* Pods-Pind My Way iOS.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		297BBFCA2161097B00A3026E /* Pind My Way iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 297BBFF32161097E00A3026E /* Build configuration list for PBXNativeTarget "Pind My Way iOS" */;
+			buildPhases = (
+				06F071AEF6EE280FD23131EE /* [CP] Check Pods Manifest.lock */,
+				297BBFC72161097B00A3026E /* Sources */,
+				297BBFC82161097B00A3026E /* Frameworks */,
+				297BBFC92161097B00A3026E /* Resources */,
+				29A55F25F9209AD7D24F45E7 /* [CP] Embed Pods Frameworks */,
+				32DCEE7461F584F24F96155D /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pind My Way iOS";
+			productName = "Pind-My-Way-Map";
+			productReference = 297BBFCB2161097B00A3026E /* Pind My Way iOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		297BBFDE2161097E00A3026E /* Pind My Way iOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 297BBFF62161097E00A3026E /* Build configuration list for PBXNativeTarget "Pind My Way iOSTests" */;
+			buildPhases = (
+				297BBFDB2161097E00A3026E /* Sources */,
+				297BBFDC2161097E00A3026E /* Frameworks */,
+				297BBFDD2161097E00A3026E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				297BBFE12161097E00A3026E /* PBXTargetDependency */,
+			);
+			name = "Pind My Way iOSTests";
+			productName = "Pind-My-Way-MapTests";
+			productReference = 297BBFDF2161097E00A3026E /* Pind My Way iOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		297BBFE92161097E00A3026E /* Pind My Way iOSUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 297BBFF92161097E00A3026E /* Build configuration list for PBXNativeTarget "Pind My Way iOSUITests" */;
+			buildPhases = (
+				297BBFE62161097E00A3026E /* Sources */,
+				297BBFE72161097E00A3026E /* Frameworks */,
+				297BBFE82161097E00A3026E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				297BBFEC2161097E00A3026E /* PBXTargetDependency */,
+			);
+			name = "Pind My Way iOSUITests";
+			productName = "Pind-My-Way-MapUITests";
+			productReference = 297BBFEA2161097E00A3026E /* Pind My Way iOSUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		297BBFC32161097B00A3026E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1000;
+				LastUpgradeCheck = 1000;
+				ORGANIZATIONNAME = "Atto Allas";
+				TargetAttributes = {
+					297BBFCA2161097B00A3026E = {
+						CreatedOnToolsVersion = 10.0;
+					};
+					297BBFDE2161097E00A3026E = {
+						CreatedOnToolsVersion = 10.0;
+						TestTargetID = 297BBFCA2161097B00A3026E;
+					};
+					297BBFE92161097E00A3026E = {
+						CreatedOnToolsVersion = 10.0;
+						TestTargetID = 297BBFCA2161097B00A3026E;
+					};
+				};
+			};
+			buildConfigurationList = 297BBFC62161097B00A3026E /* Build configuration list for PBXProject "Pind My Way iOS" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 297BBFC22161097B00A3026E;
+			productRefGroup = 297BBFCC2161097B00A3026E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				297BBFCA2161097B00A3026E /* Pind My Way iOS */,
+				297BBFDE2161097E00A3026E /* Pind My Way iOSTests */,
+				297BBFE92161097E00A3026E /* Pind My Way iOSUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		297BBFC92161097B00A3026E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				297BBFD92161097E00A3026E /* LaunchScreen.storyboard in Resources */,
+				297BBFD62161097E00A3026E /* Assets.xcassets in Resources */,
+				297BBFD42161097B00A3026E /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		297BBFDD2161097E00A3026E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		297BBFE82161097E00A3026E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		06F071AEF6EE280FD23131EE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Pind My Way iOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		29A55F25F9209AD7D24F45E7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		32DCEE7461F584F24F96155D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-resources.sh",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		297BBFC72161097B00A3026E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				297BBFD12161097B00A3026E /* ViewController.swift in Sources */,
+				297BBFFF21611B8A00A3026E /* Singleton.swift in Sources */,
+				297BBFCF2161097B00A3026E /* AppDelegate.swift in Sources */,
+				297BBFFD216118E900A3026E /* DirectionManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		297BBFDB2161097E00A3026E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				297BBFE42161097E00A3026E /* Pind_My_Way_MapTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		297BBFE62161097E00A3026E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				297BBFEF2161097E00A3026E /* Pind_My_Way_MapUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		297BBFE12161097E00A3026E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 297BBFCA2161097B00A3026E /* Pind My Way iOS */;
+			targetProxy = 297BBFE02161097E00A3026E /* PBXContainerItemProxy */;
+		};
+		297BBFEC2161097E00A3026E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 297BBFCA2161097B00A3026E /* Pind My Way iOS */;
+			targetProxy = 297BBFEB2161097E00A3026E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		297BBFD22161097B00A3026E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				297BBFD32161097B00A3026E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		297BBFD72161097E00A3026E /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				297BBFD82161097E00A3026E /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		297BBFF12161097E00A3026E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		297BBFF22161097E00A3026E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		297BBFF42161097E00A3026E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 98BA2840BCB006D5535F2E2C /* Pods-Pind My Way iOS.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8F276LS8S7;
+				INFOPLIST_FILE = "Pind My Way iOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bekos.Pind-My-Way-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		297BBFF52161097E00A3026E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BCD620F4FBA825665D82A8BE /* Pods-Pind My Way iOS.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8F276LS8S7;
+				INFOPLIST_FILE = "Pind My Way iOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bekos.Pind-My-Way-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		297BBFF72161097E00A3026E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8F276LS8S7;
+				INFOPLIST_FILE = "Pind-My-Way-MapTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bekos.Pind-My-Way-MapTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pind My Way iOS.app/Pind My Way iOS";
+			};
+			name = Debug;
+		};
+		297BBFF82161097E00A3026E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8F276LS8S7;
+				INFOPLIST_FILE = "Pind-My-Way-MapTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bekos.Pind-My-Way-MapTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pind My Way iOS.app/Pind My Way iOS";
+			};
+			name = Release;
+		};
+		297BBFFA2161097E00A3026E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8F276LS8S7;
+				INFOPLIST_FILE = "Pind-My-Way-MapUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bekos.Pind-My-Way-MapUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Pind-My-Way-Map";
+			};
+			name = Debug;
+		};
+		297BBFFB2161097E00A3026E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8F276LS8S7;
+				INFOPLIST_FILE = "Pind-My-Way-MapUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bekos.Pind-My-Way-MapUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Pind-My-Way-Map";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		297BBFC62161097B00A3026E /* Build configuration list for PBXProject "Pind My Way iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				297BBFF12161097E00A3026E /* Debug */,
+				297BBFF22161097E00A3026E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		297BBFF32161097E00A3026E /* Build configuration list for PBXNativeTarget "Pind My Way iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				297BBFF42161097E00A3026E /* Debug */,
+				297BBFF52161097E00A3026E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		297BBFF62161097E00A3026E /* Build configuration list for PBXNativeTarget "Pind My Way iOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				297BBFF72161097E00A3026E /* Debug */,
+				297BBFF82161097E00A3026E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		297BBFF92161097E00A3026E /* Build configuration list for PBXNativeTarget "Pind My Way iOSUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				297BBFFA2161097E00A3026E /* Debug */,
+				297BBFFB2161097E00A3026E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 297BBFC32161097B00A3026E /* Project object */;
+}
