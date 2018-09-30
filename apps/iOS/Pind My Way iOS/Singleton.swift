@@ -8,4 +8,5 @@
 
 import Foundation
 
+#error("Enter the real Google Maps API Key")
 let apiKey = "AIzaSyCZRc9lbMIutSDa7_tQwlU8xS09eBl_As8"
