@@ -4,21 +4,20 @@ PODS:
   - GoogleMaps/Base (2.7.0)
   - GoogleMaps/Maps (2.7.0):
     - GoogleMaps/Base
+  - GooglePlaces (2.7.0):
+    - GoogleMaps/Base (= 2.7.0)
   - SwiftyJSON (4.2.0)
 
 DEPENDENCIES:
   - GoogleMaps
+  - GooglePlaces
   - SwiftyJSON (~> 4.0)
-
-SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
-    - GoogleMaps
-    - SwiftyJSON
 
 SPEC CHECKSUMS:
   GoogleMaps: f79af95cb24d869457b1f961c93d3ce8b2f3b848
+  GooglePlaces: 3d06e6c99654545b4738ce49648745779c25f2ef
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
 
-PODFILE CHECKSUM: 6ecfbb81de7a0d476dfa495a0a0e2755e2580a1e
+PODFILE CHECKSUM: a84f65f1c50a3af33856ac391b2bcd6441443a88
 
-COCOAPODS: 1.6.0.beta.1
+COCOAPODS: 1.4.0
