@@ -7,6 +7,13 @@ target 'Pind My Way iOS' do
 
   # Pods for Pind-My-Way-Map
   pod "GoogleMaps"
+  pod "GooglePlaces"
   pod 'SwiftyJSON', '~> 4.0'
+  pod 'Polyline', '~> 4.0'
 
+end
+
+post_install do | installer |
+    require 'fileutils'
+    FileUtils.cp_r('Pods/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-acknowledgements.plist', 'Pind My Way iOS/Settings.bundle/Acknowledgements.plist', :remove_destination => true)
 end

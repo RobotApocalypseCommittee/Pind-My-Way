@@ -12,7 +12,10 @@ import SwiftyJSON
 
 let baseURLComponents = URLComponents(string: "https://maps.googleapis.com/maps/api/directions/json")!
 
-class DirectionManager {
+class Utils {
+    
+    // In meters
+    static let earthRadius = 6371000.0
     
     // This function should be called asynchronously
     static func getDirections(from start: CLLocationCoordinate2D, to end: CLLocationCoordinate2D, completion: @escaping (JSON?)->()) {
@@ -45,4 +48,23 @@ class DirectionManager {
         
         task.resume()
     }
+    
+    static func getDistance(between coord1: CLLocationCoordinate2D, and coord2: CLLocationCoordinate2D) -> Double {
+        let lat1 = coord1.latitude.degreesToRadians
+        let lat2 = coord2.latitude.degreesToRadians
+        
+        let deltaLat = (coord2.latitude-coord1.latitude).degreesToRadians
+        let deltaLon = (coord2.longitude-coord1.longitude).degreesToRadians
+        
+        let a = sin(deltaLat/2.0) * sin(deltaLat/2.0) + cos(lat1) * cos(lat2) * sin(deltaLon/2.0) * sin(deltaLon/2.0)
+        let c = 2 * atan2(sqrt(a), sqrt(1-a))
+        
+        return earthRadius * c
+    }
+}
+
+// Makes it easier to do radians
+extension FloatingPoint {
+    var degreesToRadians: Self { return self * .pi / 180 }
+    var radiansToDegrees: Self { return self * 180 / .pi }
 }
