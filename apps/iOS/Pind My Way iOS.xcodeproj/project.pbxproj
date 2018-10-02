@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		294F6FB52162C5CE00A1A402 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 294F6FB42162C5CE00A1A402 /* Settings.bundle */; };
 		297BBFCF2161097B00A3026E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFCE2161097B00A3026E /* AppDelegate.swift */; };
 		297BBFD12161097B00A3026E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFD02161097B00A3026E /* ViewController.swift */; };
 		297BBFD42161097B00A3026E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 297BBFD22161097B00A3026E /* Main.storyboard */; };
@@ -14,7 +15,7 @@
 		297BBFD92161097E00A3026E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 297BBFD72161097E00A3026E /* LaunchScreen.storyboard */; };
 		297BBFE42161097E00A3026E /* Pind_My_Way_MapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFE32161097E00A3026E /* Pind_My_Way_MapTests.swift */; };
 		297BBFEF2161097E00A3026E /* Pind_My_Way_MapUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFEE2161097E00A3026E /* Pind_My_Way_MapUITests.swift */; };
-		297BBFFD216118E900A3026E /* DirectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFFC216118E900A3026E /* DirectionManager.swift */; };
+		297BBFFD216118E900A3026E /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFFC216118E900A3026E /* Utils.swift */; };
 		297BBFFF21611B8A00A3026E /* Singleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFFE21611B8A00A3026E /* Singleton.swift */; };
 		81CD71EAAFAD8858CD70B456 /* Pods_Pind_My_Way_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E15403167219507B2A6A8364 /* Pods_Pind_My_Way_iOS.framework */; };
 /* End PBXBuildFile section */
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		294F6FB42162C5CE00A1A402 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		297BBFCB2161097B00A3026E /* Pind My Way iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pind My Way iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		297BBFCE2161097B00A3026E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		297BBFD02161097B00A3026E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -50,7 +52,7 @@
 		297BBFEA2161097E00A3026E /* Pind My Way iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Pind My Way iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		297BBFEE2161097E00A3026E /* Pind_My_Way_MapUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pind_My_Way_MapUITests.swift; sourceTree = "<group>"; };
 		297BBFF02161097E00A3026E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		297BBFFC216118E900A3026E /* DirectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionManager.swift; sourceTree = "<group>"; };
+		297BBFFC216118E900A3026E /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		297BBFFE21611B8A00A3026E /* Singleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Singleton.swift; sourceTree = "<group>"; };
 		98BA2840BCB006D5535F2E2C /* Pods-Pind My Way iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pind My Way iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		BCD620F4FBA825665D82A8BE /* Pods-Pind My Way iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pind My Way iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS.release.xcconfig"; sourceTree = "<group>"; };
@@ -111,7 +113,8 @@
 				297BBFCE2161097B00A3026E /* AppDelegate.swift */,
 				297BBFFE21611B8A00A3026E /* Singleton.swift */,
 				297BBFD02161097B00A3026E /* ViewController.swift */,
-				297BBFFC216118E900A3026E /* DirectionManager.swift */,
+				294F6FB42162C5CE00A1A402 /* Settings.bundle */,
+				297BBFFC216118E900A3026E /* Utils.swift */,
 				297BBFD22161097B00A3026E /* Main.storyboard */,
 				297BBFD52161097E00A3026E /* Assets.xcassets */,
 				297BBFD72161097E00A3026E /* LaunchScreen.storyboard */,
@@ -262,6 +265,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				294F6FB52162C5CE00A1A402 /* Settings.bundle in Resources */,
 				297BBFD92161097E00A3026E /* LaunchScreen.storyboard in Resources */,
 				297BBFD62161097E00A3026E /* Assets.xcassets in Resources */,
 				297BBFD42161097B00A3026E /* Main.storyboard in Resources */,
@@ -316,12 +320,14 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Polyline/Polyline.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Polyline.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -363,7 +369,7 @@
 				297BBFD12161097B00A3026E /* ViewController.swift in Sources */,
 				297BBFFF21611B8A00A3026E /* Singleton.swift in Sources */,
 				297BBFCF2161097B00A3026E /* AppDelegate.swift in Sources */,
-				297BBFFD216118E900A3026E /* DirectionManager.swift in Sources */,
+				297BBFFD216118E900A3026E /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -549,7 +555,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bekos.Pind-My-Way-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -568,7 +574,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bekos.Pind-My-Way-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
