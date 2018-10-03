@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2919A7D421655FBE00828104 /* Bluetooth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2919A7D321655FBE00828104 /* Bluetooth.swift */; };
 		294F6FB52162C5CE00A1A402 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 294F6FB42162C5CE00A1A402 /* Settings.bundle */; };
 		297BBFCF2161097B00A3026E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFCE2161097B00A3026E /* AppDelegate.swift */; };
 		297BBFD12161097B00A3026E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFD02161097B00A3026E /* ViewController.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2919A7D321655FBE00828104 /* Bluetooth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bluetooth.swift; sourceTree = "<group>"; };
 		294F6FB42162C5CE00A1A402 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		297BBFCB2161097B00A3026E /* Pind My Way iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pind My Way iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		297BBFCE2161097B00A3026E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 			children = (
 				297BBFCE2161097B00A3026E /* AppDelegate.swift */,
 				297BBFFE21611B8A00A3026E /* Singleton.swift */,
+				2919A7D321655FBE00828104 /* Bluetooth.swift */,
 				297BBFD02161097B00A3026E /* ViewController.swift */,
 				294F6FB42162C5CE00A1A402 /* Settings.bundle */,
 				297BBFFC216118E900A3026E /* Utils.swift */,
@@ -367,6 +370,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				297BBFD12161097B00A3026E /* ViewController.swift in Sources */,
+				2919A7D421655FBE00828104 /* Bluetooth.swift in Sources */,
 				297BBFFF21611B8A00A3026E /* Singleton.swift in Sources */,
 				297BBFCF2161097B00A3026E /* AppDelegate.swift in Sources */,
 				297BBFFD216118E900A3026E /* Utils.swift in Sources */,

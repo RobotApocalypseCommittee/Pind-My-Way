@@ -18,6 +18,8 @@ let spaceOnBottom: CGFloat = -(UIApplication.shared.delegate as! AppDelegate).wi
 
 class ViewController: UIViewController {
     
+    let bluetoothManager: BluetoothManager = BluetoothManager()
+    
     var locationManager = CLLocationManager()
     var currentLocation: CLLocation? = nil
     var mapView: GMSMapView!
@@ -229,7 +231,6 @@ extension ViewController: CLLocationManagerDelegate {
     // Handle incoming location events.
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location: CLLocation = locations.last!
-        print("Location: \(location)")
         
         let camera = GMSCameraPosition.camera(withLatitude: location.coordinate.latitude,
                                               longitude: location.coordinate.longitude,
