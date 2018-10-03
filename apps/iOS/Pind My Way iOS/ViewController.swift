@@ -73,7 +73,7 @@ class ViewController: UIViewController {
         
         definesPresentationContext = true
         
-        getPollution(location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
+        Utils.getPollution(location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
     }
     
 
@@ -127,15 +127,34 @@ class ViewController: UIViewController {
     // Takes a route, gets the overview polyline, decodes it and draws it
     func drawRoute(route: JSON, asSelected selected: Bool) {
         var points: Array<CLLocationCoordinate2D> = []
+        var pointsLastIndex = -1
+        
+        var nonDrawnPointsIncluded: Array<CLLocationCoordinate2D> = []
 
         for leg in route["legs"].array! {
             for step in leg["steps"].array! {
                 let stepPolyline = Polyline(encodedPolyline: step["polyline"]["points"].string!)
-                points.append(contentsOf: stepPolyline.coordinates!)
+                
+                for pointCoordinate in stepPolyline.coordinates! {
+                    points.append(pointCoordinate)
+                    nonDrawnPointsIncluded.append(pointCoordinate)
+                    pointsLastIndex += 1
+                    
+                    if pointsLastIndex != 0 && Utils.getDistance(between: pointCoordinate, and: points[pointsLastIndex-1]) > 10 {
+                        let pointBefore = points[pointsLastIndex-1]
+                        let fullDistanceBetween = Utils.getDistance(between: pointCoordinate, and: points[pointsLastIndex-1])
+                        
+                        for distance in stride(from: 10, to: fullDistanceBetween, by: 10) {
+                            let newPoint = CLLocationCoordinate2D(latitude: pointBefore.latitude+((pointCoordinate.latitude-pointBefore.latitude)*(distance/fullDistanceBetween)), longitude: pointBefore.longitude+((pointCoordinate.longitude-pointBefore.longitude)*(distance/fullDistanceBetween)))
+                            nonDrawnPointsIncluded.append(newPoint)
+                        }
+                    }
+                }
+
             }
         }
 
-        routeCoordinates.append(points)
+        routeCoordinates.append(nonDrawnPointsIncluded)
         
         let overallPolyline: String = encodeCoordinates(points)
         let path = GMSPath(fromEncodedPath: overallPolyline)
@@ -154,32 +173,6 @@ class ViewController: UIViewController {
         
         routePolylines.append([polyline, underPolyline])
     }
-    
-    func getPollution(location: CLLocationCoordinate2D) {
-        #warning("Put the real API key here")
-        let url = URL(string: "https://api.openweathermap.org/pollution/v1/co/" + String(describing: location.latitude) + "," + String(describing: location.longitude) + "/current.json?appid=" + "")
-        
-        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
-            
-            if let data = data {
-                do {
-                    let json = try JSON(data: data)
-                    print(json["data"][Int(json["data"].count/5)]["value"].float)
-                    
-                    //TODO Figure out how to get ppm and then determine how bad it is, but i need to sleep so it will happen tomorrow
-                    
-                    
-                }  catch let error as NSError {
-                    print(error.localizedDescription)
-                }
-            } else if let error = error {
-                print(error.localizedDescription)
-            }
-        }
-        
-        task.resume()
-    }
-    
     
 }
 

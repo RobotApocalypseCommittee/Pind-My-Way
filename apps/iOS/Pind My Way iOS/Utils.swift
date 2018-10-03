@@ -61,6 +61,31 @@ class Utils {
         
         return earthRadius * c
     }
+    
+    static func getPollution(location: CLLocationCoordinate2D) {
+        #warning("Put the real API key here")
+        let url = URL(string: "https://api.openweathermap.org/pollution/v1/co/" + String(describing: location.latitude) + "," + String(describing: location.longitude) + "/current.json?appid=" + pollutionApiKey)
+        
+        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
+            
+            if let data = data {
+                do {
+                    let json = try JSON(data: data)
+                    print(json["data"][Int(json["data"].count/5)]["value"].float)
+                    
+                    //TODO Figure out how to get ppm and then determine how bad it is, but i need to sleep so it will happen tomorrow
+                    
+                    
+                }  catch let error as NSError {
+                    print(error.localizedDescription)
+                }
+            } else if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+        
+        task.resume()
+    }
 }
 
 // Makes it easier to do radians
