@@ -64,17 +64,18 @@ class Utils {
     
     static func getPollution(location: CLLocationCoordinate2D) {
         #warning("Put the real API key here")
-        let url = URL(string: "https://api.openweathermap.org/pollution/v1/co/" + String(describing: location.latitude) + "," + String(describing: location.longitude) + "/current.json?appid=" + pollutionApiKey)
+        let pollutionAPIKey = "lol"
+        let url = URL(string: "https://api.openweathermap.org/pollution/v1/co/" + String(describing: location.latitude) + "," + String(describing: location.longitude) + "/current.json?appid=" + pollutionAPIKey)
         
         let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
-            
             if let data = data {
                 do {
                     let json = try JSON(data: data)
-                    print(json["data"][Int(json["data"].count/5)]["value"].float)
                     
-                    //TODO Figure out how to get ppm and then determine how bad it is, but i need to sleep so it will happen tomorrow
-                    
+                    // Multiply by molar weight of air and of CO and by 1000000 because why not they're all magic numbers anyway tbh - i think this is right, it seems rightish so i mean
+                    let groundReading : Float = json["data"][0]["value"].float! * 1000000 * 28.97 * 28.01
+                    print("CO")
+                    print(groundReading)
                     
                 }  catch let error as NSError {
                     print(error.localizedDescription)
@@ -83,8 +84,8 @@ class Utils {
                 print(error.localizedDescription)
             }
         }
-        
         task.resume()
+        
     }
 }
 
