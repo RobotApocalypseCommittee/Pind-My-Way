@@ -72,6 +72,8 @@ class ViewController: UIViewController {
         addressSearchController?.searchBar.placeholder = "Enter a location"
         
         definesPresentationContext = true
+        
+        Utils.getPollution(location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
     }
     
 
@@ -125,15 +127,34 @@ class ViewController: UIViewController {
     // Takes a route, gets the overview polyline, decodes it and draws it
     func drawRoute(route: JSON, asSelected selected: Bool) {
         var points: Array<CLLocationCoordinate2D> = []
+        var pointsLastIndex = -1
+        
+        var nonDrawnPointsIncluded: Array<CLLocationCoordinate2D> = []
 
         for leg in route["legs"].array! {
             for step in leg["steps"].array! {
                 let stepPolyline = Polyline(encodedPolyline: step["polyline"]["points"].string!)
-                points.append(contentsOf: stepPolyline.coordinates!)
+                
+                for pointCoordinate in stepPolyline.coordinates! {
+                    points.append(pointCoordinate)
+                    nonDrawnPointsIncluded.append(pointCoordinate)
+                    pointsLastIndex += 1
+                    
+                    if pointsLastIndex != 0 && Utils.getDistance(between: pointCoordinate, and: points[pointsLastIndex-1]) > 10 {
+                        let pointBefore = points[pointsLastIndex-1]
+                        let fullDistanceBetween = Utils.getDistance(between: pointCoordinate, and: points[pointsLastIndex-1])
+                        
+                        for distance in stride(from: 10, to: fullDistanceBetween, by: 10) {
+                            let newPoint = CLLocationCoordinate2D(latitude: pointBefore.latitude+((pointCoordinate.latitude-pointBefore.latitude)*(distance/fullDistanceBetween)), longitude: pointBefore.longitude+((pointCoordinate.longitude-pointBefore.longitude)*(distance/fullDistanceBetween)))
+                            nonDrawnPointsIncluded.append(newPoint)
+                        }
+                    }
+                }
+
             }
         }
 
-        routeCoordinates.append(points)
+        routeCoordinates.append(nonDrawnPointsIncluded)
         
         let overallPolyline: String = encodeCoordinates(points)
         let path = GMSPath(fromEncodedPath: overallPolyline)
@@ -152,6 +173,7 @@ class ViewController: UIViewController {
         
         routePolylines.append([polyline, underPolyline])
     }
+    
 }
 
 
