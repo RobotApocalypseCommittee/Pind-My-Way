@@ -9,12 +9,16 @@
 import Foundation
 import CoreBluetooth
 
+let piServiceUuid = CBUUID(string: "9540")
+let writeCharacteristicUuid = CBUUID(string: "3bf0")
+
 class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     var centralManager: CBCentralManager? = nil
     
     var raspberryPi: CBPeripheral? = nil
     var dataService: CBService? = nil
+    var characteristicsDiscovered = false
     
     override init() {
         super.init()
@@ -26,14 +30,16 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
         case .poweredOn:
-            print("Powered on")
-            central.scanForPeripherals(withServices: [CBUUID(string: "123a")], options: nil)
+            print("Info: Bluetooth: Powered on")
+            central.scanForPeripherals(withServices: [piServiceUuid], options: nil)
         default:
             return
         }
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        print("Info: Bluetooth: Peripheral found")
+        
         raspberryPi = peripheral
         raspberryPi!.delegate = self
         
@@ -44,31 +50,73 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         if peripheral == raspberryPi! {
-            raspberryPi!.discoverServices([CBUUID(string: "123a")])
+            print("Info: Bluetooth: Peripheral connected")
+            raspberryPi!.discoverServices([piServiceUuid])
         } else {
-            print("An unknown peripheral connected!")
+            print("Warning: Bluetooth: An unknown peripheral connected!")
         }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         if error == nil {
+            print("Info: Bluetooth: Service found")
             dataService = peripheral.services![0]
-            raspberryPi!.discoverCharacteristics([CBUUID(string: "1135")], for: dataService!)
+            raspberryPi!.discoverCharacteristics([writeCharacteristicUuid], for: dataService!)
         } else {
-            print(error!)
+            print("Error: Bluetooth: \(error!)")
         }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         if error == nil {
             if service == dataService! {
-                var number = 66
-                raspberryPi!.writeValue(Data(bytes: &number, count: 1), for: dataService!.characteristics![0], type: .withResponse)
+                print("Info: Bluetooth: Characteristics discovered")
+                
+                var number = 0xbabe
+                print("Info: Bluetooth: Max packet length: \(raspberryPi!.maximumWriteValueLength(for: .withResponse))")
+                
+                let data: Data = Data(Data(bytes: &number, count: 2).reversed())
+                var allData: Data = Data()
+                
+                // Test to see if sending 500 bytes works - it does
+                for _ in 1...8 {
+                    allData.append(contentsOf: data)
+                }
+                
+                
+                // The Data constructor (at least in this instance), combined with the pi at normal settings, produces a LITTLE ENDIAN
+                // output from an int.
+                // If we reverse it and then feed that to the Data constructor, it becomes BIG ENDIAN,
+                // Or optionally use CFSwap<Whatever>HostToBig(arg:)
+                raspberryPi!.writeValue(allData, for: dataService!.characteristics![0], type: .withResponse)
+                
+                sleep(10)
+                
+                characteristicsDiscovered = true
             } else {
-                print("A service was discovered that was not the data service!")
+                print("Warning: Bluetooth: A service was discovered that was not the data service!")
             }
         } else {
-            print(error!)
+            print("Error: Bluetooth: \(error!)")
         }
     }
+    
+    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor descriptor: CBCharacteristic, error: Error?) {
+        if let error = error {
+            print("Error: Bluetooth: \(error)")
+        } else {
+            print("Info: Bluetooth: Value written")
+        }
+    }
+    
+    /*
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+        print(error)
+        print("Value read")
+        
+        characteristic.value!.withUnsafeBytes { characteristicBytes in
+            print(Array(UnsafeBufferPointer(start: UnsafePointer<UInt16>(characteristicBytes), count: 8)).map { String(CFSwapInt16BigToHost($0), radix: 16) })
+        }
+    }
+    */
 }

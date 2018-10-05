@@ -34,11 +34,12 @@ class ViewController: UIViewController {
     var routePolylines: Array<Array<GMSPolyline>> = []
     var routeCoordinates: Array<Array<CLLocationCoordinate2D>> = []
 
-    @IBOutlet weak var addressBar: UISearchBar!
-
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        // This is the same color as the search bar
+        self.view.backgroundColor = UIColor(displayP3Red: 199/255, green: 198/255, blue: 204/255, alpha: 1)
         
         locationManager = CLLocationManager()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -49,13 +50,13 @@ class ViewController: UIViewController {
         
         let window = (UIApplication.shared.delegate as! AppDelegate).window!
         
-        // Magic 5.0 is magic
         let camera = GMSCameraPosition.camera(withLatitude: 0.0, longitude: 0.0, zoom: zoomLevel)
-        self.mapView = GMSMapView.map(withFrame: CGRect(x: self.view.bounds.minX, y: window.safeAreaInsets.top+spaceOnTop+5.0, width: self.view.bounds.width, height: self.view.bounds.height-(spaceOnTop+spaceOnBottom+(window.safeAreaInsets.bottom+window.safeAreaInsets.top))), camera: camera)
+        
+        self.mapView = GMSMapView.map(withFrame: CGRect(x: self.view.bounds.minX, y: window.safeAreaInsets.top+spaceOnTop, width: self.view.bounds.width, height: self.view.bounds.height-(spaceOnTop+spaceOnBottom+(window.safeAreaInsets.bottom+window.safeAreaInsets.top))), camera: camera)
         
         self.view.addSubview(mapView)
         
-        mapView.settings.myLocationButton = true
+        mapView.settings.myLocationButton = false
         mapView.isMyLocationEnabled = true
         mapView.delegate = self
         
@@ -68,15 +69,24 @@ class ViewController: UIViewController {
         let searchView = UIView(frame: CGRect(x: 0, y: window.safeAreaInsets.top, width: self.view.bounds.width, height: spaceOnTop))
         
         searchView.addSubview((addressSearchController?.searchBar)!)
+        
         self.view.addSubview(searchView)
+
         addressSearchController?.searchBar.sizeToFit()
-        addressSearchController?.searchBar.isTranslucent = false
         addressSearchController?.searchBar.placeholder = "Enter a location"
         
         definesPresentationContext = true
         
-        Utils.getPollution(location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
+        Utils.getPollution(location: CLLocationCoordinate2D(latitude: 51.1, longitude: -0.1))
     }
+    
+    // Proof of concept for resizing the search bar (for the menu icon soon to come)
+    override func viewDidLayoutSubviews() {
+        var addressSearchBarFrame = addressSearchController?.searchBar.frame
+        addressSearchBarFrame?.size.height = spaceOnTop // Either this or the magic 5.0 is needed
+        addressSearchController?.searchBar.frame = addressSearchBarFrame!
+    }
+    
     
 
     // Gets directions and draws them on the map
@@ -113,8 +123,27 @@ class ViewController: UIViewController {
                     northEastCoordinates.longitude = max(routes[i]["bounds"]["northeast"]["lng"].double!, northEastCoordinates.longitude)
                 }
                 
+                // These two sets make sure the current location (start point) and end point are in the bounds
+                if let location = self.currentLocation {
+                    southWestCoordinates.latitude = min(location.coordinate.latitude, southWestCoordinates.latitude)
+                    southWestCoordinates.longitude = min(location.coordinate.longitude, southWestCoordinates.longitude)
+                    northEastCoordinates.latitude = max(location.coordinate.latitude, northEastCoordinates.latitude)
+                    northEastCoordinates.longitude = max(location.coordinate.longitude, northEastCoordinates.longitude)
+                }
+                
+                southWestCoordinates.latitude = min(endCoordinates.latitude, southWestCoordinates.latitude)
+                southWestCoordinates.longitude = min(endCoordinates.longitude, southWestCoordinates.longitude)
+                northEastCoordinates.latitude = max(endCoordinates.latitude, northEastCoordinates.latitude)
+                northEastCoordinates.longitude = max(endCoordinates.longitude, northEastCoordinates.longitude)
+                
                 DispatchQueue.main.async {
-                    let update = GMSCameraUpdate.fit(GMSCoordinateBounds(coordinate: southWestCoordinates, coordinate: northEastCoordinates), with: UIEdgeInsets(top: 75.0, left: 15.0, bottom: 15.0, right: 15.0))
+                    let update: GMSCameraUpdate
+                    if UIDevice.current.userInterfaceIdiom == .phone {
+                        update = GMSCameraUpdate.fit(GMSCoordinateBounds(coordinate: southWestCoordinates, coordinate: northEastCoordinates), with: UIEdgeInsets(top: 65.0, left: 15.0, bottom: 15.0, right: 15.0))
+                    } else {
+                        update = GMSCameraUpdate.fit(GMSCoordinateBounds(coordinate: southWestCoordinates, coordinate: northEastCoordinates), with: UIEdgeInsets(top: 45.0, left: 25.0, bottom: 25.0, right: 25.0))
+                    }
+                    
                     self.mapView.animate(with: update)
                     
                     // I do these as two seperate things so the resize happens first of all
@@ -183,7 +212,7 @@ extension ViewController: GMSMapViewDelegate {
     // Called when user touches to place a marker
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         if routePolylines.count == 0 {
-            print("Marker placed at \(coordinate.latitude), \(coordinate.longitude)")
+            print("Info: Map: Marker placed at \(coordinate.latitude), \(coordinate.longitude)")
             placeMarker(mapView, at: coordinate)
             getDirections(endCoordinates: coordinate)
         } else {
@@ -211,7 +240,7 @@ extension ViewController: GMSMapViewDelegate {
                     underPolyline.zIndex = selected ? 99 : 1
                 }
             } else {
-                print("Marker placed at \(coordinate.latitude), \(coordinate.longitude)")
+                print("Info: Map: Marker placed at \(coordinate.latitude), \(coordinate.longitude)")
                 placeMarker(mapView, at: coordinate)
                 getDirections(endCoordinates: coordinate)
             }
@@ -252,14 +281,14 @@ extension ViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .restricted:
-            print("Location access was restricted.")
+            print("Warning: Location: Location access was restricted.")
         case .denied:
-            print("User denied access to location.")
+            print("Warning: Location: User denied access to location.")
         case .notDetermined:
-            print("Location status not determined.")
+            print("Warning: Location: Location status not determined.")
         case .authorizedAlways: fallthrough
         case .authorizedWhenInUse:
-            print("Location status is OK.")
+            print("Info: Location: Location status is OK.")
         }
     }
     
@@ -267,14 +296,12 @@ extension ViewController: CLLocationManagerDelegate {
     // Handle location manager errors.
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         locationManager.stopUpdatingLocation()
-        print("Error: \(error)")
+        print("Error: Location: \(error)")
     }
 }
 
 extension ViewController: GMSAutocompleteResultsViewControllerDelegate {
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didAutocompleteWith place: GMSPlace) {
-        print(place)
-        
         addressSearchController?.isActive = false
         
         placeMarker(mapView, at: place.coordinate)
@@ -283,7 +310,7 @@ extension ViewController: GMSAutocompleteResultsViewControllerDelegate {
     }
     
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didFailAutocompleteWithError error: Error) {
-        print("Error: ", error.localizedDescription)
+        print("Error: Autocomplete: \(error.localizedDescription)")
     }
     
     func didRequestAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {

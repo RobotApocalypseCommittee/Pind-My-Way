@@ -35,14 +35,14 @@ class Utils {
         let task = URLSession.shared.dataTask(with: request) {
             (data, response, error) in
             guard let _:NSData = data as NSData?, let _:URLResponse = response, error == nil else {
-                print("error in request")
+                print("Error: Directions: \(error!)")
                 return
             }
             do {
                 let directionsJson = try JSON.init(data: data!)
                 completion(directionsJson)
-            } catch {
-                print("Error with JSON")
+            } catch let error {
+                print("Error: Directions: \(error.localizedDescription))")
             }
         }
         
@@ -63,21 +63,25 @@ class Utils {
     }
     
     static func getPollution(location: CLLocationCoordinate2D) {
-        #warning("Put the real API key here")
-        let pollutionAPIKey = "lol"
-        let url = URL(string: "https://api.openweathermap.org/pollution/v1/co/" + String(describing: location.latitude) + "," + String(describing: location.longitude) + "/current.json?appid=" + pollutionAPIKey)
+        
+        //return
+
+        let url = URL(string: "https://api.openweathermap.org/pollution/v1/co/\(location.latitude),\(location.longitude)/current.json?appid=\(pollutionApiKey)")
         
         let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
             if let data = data {
                 do {
                     let json = try JSON(data: data)
-                    
+                    print(json)
                     // Multiply by molar weight of air and of CO and by 1000000 because why not they're all magic numbers anyway tbh - i think this is right, it seems rightish so i mean
-                    let groundReading : Float = json["data"][0]["value"].float! * 1000000 * 28.97 * 28.01
-                    print("CO")
-                    print(groundReading)
+                    if let mixingRatioReading = json["data"][0]["value"].float {
+                        let groundReading : Float = mixingRatioReading * 1000000 * 28.97 * 28.01
+                        print("Info: Pollution: CO = \(groundReading)")
+                    } else {
+                        print("Warning: Pollution data incorrect")
+                    }
                     
-                }  catch let error as NSError {
+                }  catch let error {
                     print(error.localizedDescription)
                 }
             } else if let error = error {
