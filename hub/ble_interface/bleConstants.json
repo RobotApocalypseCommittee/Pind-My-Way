@@ -1,7 +1,14 @@
 {
   "deviceName": "PIMW-1",
-
-  "primaryService": "9540",
-  "versionCharacteristic": "d0668495159f405ecebe4014a716de2e1",
-  "routeUploadCharacteristic": "3bf0"
+  "characteristics": {
+    "version": {
+      "uuid": "d0668495159f405ecebe4014a716de2e1",
+      "description": "Version of PIMW Software"
+    },
+    "routeUpload": {
+      "uuid": "3bf0",
+      "description": "Recieves the route description"
+    }
+  },
+  "primaryService": "9540"
 }

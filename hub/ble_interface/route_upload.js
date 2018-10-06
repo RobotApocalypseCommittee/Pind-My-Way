@@ -1,8 +1,9 @@
 const bleno = require("bleno")
-const bleConstants = require("./bleConstants.json")
+
+const {characteristics:{routeUpload}} = require("./bleConstants.json")
 
 let route_upload_characteristic = new bleno.Characteristic({
-  uuid: bleConstants.routeUploadCharacteristic, // or 'fff1' for 16-bit
+  uuid: routeUpload.uuid, // or 'fff1' for 16-bit
   properties: [ "write" ], // can be a combination of 'read', 'write', 'writeWithoutResponse', 'notify', 'indicate'
   onWriteRequest: function(data, offset, withoutResponse, callback) {
     console.log("Write Request")
@@ -10,7 +11,13 @@ let route_upload_characteristic = new bleno.Characteristic({
     console.log("Offset: ", offset)
     console.log("WithoutResponse: ", withoutResponse)
     callback(bleno.Characteristic.RESULT_SUCCESS)
-  }
+  },
+  descriptors: [
+    new bleno.Descriptor({
+      uuid: "2901",
+      value: routeUpload.description
+    })
+  ]
 
 })
 

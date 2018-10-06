@@ -47,8 +47,8 @@ class Route {
       let cbuf = buf.slice(offset, offset+17)
       // Read a byte at position 0
       let command = cbuf.readUInt8(0)
-      let lat = cbuf.readDoubleBE(1)
-      let lon = cbuf.readDoubleBE(9)
+      let lat = cbuf.readDoubleLE(1)
+      let lon = cbuf.readDoubleLE(9)
       this.add_point(new RoutePoint(command, lat, lon))
       offset += 17
     }
