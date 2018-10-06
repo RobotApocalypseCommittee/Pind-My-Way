@@ -1,13 +1,14 @@
 const bleno = require("bleno")
-
+const bleConstants = require("./bleConstants.json")
 
 const versionCharacteristic = require("./version_characteristic")
+const routeUploadCharacteristic = require("./route_upload")
 
 bleno.on('stateChange', function(state) {
   console.log('on -> stateChange: ' + state);
 
   if (state === 'poweredOn') {
-    bleno.startAdvertising('pimw', ['9540']);
+    bleno.startAdvertising(bleConstants.deviceName, [bleConstants.primaryService]);
   } else {
     bleno.stopAdvertising();
   }
@@ -15,9 +16,10 @@ bleno.on('stateChange', function(state) {
 bleno.on('advertisingStart', function(error) {
   console.log('on -> advertisingStart: ' + (error ? 'error ' + error : 'success'));
   let primaryService = new bleno.PrimaryService({
-    uuid: '9540', // or 'fff0' for 16-bit
+    uuid: bleConstants.primaryService, // or 'fff0' for 16-bit
     characteristics: [
-      versionCharacteristic
+      versionCharacteristic,
+      routeUploadCharacteristic
     ]
   })
   console.log(primaryService)

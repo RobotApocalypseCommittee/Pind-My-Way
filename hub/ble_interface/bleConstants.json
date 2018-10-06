@@ -1,0 +1,7 @@
+{
+  "deviceName": "PIMW-1",
+
+  "primaryService": "9540",
+  "versionCharacteristic": "d0668495159f405ecebe4014a716de2e1",
+  "routeUploadCharacteristic": "3bf0"
+}
