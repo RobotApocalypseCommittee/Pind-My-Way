@@ -3,6 +3,7 @@ const bleConstants = require("./bleConstants.json")
 
 const versionCharacteristic = require("./version_characteristic")
 const routeUploadCharacteristic = require("./route_upload")
+const {name_characteristic, random_id_characteristic} = require("./identification_characteristic")
 
 bleno.on('stateChange', function(state) {
   console.log('on -> stateChange: ' + state);
@@ -19,7 +20,9 @@ bleno.on('advertisingStart', function(error) {
     uuid: bleConstants.primaryService, // or 'fff0' for 16-bit
     characteristics: [
       versionCharacteristic,
-      routeUploadCharacteristic
+      routeUploadCharacteristic,
+      random_id_characteristic,
+      name_characteristic
     ]
   })
   console.log(primaryService)

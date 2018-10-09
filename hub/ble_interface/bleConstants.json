@@ -8,6 +8,14 @@
     "routeUpload": {
       "uuid": "3bf0",
       "description": "Recieves the route description"
+    },
+    "unique_identify": {
+      "uuid": "fc58",
+      "description": "A number unique to the device"
+    },
+    "settable_name": {
+      "uuid": "fc59",
+      "description": "A name, set by the user, for ease of connection on other devices"
     }
   },
   "primaryService": "9540"
