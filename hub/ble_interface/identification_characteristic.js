@@ -4,11 +4,13 @@ const {characteristics: {unique_identify, settable_name}} = require("./bleConsta
 let config = require("../config.json")
 const fs = require("fs")
 
+const rand_ID_buffer = new Buffer(4);
+rand_ID_buffer.writeInt32LE(config.random_id, 0)
 
 let random_id_characteristic = new bleno.Characteristic({
   uuid: unique_identify.uuid, // or 'fff1' for 16-bit
   properties: ["read"], // can be a combination of 'read', 'write', 'writeWithoutResponse', 'notify', 'indicate'
-  value: config.random_id, // optional static value, must be of type Buffer - for read only characteristics
+  value: rand_ID_buffer, // optional static value, must be of type Buffer - for read only characteristics
   descriptors: [
     new bleno.Descriptor({
       uuid: "2901",
