@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2919A7D421655FBE00828104 /* Bluetooth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2919A7D321655FBE00828104 /* Bluetooth.swift */; };
+		2942A5E2216B881C00B1FDBF /* BluetoothViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2942A5E1216B881C00B1FDBF /* BluetoothViewController.swift */; };
+		2942A5E4216BD74400B1FDBF /* BluetoothTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2942A5E3216BD74400B1FDBF /* BluetoothTableCell.swift */; };
 		294F6FB52162C5CE00A1A402 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 294F6FB42162C5CE00A1A402 /* Settings.bundle */; };
 		297BBFCF2161097B00A3026E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFCE2161097B00A3026E /* AppDelegate.swift */; };
 		297BBFD12161097B00A3026E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFD02161097B00A3026E /* ViewController.swift */; };
@@ -18,6 +20,10 @@
 		297BBFEF2161097E00A3026E /* Pind_My_Way_MapUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFEE2161097E00A3026E /* Pind_My_Way_MapUITests.swift */; };
 		297BBFFD216118E900A3026E /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFFC216118E900A3026E /* Utils.swift */; };
 		297BBFFF21611B8A00A3026E /* Singleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFFE21611B8A00A3026E /* Singleton.swift */; };
+		29B2C2B6216D1E8C00C867B8 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B2C2B5216D1E8C00C867B8 /* Reachability.swift */; };
+		29B2C2B8216D329000C867B8 /* Introduction.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 29B2C2B7216D329000C867B8 /* Introduction.storyboard */; };
+		29B2C2BA216D37FE00C867B8 /* IntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B2C2B9216D37FE00C867B8 /* IntroductionViewController.swift */; };
+		29E0651A216D58500021C799 /* HorizontalAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E06519216D58500021C799 /* HorizontalAnimator.swift */; };
 		81CD71EAAFAD8858CD70B456 /* Pods_Pind_My_Way_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E15403167219507B2A6A8364 /* Pods_Pind_My_Way_iOS.framework */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +46,8 @@
 
 /* Begin PBXFileReference section */
 		2919A7D321655FBE00828104 /* Bluetooth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bluetooth.swift; sourceTree = "<group>"; };
+		2942A5E1216B881C00B1FDBF /* BluetoothViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothViewController.swift; sourceTree = "<group>"; };
+		2942A5E3216BD74400B1FDBF /* BluetoothTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothTableCell.swift; sourceTree = "<group>"; };
 		294F6FB42162C5CE00A1A402 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		297BBFCB2161097B00A3026E /* Pind My Way iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pind My Way iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		297BBFCE2161097B00A3026E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -56,6 +64,10 @@
 		297BBFF02161097E00A3026E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		297BBFFC216118E900A3026E /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		297BBFFE21611B8A00A3026E /* Singleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Singleton.swift; sourceTree = "<group>"; };
+		29B2C2B5216D1E8C00C867B8 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		29B2C2B7216D329000C867B8 /* Introduction.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Introduction.storyboard; sourceTree = "<group>"; };
+		29B2C2B9216D37FE00C867B8 /* IntroductionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroductionViewController.swift; sourceTree = "<group>"; };
+		29E06519216D58500021C799 /* HorizontalAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalAnimator.swift; sourceTree = "<group>"; };
 		98BA2840BCB006D5535F2E2C /* Pods-Pind My Way iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pind My Way iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		BCD620F4FBA825665D82A8BE /* Pods-Pind My Way iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pind My Way iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS.release.xcconfig"; sourceTree = "<group>"; };
 		E15403167219507B2A6A8364 /* Pods_Pind_My_Way_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pind_My_Way_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -87,6 +99,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2942A5E5216BD74F00B1FDBF /* Bluetooth */ = {
+			isa = PBXGroup;
+			children = (
+				2942A5E3216BD74400B1FDBF /* BluetoothTableCell.swift */,
+				2919A7D321655FBE00828104 /* Bluetooth.swift */,
+				2942A5E1216B881C00B1FDBF /* BluetoothViewController.swift */,
+			);
+			path = Bluetooth;
+			sourceTree = "<group>";
+		};
 		297BBFC22161097B00A3026E = {
 			isa = PBXGroup;
 			children = (
@@ -112,16 +134,20 @@
 		297BBFCD2161097B00A3026E /* Pind My Way iOS */ = {
 			isa = PBXGroup;
 			children = (
+				2942A5E5216BD74F00B1FDBF /* Bluetooth */,
 				297BBFCE2161097B00A3026E /* AppDelegate.swift */,
 				297BBFFE21611B8A00A3026E /* Singleton.swift */,
-				2919A7D321655FBE00828104 /* Bluetooth.swift */,
 				297BBFD02161097B00A3026E /* ViewController.swift */,
 				294F6FB42162C5CE00A1A402 /* Settings.bundle */,
 				297BBFFC216118E900A3026E /* Utils.swift */,
 				297BBFD22161097B00A3026E /* Main.storyboard */,
+				29B2C2B7216D329000C867B8 /* Introduction.storyboard */,
+				29B2C2B9216D37FE00C867B8 /* IntroductionViewController.swift */,
+				29E06519216D58500021C799 /* HorizontalAnimator.swift */,
 				297BBFD52161097E00A3026E /* Assets.xcassets */,
 				297BBFD72161097E00A3026E /* LaunchScreen.storyboard */,
 				297BBFDA2161097E00A3026E /* Info.plist */,
+				29B2C2B5216D1E8C00C867B8 /* Reachability.swift */,
 			);
 			path = "Pind My Way iOS";
 			sourceTree = "<group>";
@@ -268,6 +294,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				29B2C2B8216D329000C867B8 /* Introduction.storyboard in Resources */,
 				294F6FB52162C5CE00A1A402 /* Settings.bundle in Resources */,
 				297BBFD92161097E00A3026E /* LaunchScreen.storyboard in Resources */,
 				297BBFD62161097E00A3026E /* Assets.xcassets in Resources */,
@@ -369,9 +396,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				29E0651A216D58500021C799 /* HorizontalAnimator.swift in Sources */,
 				297BBFD12161097B00A3026E /* ViewController.swift in Sources */,
 				2919A7D421655FBE00828104 /* Bluetooth.swift in Sources */,
 				297BBFFF21611B8A00A3026E /* Singleton.swift in Sources */,
+				2942A5E4216BD74400B1FDBF /* BluetoothTableCell.swift in Sources */,
+				29B2C2B6216D1E8C00C867B8 /* Reachability.swift in Sources */,
+				29B2C2BA216D37FE00C867B8 /* IntroductionViewController.swift in Sources */,
+				2942A5E2216B881C00B1FDBF /* BluetoothViewController.swift in Sources */,
 				297BBFCF2161097B00A3026E /* AppDelegate.swift in Sources */,
 				297BBFFD216118E900A3026E /* Utils.swift in Sources */,
 			);
@@ -552,6 +584,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8F276LS8S7;
 				INFOPLIST_FILE = "Pind My Way iOS/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -571,6 +604,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8F276LS8S7;
 				INFOPLIST_FILE = "Pind My Way iOS/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

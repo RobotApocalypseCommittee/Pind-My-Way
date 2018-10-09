@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="O2z-8B-UPA">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Intro-->
+        <scene sceneID="ENU-De-Zh2">
+            <objects>
+                <viewController title="Intro" id="O2z-8B-UPA" customClass="IntroductionViewController" customModule="Pind_My_Way_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="DA6-V1-fFs">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Introduction" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9su-PF-09R">
+                                <rect key="frame" x="117.66666666666667" y="44" width="139.66666666666663" height="33"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="27"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bjd-eQ-YmZ">
+                                <rect key="frame" x="146" y="665" width="83" height="38"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <state key="normal" title="Continue"/>
+                                <connections>
+                                    <action selector="continueButton_touchUpInside:" destination="O2z-8B-UPA" eventType="touchUpInside" id="8oJ-Oe-a5T"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="9su-PF-09R" firstAttribute="centerX" secondItem="DA6-V1-fFs" secondAttribute="centerX" id="1c1-WM-Rso"/>
+                            <constraint firstItem="c98-t1-dCR" firstAttribute="bottom" secondItem="bjd-eQ-YmZ" secondAttribute="bottom" constant="75" id="2tl-Jm-uv2"/>
+                            <constraint firstItem="9su-PF-09R" firstAttribute="top" secondItem="c98-t1-dCR" secondAttribute="top" id="hgZ-gz-sSL"/>
+                            <constraint firstItem="bjd-eQ-YmZ" firstAttribute="centerX" secondItem="DA6-V1-fFs" secondAttribute="centerX" id="tUg-HE-HIo"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="c98-t1-dCR"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Efs-fj-zQB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+</document>

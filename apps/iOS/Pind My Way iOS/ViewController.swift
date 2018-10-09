@@ -16,16 +16,19 @@ let spaceOnTop: CGFloat = 50.0
 // Really hacky for now to ignore the safe area
 let spaceOnBottom: CGFloat = -(UIApplication.shared.delegate as! AppDelegate).window!.safeAreaInsets.bottom
 
+var isFirstLoad = true
+
 class ViewController: UIViewController {
     
-    let bluetoothManager: BluetoothManager = BluetoothManager()
+    let toBluetoothTransition = HorizontalAnimator()
+    let fromBluetoothTransition = BackHorizontalAnimator()
     
     var locationManager = CLLocationManager()
     var currentLocation: CLLocation? = nil
     var mapView: GMSMapView!
     
-    var addressResultsViewController: GMSAutocompleteResultsViewController?
-    var addressSearchController: UISearchController?
+    var addressResultsViewController = GMSAutocompleteResultsViewController()
+    var addressSearchController = UISearchController()
     
     var zoomLevel: Float = 15.0
     
@@ -33,6 +36,10 @@ class ViewController: UIViewController {
     
     var routePolylines: Array<Array<GMSPolyline>> = []
     var routeCoordinates: Array<Array<CLLocationCoordinate2D>> = []
+    
+    var networkCheckerTimer = Timer()
+
+    @IBOutlet weak var GoButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,41 +61,73 @@ class ViewController: UIViewController {
         
         self.mapView = GMSMapView.map(withFrame: CGRect(x: self.view.bounds.minX, y: window.safeAreaInsets.top+spaceOnTop, width: self.view.bounds.width, height: self.view.bounds.height-(spaceOnTop+spaceOnBottom+(window.safeAreaInsets.bottom+window.safeAreaInsets.top))), camera: camera)
         
-        self.view.addSubview(mapView)
+        self.view.insertSubview(mapView, at: 0)
+        
+        self.GoButton.layer.zPosition = 1
         
         mapView.settings.myLocationButton = false
         mapView.isMyLocationEnabled = true
         mapView.delegate = self
         
         addressResultsViewController = GMSAutocompleteResultsViewController()
-        addressResultsViewController?.delegate = self
+        addressResultsViewController.delegate = self
         
         addressSearchController = UISearchController(searchResultsController: addressResultsViewController)
-        addressSearchController?.searchResultsUpdater = addressResultsViewController
+        addressSearchController.searchResultsUpdater = addressResultsViewController
         
         let searchView = UIView(frame: CGRect(x: 0, y: window.safeAreaInsets.top, width: self.view.bounds.width, height: spaceOnTop))
         
-        searchView.addSubview((addressSearchController?.searchBar)!)
+        searchView.addSubview(addressSearchController.searchBar)
         
         self.view.addSubview(searchView)
 
-        addressSearchController?.searchBar.sizeToFit()
-        addressSearchController?.searchBar.placeholder = "Enter a location"
+        addressSearchController.searchBar.sizeToFit()
+        addressSearchController.searchBar.placeholder = "Enter a location"
         
         definesPresentationContext = true
         
         Utils.getPollution(location: CLLocationCoordinate2D(latitude: 51.1, longitude: -0.1))
+        
+        // TODO make this better!
+        networkCheckerTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
+            if !Reachability.isConnectedToNetwork() {
+                self.mapView.isHidden = true
+                self.GoButton.isHidden = true
+                self.addressSearchController.searchBar.isHidden = true
+                self.view.backgroundColor = .white
+                //print("Info: Connection: The device is not connected to the internet.")
+            } else {
+                self.mapView.isHidden = false
+                self.GoButton.isHidden = false
+                self.addressSearchController.searchBar.isHidden = false
+                self.view.backgroundColor = UIColor(displayP3Red: 199/255, green: 198/255, blue: 204/255, alpha: 1)
+                //print("Info: Connection: The device is connected to the internet.")
+            }
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // Only shows the introduction if the user has never completed it
+        if !UserDefaults.standard.bool(forKey: "introDone") {
+            performSegue(withIdentifier: "ToIntroduction", sender: self)
+        }
     }
     
     // Proof of concept for resizing the search bar (for the menu icon soon to come)
     override func viewDidLayoutSubviews() {
-        var addressSearchBarFrame = addressSearchController?.searchBar.frame
-        addressSearchBarFrame?.size.height = spaceOnTop // Either this or the magic 5.0 is needed
-        addressSearchController?.searchBar.frame = addressSearchBarFrame!
+        var addressSearchBarFrame = addressSearchController.searchBar.frame
+        addressSearchBarFrame.size.height = spaceOnTop // Either this or the magic 5.0 is needed
+        addressSearchController.searchBar.frame = addressSearchBarFrame
     }
     
+    @IBAction func GoButton_touchUpInside(_ sender: Any) {
+        let newViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Bluetooth")
+        newViewController.transitioningDelegate = self
+        self.present(newViewController, animated: true, completion: nil)
+    }
     
-
     // Gets directions and draws them on the map
     func getDirections(endCoordinates: CLLocationCoordinate2D) {
         let startCoordinates: CLLocationCoordinate2D = currentLocation!.coordinate
@@ -208,6 +247,17 @@ class ViewController: UIViewController {
 }
 
 
+extension ViewController: UIViewControllerTransitioningDelegate {
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return toBluetoothTransition
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return fromBluetoothTransition
+    }
+}
+
+
 extension ViewController: GMSMapViewDelegate {
     // Called when user touches to place a marker
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
@@ -268,7 +318,7 @@ extension ViewController: CLLocationManagerDelegate {
         // Basically sets reasonable bounds to bias for in the place search
         let autocompleteBiasBounds = GMSCoordinateBounds(coordinate: CLLocationCoordinate2D(latitude: location.coordinate.latitude+0.1, longitude: location.coordinate.longitude+0.1), coordinate: CLLocationCoordinate2D(latitude: location.coordinate.latitude-0.1, longitude: location.coordinate.longitude-0.1))
         
-        addressResultsViewController?.autocompleteBounds = autocompleteBiasBounds
+        addressResultsViewController.autocompleteBounds = autocompleteBiasBounds
         
         
         if currentLocation == nil {
@@ -302,7 +352,7 @@ extension ViewController: CLLocationManagerDelegate {
 
 extension ViewController: GMSAutocompleteResultsViewControllerDelegate {
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didAutocompleteWith place: GMSPlace) {
-        addressSearchController?.isActive = false
+        addressSearchController.isActive = false
         
         placeMarker(mapView, at: place.coordinate)
         

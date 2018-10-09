@@ -11,26 +11,86 @@ import CoreBluetooth
 
 let piServiceUuid = CBUUID(string: "9540")
 let writeCharacteristicUuid = CBUUID(string: "3bf0")
+let uniqueIDCharacteristicUuid = CBUUID(string: "fc58")
+let settableNameCharacteristicUuid = CBUUID(string: "fc59")
 
-class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
+class BluetoothManager: NSObject {
     
-    var centralManager: CBCentralManager? = nil
+    var _centralManager: CBCentralManager? = nil
     
-    var raspberryPi: CBPeripheral? = nil
-    var dataService: CBService? = nil
+    var scanningForPi = false
+    
+    var raspberryPis: Array<CBPeripheral> = []
+
+    var _selectedPi: CBPeripheral? = nil
+    var piConnected = false
+    
+    var _piDataService: CBService? = nil
+
     var characteristicsDiscovered = false
     
-    override init() {
+    let peripheralFoundCallback: () -> Void
+    
+    init(withCallback callback: @escaping () -> Void) {
+        peripheralFoundCallback = callback
+        
         super.init()
         
         // Change queue to be more logical for bluetooth transfer
-        centralManager = CBCentralManager(delegate: self, queue: nil)
+        _centralManager = CBCentralManager(delegate: self, queue: nil)
     }
+    
+    func startScanning() {
+        if _centralManager!.state != .poweredOn {
+            print("Warning: Bluetooth: Cannot start scanning before being turned on!")
+            return
+        }
+        if !scanningForPi {
+            _centralManager!.scanForPeripherals(withServices: [piServiceUuid], options: nil)
+            scanningForPi = true
+        }
+    }
+    
+    func stopScanning() {
+        if scanningForPi {
+            _centralManager!.stopScan()
+            scanningForPi = false
+        }
+    }
+    
+    func connectPiAndService(peripheral: CBPeripheral) {
+        _piDataService = nil
+        characteristicsDiscovered = false
+        
+        peripheral.delegate = self
+        _selectedPi = peripheral
+        
+        _centralManager!.connect(_selectedPi!, options: nil)
+    }
+    
+    func disconnectPi() {
+        if let _selectedPi = _selectedPi {
+            _selectedPi.delegate = nil
+            _centralManager!.cancelPeripheralConnection(_selectedPi)
+        }
+        _selectedPi = nil
+        _piDataService = nil
+        characteristicsDiscovered = false
+    }
+    
+    deinit {
+        disconnectPi()
+        stopScanning()
+    }
+}
+
+extension BluetoothManager: CBCentralManagerDelegate {
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
         case .poweredOn:
             print("Info: Bluetooth: Powered on")
+            scanningForPi = true
             central.scanForPeripherals(withServices: [piServiceUuid], options: nil)
         default:
             return
@@ -40,28 +100,33 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         print("Info: Bluetooth: Peripheral found")
         
-        raspberryPi = peripheral
-        raspberryPi!.delegate = self
-        
-        centralManager!.connect(peripheral, options: nil)
-        
-        centralManager!.stopScan()
+        if !raspberryPis.contains(peripheral) {
+            raspberryPis.insert(peripheral, at: raspberryPis.endIndex)
+            
+            peripheralFoundCallback()
+        }
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        if peripheral == raspberryPi! {
-            print("Info: Bluetooth: Peripheral connected")
-            raspberryPi!.discoverServices([piServiceUuid])
+        if peripheral == _selectedPi! {
+            print("Info: Bluetooth: Pi connected")
+            
+            // Immediately tries to discover the data writing service
+            _selectedPi!.discoverServices([piServiceUuid])
         } else {
             print("Warning: Bluetooth: An unknown peripheral connected!")
         }
     }
     
+}
+
+extension BluetoothManager: CBPeripheralDelegate {
+    
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         if error == nil {
-            print("Info: Bluetooth: Service found")
-            dataService = peripheral.services![0]
-            raspberryPi!.discoverCharacteristics([writeCharacteristicUuid], for: dataService!)
+            print("Info: Bluetooth: Data service found")
+            _piDataService = peripheral.services![0]
+            _selectedPi!.discoverCharacteristics([writeCharacteristicUuid], for: _piDataService!)
         } else {
             print("Error: Bluetooth: \(error!)")
         }
@@ -69,11 +134,11 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         if error == nil {
-            if service == dataService! {
+            if service == _piDataService! {
                 print("Info: Bluetooth: Characteristics discovered")
                 
                 var number = 0xbabe
-                print("Info: Bluetooth: Max packet length: \(raspberryPi!.maximumWriteValueLength(for: .withResponse))")
+                print("Info: Bluetooth: Max packet length: \(_selectedPi!.maximumWriteValueLength(for: .withResponse))")
                 
                 let data: Data = Data(Data(bytes: &number, count: 2).reversed())
                 var allData: Data = Data()
@@ -88,9 +153,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
                 // output from an int.
                 // If we reverse it and then feed that to the Data constructor, it becomes BIG ENDIAN,
                 // Or optionally use CFSwap<Whatever>HostToBig(arg:)
-                raspberryPi!.writeValue(allData, for: dataService!.characteristics![0], type: .withResponse)
-                
-                sleep(10)
+                _selectedPi!.writeValue(allData, for: _piDataService!.characteristics![0], type: .withResponse)
                 
                 characteristicsDiscovered = true
             } else {
