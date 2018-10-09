@@ -20,8 +20,8 @@ var isFirstLoad = true
 
 class ViewController: UIViewController {
     
-    let toBluetoothTransition = HorizontalAnimator()
-    let fromBluetoothTransition = BackHorizontalAnimator()
+    let toBluetoothTransition = HorizontalAnimator(goingForwards: true)
+    let fromBluetoothTransition = HorizontalAnimator(goingForwards: false)
     
     var locationManager = CLLocationManager()
     var currentLocation: CLLocation? = nil
