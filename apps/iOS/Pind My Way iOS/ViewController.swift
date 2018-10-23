@@ -45,6 +45,27 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        //Fetches pollution data as part of the loading process
+        DispatchQueue.main.async {
+            let url = URL(string: "http://api.erg.kcl.ac.uk/AirQuality/Daily/MonitoringIndex/Latest/GroupName=London/json")
+            let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
+                if let data = data {
+                    do {
+                        pollutionResp = try JSON(data: data)
+                        print("loaded")
+                    }  catch let error {
+                        print("oof")
+                        print(error.localizedDescription)
+                    }
+                } else if let error = error {
+                    print("oof")
+                    print(error.localizedDescription)
+                }
+            }
+            task.resume()
+        }
+        
+        
         // This is the same color as the search bar
         self.view.backgroundColor = UIColor(displayP3Red: 199/255, green: 198/255, blue: 204/255, alpha: 1)
         
@@ -86,7 +107,7 @@ class ViewController: UIViewController {
         
         definesPresentationContext = true
         
-        Utils.getPollution(location: CLLocationCoordinate2D(latitude: 51.1, longitude: -0.1))
+        
         
         // TODO make this better!
         networkCheckerTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
@@ -241,7 +262,11 @@ class ViewController: UIViewController {
         underPolyline.zIndex = selected ? 99 : 1
         underPolyline.map = mapView
         
-        routePolylines.append([polyline, underPolyline])
+        let overviewPoints = String(describing: route["overview_polyline"]["points"])
+        let overviewPath = GMSPath(fromEncodedPath: overviewPoints)
+        let overviewPolyline = GMSPolyline(path: overviewPath)
+        
+        routePolylines.append([polyline, underPolyline, overviewPolyline])
     }
     
 }
@@ -288,6 +313,10 @@ extension ViewController: GMSMapViewDelegate {
                     underPolyline.strokeWidth = selected ? 6.0 : 5.0
                     underPolyline.strokeColor = selected ? UIColor(red: 26.0/255, green: 100.0/255, blue: 255.0/255, alpha: 1.0) : UIColor.gray
                     underPolyline.zIndex = selected ? 99 : 1
+                    if selected {
+                        
+                        Utils.getRoutePollution(route: routeCoordinates[i])
+                    }
                 }
             } else {
                 print("Info: Map: Marker placed at \(coordinate.latitude), \(coordinate.longitude)")

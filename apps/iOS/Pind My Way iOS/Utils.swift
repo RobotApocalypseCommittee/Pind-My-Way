@@ -9,6 +9,7 @@
 import Foundation
 import GoogleMaps
 import SwiftyJSON
+import SwiftyXML
 
 let baseURLComponents = URLComponents(string: "https://maps.googleapis.com/maps/api/directions/json")!
 
@@ -62,34 +63,70 @@ class Utils {
         return earthRadius * c
     }
     
-    static func getPollution(location: CLLocationCoordinate2D) {
+    static func getRoutePollution(route: [CLLocationCoordinate2D]) -> [String : [String : Any]] {
+        //Thins out the route, only using points every ~100m
+        var thinRoute : [CLLocationCoordinate2D] = []
+        for i in stride(from: 0, to: route.count, by: 10) {
+            thinRoute.append(route[i])
+        }
         
-        //return
-
-        let url = URL(string: "https://api.openweathermap.org/pollution/v1/co/\(location.latitude),\(location.longitude)/current.json?appid=\(pollutionApiKey)")
-        
-        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
-            if let data = data {
-                do {
-                    let json = try JSON(data: data)
-                    print(json)
-                    // Multiply by molar weight of air and of CO and by 1000000 because why not they're all magic numbers anyway tbh - i think this is right, it seems rightish so i mean
-                    if let mixingRatioReading = json["data"][0]["value"].float {
-                        let groundReading : Float = mixingRatioReading * 1000000 * 28.97 * 28.01
-                        print("Info: Pollution: CO = \(groundReading)")
-                    } else {
-                        print("Warning: Pollution data incorrect")
-                    }
-                    
-                }  catch let error {
-                    print(error.localizedDescription)
+        //Creates an array of all the monitoring stations
+        var dataPoints : [JSON] = []
+        for area in pollutionResp["DailyAirQualityIndex"]["LocalAuthority"] {
+            if area.1["Site"].exists() {
+                for site in area.1["Site"] {
+                    dataPoints.append(site.1)
                 }
-            } else if let error = error {
-                print(error.localizedDescription)
             }
         }
-        task.resume()
         
+        var closestReadings : [JSON] = []
+        
+        //Gets the closest monitoring point to every route point
+        for coord in thinRoute {
+            var closestAreaIndex = 0;
+            var closestAreaDistance : Float = 9999.0;
+            var i = 0
+            for area in dataPoints {
+                //Calculates distance from route point to pollution monitoring point
+                let areaLat = area["@Latitude"].floatValue
+                let areaLong = area["@Longitude"].floatValue
+                let distance = Float(pow(abs(Double(areaLat) - coord.latitude), 2) + pow(abs(Double(areaLong) - coord.longitude), 2)).squareRoot()
+
+                if distance < closestAreaDistance {
+                    closestAreaIndex = i
+                    closestAreaDistance = distance;
+                }
+                i += 1
+            }
+            closestReadings.append(dataPoints[closestAreaIndex]["Species"])
+        }
+
+        //Stores all the pollution values for every point on the route
+        var allPollutionReadings : [String:[Float]] = ["O3":[], "PM10":[], "NO2":[], "SO2":[], "PM25":[]]
+        for readings in closestReadings {
+            for reading in readings {
+                if allPollutionReadings[reading.1["@SpeciesCode"].stringValue] != nil {
+                    allPollutionReadings[reading.1["@SpeciesCode"].stringValue]!.append(Float(reading.1["@AirQualityIndex"].intValue))
+                }
+            }
+        }
+        
+        //Summarises, getting average and total for every pollutants
+        var summary : [String : [String:Any]] = [:]
+        for (pollutant, values) in allPollutionReadings {
+            if values == [] {
+                summary[pollutant] = ["available" : false, "average" : 0, "total":0]
+            }
+            else {
+                let total = values.reduce(0, +)
+                let average = total/Float(values.count)
+                summary[pollutant] = ["available" : true, "average" : average, "total" : total]
+            }
+        }
+        
+        print(summary)
+        return summary
     }
 }
 
