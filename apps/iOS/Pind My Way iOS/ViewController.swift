@@ -33,6 +33,7 @@ class ViewController: UIViewController {
     var zoomLevel: Float = 15.0
     
     var marker : GMSMarker = GMSMarker()
+    var pollutionMarker : GMSMarker = GMSMarker()
     
     var routePolylines: Array<Array<GMSPolyline>> = []
     var routeCoordinates: Array<Array<CLLocationCoordinate2D>> = []
@@ -46,24 +47,23 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         //Fetches pollution data as part of the loading process
-        DispatchQueue.main.async {
-            let url = URL(string: "http://api.erg.kcl.ac.uk/AirQuality/Daily/MonitoringIndex/Latest/GroupName=London/json")
-            let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
-                if let data = data {
-                    do {
-                        pollutionResp = try JSON(data: data)
-                        print("loaded")
-                    }  catch let error {
-                        print("oof")
-                        print(error.localizedDescription)
-                    }
-                } else if let error = error {
+        let url = URL(string: "http://api.erg.kcl.ac.uk/AirQuality/Daily/MonitoringIndex/Latest/GroupName=London/json")
+        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
+            if let data = data {
+                do {
+                    pollutionResp = try JSON(data: data)
+                    print("loaded")
+                }  catch let error {
                     print("oof")
                     print(error.localizedDescription)
                 }
+            } else if let error = error {
+                print("oof")
+                print(error.localizedDescription)
             }
-            task.resume()
         }
+        task.resume()
+        
         
         
         // This is the same color as the search bar
@@ -210,6 +210,9 @@ class ViewController: UIViewController {
                     for i in 0...routes.count-1 {
                         self.drawRoute(route: routes[i], asSelected: i == 0)
                     }
+                    // places info card at the middle of the route
+                    let middleCoord = routes[0]["legs"][routes[0]["legs"].count/2]["steps"][routes[0]["legs"][routes[0]["legs"].count/2]["steps"].count/2]["start_location"]
+                    self.showPollutionInfo(index: 0, pos: CLLocationCoordinate2D(latitude: middleCoord["lat"].doubleValue, longitude: middleCoord["lng"].doubleValue))
                 }
             }
         }
@@ -315,7 +318,11 @@ extension ViewController: GMSMapViewDelegate {
                     underPolyline.zIndex = selected ? 99 : 1
                     if selected {
                         
-                        Utils.getRoutePollution(route: routeCoordinates[i])
+                        // places the info card at the 'midpoint' of the polyline
+                        // TODO find the actual midpoint (using distance)
+                        let middleCoord = polyline.path!.coordinate(at: polyline.path!.count()/2)
+                        self.showPollutionInfo(index: i, pos: CLLocationCoordinate2D(latitude: middleCoord.latitude, longitude: middleCoord.longitude))
+                        
                     }
                 }
             } else {
@@ -328,10 +335,45 @@ extension ViewController: GMSMapViewDelegate {
     
     func placeMarker(_ mapView: GMSMapView, at coordinate: CLLocationCoordinate2D) {
         mapView.clear()
+        
         marker = GMSMarker(position: coordinate)
         marker.appearAnimation = GMSMarkerAnimation.pop
         marker.map = mapView
     }
+    
+    //TODO beautify hehe
+    func showPollutionInfo(index: Int, pos: CLLocationCoordinate2D) {
+        let pollutionInfo = Utils.getRoutePollution(route: routeCoordinates[index])
+        
+        pollutionMarker.map = nil
+        pollutionMarker = GMSMarker(position: CLLocationCoordinate2D(latitude: pos.latitude+0.03, longitude: pos.longitude+0.03))
+        pollutionMarker.appearAnimation = GMSMarkerAnimation.pop
+        
+        //I absolutely need to find a better way of doing this . . .
+        let pollutionView = RouteInfoView(frame: CGRect(x: 100, y: 0, width: 200, height: 150))
+        if pollutionInfo["NO2"]!["available"]! as! Bool {
+            pollutionView.no2Average.text = String(describing: round((pollutionInfo["NO2"]!["average"]! as! Float)*100)/100)
+            pollutionView.no2Total.text = String(describing: pollutionInfo["NO2"]!["total"]!)
+        }
+        else {
+            pollutionView.no2Average.text = "N/A"
+            pollutionView.no2Total.text = "N/A"
+        }
+        
+        if pollutionInfo["SO2"]!["available"]! as! Bool {
+            pollutionView.so2Average.text = String(describing: round((pollutionInfo["SO2"]!["average"]! as! Float)*100)/100)
+            pollutionView.so2Total.text = String(describing: pollutionInfo["SO2"]!["total"]!)
+        }
+        else {
+            pollutionView.so2Average.text = "N/A"
+            pollutionView.so2Total.text = "N/A"
+        }
+        
+        pollutionMarker.iconView = pollutionView
+        pollutionMarker.map = mapView
+    }
+    
+    
 }
 
 
