@@ -72,7 +72,14 @@ class Utils {
         
         //Creates an array of all the monitoring stations
         var dataPoints : [JSON] = []
-        for area in pollutionResp["DailyAirQualityIndex"]["LocalAuthority"] {
+        
+        let localAuthority = pollutionResp["DailyAirQualityIndex"]["LocalAuthority"]
+        
+        guard !localAuthority.isEmpty else {
+            return [:]
+        }
+        
+        for area in localAuthority {
             if area.1["Site"].exists() {
                 for site in area.1["Site"] {
                     dataPoints.append(site.1)

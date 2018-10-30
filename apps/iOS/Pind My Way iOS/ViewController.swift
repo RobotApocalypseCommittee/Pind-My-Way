@@ -351,7 +351,7 @@ extension ViewController: GMSMapViewDelegate {
         
         //I absolutely need to find a better way of doing this . . .
         let pollutionView = RouteInfoView(frame: CGRect(x: 100, y: 0, width: 200, height: 150))
-        if pollutionInfo["NO2"]!["available"]! as! Bool {
+        if pollutionInfo["NO2"]?["available"] as? Bool ?? false {
             pollutionView.no2Average.text = String(describing: round((pollutionInfo["NO2"]!["average"]! as! Float)*100)/100)
             pollutionView.no2Total.text = String(describing: pollutionInfo["NO2"]!["total"]!)
         }
@@ -360,7 +360,7 @@ extension ViewController: GMSMapViewDelegate {
             pollutionView.no2Total.text = "N/A"
         }
         
-        if pollutionInfo["SO2"]!["available"]! as! Bool {
+        if pollutionInfo["SO2"]?["available"] as? Bool ?? false {
             pollutionView.so2Average.text = String(describing: round((pollutionInfo["SO2"]!["average"]! as! Float)*100)/100)
             pollutionView.so2Total.text = String(describing: pollutionInfo["SO2"]!["total"]!)
         }
