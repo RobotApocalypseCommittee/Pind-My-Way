@@ -16,27 +16,55 @@ let spaceOnTop: CGFloat = 50.0
 // Really hacky for now to ignore the safe area
 let spaceOnBottom: CGFloat = -(UIApplication.shared.delegate as! AppDelegate).window!.safeAreaInsets.bottom
 
+var isFirstLoad = true
+
 class ViewController: UIViewController {
     
-    let bluetoothManager: BluetoothManager = BluetoothManager()
+    let toBluetoothTransition = HorizontalAnimator(goingForwards: true)
+    let fromBluetoothTransition = HorizontalAnimator(goingForwards: false)
     
     var locationManager = CLLocationManager()
     var currentLocation: CLLocation? = nil
     var mapView: GMSMapView!
     
-    var addressResultsViewController: GMSAutocompleteResultsViewController?
-    var addressSearchController: UISearchController?
+    var addressResultsViewController = GMSAutocompleteResultsViewController()
+    var addressSearchController = UISearchController()
     
     var zoomLevel: Float = 15.0
     
     var marker : GMSMarker = GMSMarker()
+    var pollutionMarker : GMSMarker = GMSMarker()
     
     var routePolylines: Array<Array<GMSPolyline>> = []
     var routeCoordinates: Array<Array<CLLocationCoordinate2D>> = []
+    
+    var networkCheckerTimer = Timer()
+
+    @IBOutlet weak var GoButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        //Fetches pollution data as part of the loading process
+        let url = URL(string: "http://api.erg.kcl.ac.uk/AirQuality/Daily/MonitoringIndex/Latest/GroupName=London/json")
+        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
+            if let data = data {
+                do {
+                    pollutionResp = try JSON(data: data)
+                    print("loaded")
+                }  catch let error {
+                    print("oof")
+                    print(error.localizedDescription)
+                }
+            } else if let error = error {
+                print("oof")
+                print(error.localizedDescription)
+            }
+        }
+        task.resume()
+        
+        
         
         // This is the same color as the search bar
         self.view.backgroundColor = UIColor(displayP3Red: 199/255, green: 198/255, blue: 204/255, alpha: 1)
@@ -54,41 +82,73 @@ class ViewController: UIViewController {
         
         self.mapView = GMSMapView.map(withFrame: CGRect(x: self.view.bounds.minX, y: window.safeAreaInsets.top+spaceOnTop, width: self.view.bounds.width, height: self.view.bounds.height-(spaceOnTop+spaceOnBottom+(window.safeAreaInsets.bottom+window.safeAreaInsets.top))), camera: camera)
         
-        self.view.addSubview(mapView)
+        self.view.insertSubview(mapView, at: 0)
+        
+        self.GoButton.layer.zPosition = 1
         
         mapView.settings.myLocationButton = false
         mapView.isMyLocationEnabled = true
         mapView.delegate = self
         
         addressResultsViewController = GMSAutocompleteResultsViewController()
-        addressResultsViewController?.delegate = self
+        addressResultsViewController.delegate = self
         
         addressSearchController = UISearchController(searchResultsController: addressResultsViewController)
-        addressSearchController?.searchResultsUpdater = addressResultsViewController
+        addressSearchController.searchResultsUpdater = addressResultsViewController
         
         let searchView = UIView(frame: CGRect(x: 0, y: window.safeAreaInsets.top, width: self.view.bounds.width, height: spaceOnTop))
         
-        searchView.addSubview((addressSearchController?.searchBar)!)
+        searchView.addSubview(addressSearchController.searchBar)
         
         self.view.addSubview(searchView)
 
-        addressSearchController?.searchBar.sizeToFit()
-        addressSearchController?.searchBar.placeholder = "Enter a location"
+        addressSearchController.searchBar.sizeToFit()
+        addressSearchController.searchBar.placeholder = "Enter a location"
         
         definesPresentationContext = true
         
-        Utils.getPollution(location: CLLocationCoordinate2D(latitude: 51.1, longitude: -0.1))
+        
+        
+        // TODO make this better!
+        networkCheckerTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
+            if !Reachability.isConnectedToNetwork() {
+                self.mapView.isHidden = true
+                self.GoButton.isHidden = true
+                self.addressSearchController.searchBar.isHidden = true
+                self.view.backgroundColor = .white
+                //print("Info: Connection: The device is not connected to the internet.")
+            } else {
+                self.mapView.isHidden = false
+                self.GoButton.isHidden = false
+                self.addressSearchController.searchBar.isHidden = false
+                self.view.backgroundColor = UIColor(displayP3Red: 199/255, green: 198/255, blue: 204/255, alpha: 1)
+                //print("Info: Connection: The device is connected to the internet.")
+            }
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // Only shows the introduction if the user has never completed it
+        if !UserDefaults.standard.bool(forKey: "introDone") {
+            performSegue(withIdentifier: "ToIntroduction", sender: self)
+        }
     }
     
     // Proof of concept for resizing the search bar (for the menu icon soon to come)
     override func viewDidLayoutSubviews() {
-        var addressSearchBarFrame = addressSearchController?.searchBar.frame
-        addressSearchBarFrame?.size.height = spaceOnTop // Either this or the magic 5.0 is needed
-        addressSearchController?.searchBar.frame = addressSearchBarFrame!
+        var addressSearchBarFrame = addressSearchController.searchBar.frame
+        addressSearchBarFrame.size.height = spaceOnTop // Either this or the magic 5.0 is needed
+        addressSearchController.searchBar.frame = addressSearchBarFrame
     }
     
+    @IBAction func GoButton_touchUpInside(_ sender: Any) {
+        let newViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Bluetooth")
+        newViewController.transitioningDelegate = self
+        self.present(newViewController, animated: true, completion: nil)
+    }
     
-
     // Gets directions and draws them on the map
     func getDirections(endCoordinates: CLLocationCoordinate2D) {
         let startCoordinates: CLLocationCoordinate2D = currentLocation!.coordinate
@@ -150,6 +210,9 @@ class ViewController: UIViewController {
                     for i in 0...routes.count-1 {
                         self.drawRoute(route: routes[i], asSelected: i == 0)
                     }
+                    // places info card at the middle of the route
+                    let middleCoord = routes[0]["legs"][routes[0]["legs"].count/2]["steps"][routes[0]["legs"][routes[0]["legs"].count/2]["steps"].count/2]["start_location"]
+                    self.showPollutionInfo(index: 0, pos: CLLocationCoordinate2D(latitude: middleCoord["lat"].doubleValue, longitude: middleCoord["lng"].doubleValue))
                 }
             }
         }
@@ -202,9 +265,24 @@ class ViewController: UIViewController {
         underPolyline.zIndex = selected ? 99 : 1
         underPolyline.map = mapView
         
-        routePolylines.append([polyline, underPolyline])
+        let overviewPoints = String(describing: route["overview_polyline"]["points"])
+        let overviewPath = GMSPath(fromEncodedPath: overviewPoints)
+        let overviewPolyline = GMSPolyline(path: overviewPath)
+        
+        routePolylines.append([polyline, underPolyline, overviewPolyline])
     }
     
+}
+
+
+extension ViewController: UIViewControllerTransitioningDelegate {
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return toBluetoothTransition
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return fromBluetoothTransition
+    }
 }
 
 
@@ -238,6 +316,14 @@ extension ViewController: GMSMapViewDelegate {
                     underPolyline.strokeWidth = selected ? 6.0 : 5.0
                     underPolyline.strokeColor = selected ? UIColor(red: 26.0/255, green: 100.0/255, blue: 255.0/255, alpha: 1.0) : UIColor.gray
                     underPolyline.zIndex = selected ? 99 : 1
+                    if selected {
+                        
+                        // places the info card at the 'midpoint' of the polyline
+                        // TODO find the actual midpoint (using distance)
+                        let middleCoord = polyline.path!.coordinate(at: polyline.path!.count()/2)
+                        self.showPollutionInfo(index: i, pos: CLLocationCoordinate2D(latitude: middleCoord.latitude, longitude: middleCoord.longitude))
+                        
+                    }
                 }
             } else {
                 print("Info: Map: Marker placed at \(coordinate.latitude), \(coordinate.longitude)")
@@ -249,10 +335,45 @@ extension ViewController: GMSMapViewDelegate {
     
     func placeMarker(_ mapView: GMSMapView, at coordinate: CLLocationCoordinate2D) {
         mapView.clear()
+        
         marker = GMSMarker(position: coordinate)
         marker.appearAnimation = GMSMarkerAnimation.pop
         marker.map = mapView
     }
+    
+    //TODO beautify hehe
+    func showPollutionInfo(index: Int, pos: CLLocationCoordinate2D) {
+        let pollutionInfo = Utils.getRoutePollution(route: routeCoordinates[index])
+        
+        pollutionMarker.map = nil
+        pollutionMarker = GMSMarker(position: CLLocationCoordinate2D(latitude: pos.latitude+0.03, longitude: pos.longitude+0.03))
+        pollutionMarker.appearAnimation = GMSMarkerAnimation.pop
+        
+        //I absolutely need to find a better way of doing this . . .
+        let pollutionView = RouteInfoView(frame: CGRect(x: 100, y: 0, width: 200, height: 150))
+        if pollutionInfo["NO2"]?["available"] as? Bool ?? false {
+            pollutionView.no2Average.text = String(describing: round((pollutionInfo["NO2"]!["average"]! as! Float)*100)/100)
+            pollutionView.no2Total.text = String(describing: pollutionInfo["NO2"]!["total"]!)
+        }
+        else {
+            pollutionView.no2Average.text = "N/A"
+            pollutionView.no2Total.text = "N/A"
+        }
+        
+        if pollutionInfo["SO2"]?["available"] as? Bool ?? false {
+            pollutionView.so2Average.text = String(describing: round((pollutionInfo["SO2"]!["average"]! as! Float)*100)/100)
+            pollutionView.so2Total.text = String(describing: pollutionInfo["SO2"]!["total"]!)
+        }
+        else {
+            pollutionView.so2Average.text = "N/A"
+            pollutionView.so2Total.text = "N/A"
+        }
+        
+        pollutionMarker.iconView = pollutionView
+        pollutionMarker.map = mapView
+    }
+    
+    
 }
 
 
@@ -268,7 +389,7 @@ extension ViewController: CLLocationManagerDelegate {
         // Basically sets reasonable bounds to bias for in the place search
         let autocompleteBiasBounds = GMSCoordinateBounds(coordinate: CLLocationCoordinate2D(latitude: location.coordinate.latitude+0.1, longitude: location.coordinate.longitude+0.1), coordinate: CLLocationCoordinate2D(latitude: location.coordinate.latitude-0.1, longitude: location.coordinate.longitude-0.1))
         
-        addressResultsViewController?.autocompleteBounds = autocompleteBiasBounds
+        addressResultsViewController.autocompleteBounds = autocompleteBiasBounds
         
         
         if currentLocation == nil {
@@ -302,7 +423,7 @@ extension ViewController: CLLocationManagerDelegate {
 
 extension ViewController: GMSAutocompleteResultsViewControllerDelegate {
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didAutocompleteWith place: GMSPlace) {
-        addressSearchController?.isActive = false
+        addressSearchController.isActive = false
         
         placeMarker(mapView, at: place.coordinate)
         

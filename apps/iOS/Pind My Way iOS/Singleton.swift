@@ -7,9 +7,9 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 #warning("Enter the real Google Maps API Key")
-let apiKey = "AIzaSyCZRc9lbMIutSDa7_tQwlU8xS09eBl_As8"
+let apiKey = ""
 
-#warning("Enter the real pollution API key")
-let pollutionApiKey = ""
+var pollutionResp : JSON = []

@@ -8,12 +8,14 @@ PODS:
     - GoogleMaps/Base (= 2.7.0)
   - Polyline (4.2.0)
   - SwiftyJSON (4.2.0)
+  - SwiftyXML (1.7.0)
 
 DEPENDENCIES:
   - GoogleMaps
   - GooglePlaces
   - Polyline (~> 4.0)
   - SwiftyJSON (~> 4.0)
+  - SwiftyXML (~> 1.7.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -21,13 +23,15 @@ SPEC REPOS:
     - GooglePlaces
     - Polyline
     - SwiftyJSON
+    - SwiftyXML
 
 SPEC CHECKSUMS:
   GoogleMaps: f79af95cb24d869457b1f961c93d3ce8b2f3b848
   GooglePlaces: 3d06e6c99654545b4738ce49648745779c25f2ef
   Polyline: 3d69f75bb136357e27291d439d0436c6ebda57a4
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
+  SwiftyXML: 7ed8a99cbdb3b6dbc270a48ae0064d792f5daaa2
 
-PODFILE CHECKSUM: 4f28b82057dcb00de5c4cb6c81dcfbaad99a82fb
+PODFILE CHECKSUM: 3fdb195a2859c64d9df51989f5f82c68ca6e86ad
 
 COCOAPODS: 1.6.0.beta.1

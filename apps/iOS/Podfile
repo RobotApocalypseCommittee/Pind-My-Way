@@ -10,7 +10,7 @@ target 'Pind My Way iOS' do
   pod "GooglePlaces"
   pod 'SwiftyJSON', '~> 4.0'
   pod 'Polyline', '~> 4.0'
-
+  pod 'SwiftyXML', '~> 1.7.0'
 end
 
 post_install do | installer |
