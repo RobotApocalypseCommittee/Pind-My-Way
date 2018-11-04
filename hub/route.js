@@ -1,4 +1,4 @@
-
+const {GeoCoord} = require("./GeoCoords")
 
 class RoutePoint {
   constructor(command, lat, lon) {
@@ -7,12 +7,12 @@ class RoutePoint {
         case 0: command = "forward"; break;
         case 1: command = "left"; break;
         case 2: command = "right"; break;
+        case 3: command = "reverse"; break;
         default: throw `Unknown command ${command}`;
       }
     }
     this.direction = command
-    this.latitude = lat
-    this.longitude = lon
+    this.loc = new GeoCoord(lat, lon)
   }
 }
 class Route {
@@ -63,4 +63,4 @@ class Route {
 
 }
 
-
+module.exports = {Route, RoutePoint}

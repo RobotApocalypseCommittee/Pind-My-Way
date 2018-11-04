@@ -1,4 +1,6 @@
 const bleno = require("bleno")
+const {Route} = require("../route")
+
 
 const {characteristics:{routeUpload}} = require("./bleConstants.json")
 
@@ -10,7 +12,13 @@ let route_upload_characteristic = new bleno.Characteristic({
     console.log("Data: ", data)
     console.log("Offset: ", offset)
     console.log("WithoutResponse: ", withoutResponse)
-    callback(bleno.Characteristic.RESULT_SUCCESS)
+    // Hoping it works
+    let route = new Route()
+    if (route.decode_data(data)) {
+      callback(bleno.Characteristic.RESULT_SUCCESS)
+    } else {
+      callback(bleno.Characteristic.RESULT_INVALID_ATTRIBUTE_LENGTH)
+    }
   },
   descriptors: [
     new bleno.Descriptor({
