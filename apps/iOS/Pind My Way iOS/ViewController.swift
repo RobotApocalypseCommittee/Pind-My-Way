@@ -33,7 +33,6 @@ class ViewController: UIViewController {
     var zoomLevel: Float = 15.0
     
     var marker : GMSMarker = GMSMarker()
-    var pollutionMarker : GMSMarker = GMSMarker()
     
     var routePolylines: Array<Array<GMSPolyline>> = []
     var routeCoordinates: Array<Array<CLLocationCoordinate2D>> = []
@@ -208,18 +207,15 @@ class ViewController: UIViewController {
                     
                     // I do these as two seperate things so the resize happens first of all
                     for i in 0...routes.count-1 {
-                        self.drawRoute(route: routes[i], asSelected: i == 0)
+                        self.drawRoute(route: routes[i], asSelected: i == 0, name: "Route \(i+1)")
                     }
-                    // places info card at the middle of the route
-                    let middleCoord = routes[0]["legs"][routes[0]["legs"].count/2]["steps"][routes[0]["legs"][routes[0]["legs"].count/2]["steps"].count/2]["start_location"]
-                    self.showPollutionInfo(index: 0, pos: CLLocationCoordinate2D(latitude: middleCoord["lat"].doubleValue, longitude: middleCoord["lng"].doubleValue))
                 }
             }
         }
     }
     
     // Takes a route, gets the overview polyline, decodes it and draws it
-    func drawRoute(route: JSON, asSelected selected: Bool) {
+    func drawRoute(route: JSON, asSelected selected: Bool, name: String) {
         var points: Array<CLLocationCoordinate2D> = []
         var pointsLastIndex = -1
         
@@ -258,6 +254,24 @@ class ViewController: UIViewController {
         polyline.strokeColor = selected ? UIColor(red: 26.0/255, green: 142.0/255, blue: 255.0/255, alpha: 1.0) : UIColor.lightGray
         polyline.zIndex = selected ? 100 : 2
         polyline.map = mapView
+        
+        // get the 'middle point where the marker is placed' this needs to be better for routes that are really similar
+        let pointCount = path!.count()
+        let midpoint = path!.coordinate(at: pointCount/2)
+        marker = GMSMarker(position: midpoint)
+        marker.appearAnimation = GMSMarkerAnimation.pop
+        
+        // store info about what the marker's info window should display in the marker
+        marker.title = name
+        marker.icon = #imageLiteral(resourceName: "routeInfo.png")
+        let pollutionInfo = Utils.getRoutePollution(route: nonDrawnPointsIncluded)
+        var description = "NO2 rating: \(pollutionInfo["NO2"]!["total"]!)\n"
+        description.append(contentsOf: "SO2 rating: \(pollutionInfo["SO2"]!["total"]!)\n")
+        description.append(contentsOf: "PM10 rating: \(pollutionInfo["PM10"]!["total"]!)\n")
+        description.append(contentsOf: "PM25 rating: \(pollutionInfo["PM25"]!["total"]!)\n")
+        description.append(contentsOf: "O3 rating: \(pollutionInfo["O3"]!["total"]!)")
+        marker.snippet = description
+        marker.map = mapView
         
         let underPolyline = GMSPolyline(path: path)
         underPolyline.strokeWidth = selected ? 6.0 : 5.0
@@ -312,18 +326,12 @@ extension ViewController: GMSMapViewDelegate {
                     polyline.strokeColor = selected ? UIColor(red: 26.0/255, green: 142.0/255, blue: 255.0/255, alpha: 1.0) : UIColor.lightGray
                     polyline.zIndex = selected ? 100 : 2
                     
+                    
+                    
                     let underPolyline = routePolylines[i][1]
                     underPolyline.strokeWidth = selected ? 6.0 : 5.0
                     underPolyline.strokeColor = selected ? UIColor(red: 26.0/255, green: 100.0/255, blue: 255.0/255, alpha: 1.0) : UIColor.gray
                     underPolyline.zIndex = selected ? 99 : 1
-                    if selected {
-                        
-                        // places the info card at the 'midpoint' of the polyline
-                        // TODO find the actual midpoint (using distance)
-                        let middleCoord = polyline.path!.coordinate(at: polyline.path!.count()/2)
-                        self.showPollutionInfo(index: i, pos: CLLocationCoordinate2D(latitude: middleCoord.latitude, longitude: middleCoord.longitude))
-                        
-                    }
                 }
             } else {
                 print("Info: Map: Marker placed at \(coordinate.latitude), \(coordinate.longitude)")
@@ -341,39 +349,30 @@ extension ViewController: GMSMapViewDelegate {
         marker.map = mapView
     }
     
-    //TODO beautify hehe
-    func showPollutionInfo(index: Int, pos: CLLocationCoordinate2D) {
-        let pollutionInfo = Utils.getRoutePollution(route: routeCoordinates[index])
+    // called every time a marker info window may need to be created
+    func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
+        let view = UIView(frame: CGRect.init(x: 0, y: 0, width: 200, height: 120))
+        view.backgroundColor = UIColor.white
+        view.layer.cornerRadius = 20
         
-        pollutionMarker.map = nil
-        pollutionMarker = GMSMarker(position: CLLocationCoordinate2D(latitude: pos.latitude+0.03, longitude: pos.longitude+0.03))
-        pollutionMarker.appearAnimation = GMSMarkerAnimation.pop
+        let title = UILabel(frame: CGRect.init(x: 8, y: 8, width: view.frame.size.width - 16, height: 15))
+        title.text = marker.title
+        view.addSubview(title)
         
-        //I absolutely need to find a better way of doing this . . .
-        let pollutionView = RouteInfoView(frame: CGRect(x: 100, y: 0, width: 200, height: 150))
-        if pollutionInfo["NO2"]?["available"] as? Bool ?? false {
-            pollutionView.no2Average.text = String(describing: round((pollutionInfo["NO2"]!["average"]! as! Float)*100)/100)
-            pollutionView.no2Total.text = String(describing: pollutionInfo["NO2"]!["total"]!)
-        }
-        else {
-            pollutionView.no2Average.text = "N/A"
-            pollutionView.no2Total.text = "N/A"
-        }
+        let desc = UILabel(frame: CGRect.init(x: title.frame.origin.x, y: title.frame.origin.y + title.frame.size.height + 3, width: view.frame.size.width - 16, height: 80))
+        desc.text = marker.snippet
+        desc.lineBreakMode = .byWordWrapping
+        desc.numberOfLines = 5
+        desc.font = UIFont.systemFont(ofSize: 12, weight: .light)
+        view.addSubview(desc)
         
-        if pollutionInfo["SO2"]?["available"] as? Bool ?? false {
-            pollutionView.so2Average.text = String(describing: round((pollutionInfo["SO2"]!["average"]! as! Float)*100)/100)
-            pollutionView.so2Total.text = String(describing: pollutionInfo["SO2"]!["total"]!)
+        // don't return a view if the marker is just a random regular marker
+        if marker.title != nil {
+            return view
         }
-        else {
-            pollutionView.so2Average.text = "N/A"
-            pollutionView.so2Total.text = "N/A"
-        }
-        
-        pollutionMarker.iconView = pollutionView
-        pollutionMarker.map = mapView
+        return nil
     }
-    
-    
+
 }
 
 

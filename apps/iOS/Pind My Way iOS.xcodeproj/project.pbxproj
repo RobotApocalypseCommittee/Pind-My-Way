@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		213BC12D2182217F004B3B40 /* RouteInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213BC12C2182217F004B3B40 /* RouteInfoView.swift */; };
+		21FB33E62194DBA9006A06D3 /* routeInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 21FB33E52194DBA9006A06D3 /* routeInfo.png */; };
 		2919A7D421655FBE00828104 /* Bluetooth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2919A7D321655FBE00828104 /* Bluetooth.swift */; };
 		2942A5E2216B881C00B1FDBF /* BluetoothViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2942A5E1216B881C00B1FDBF /* BluetoothViewController.swift */; };
 		2942A5E4216BD74400B1FDBF /* BluetoothTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2942A5E3216BD74400B1FDBF /* BluetoothTableCell.swift */; };
@@ -46,7 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		213BC12C2182217F004B3B40 /* RouteInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoView.swift; sourceTree = "<group>"; };
+		21FB33E52194DBA9006A06D3 /* routeInfo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = routeInfo.png; sourceTree = "<group>"; };
 		2919A7D321655FBE00828104 /* Bluetooth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bluetooth.swift; sourceTree = "<group>"; };
 		2942A5E1216B881C00B1FDBF /* BluetoothViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothViewController.swift; sourceTree = "<group>"; };
 		2942A5E3216BD74400B1FDBF /* BluetoothTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothTableCell.swift; sourceTree = "<group>"; };
@@ -101,6 +101,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		21FB33E42194DB84006A06D3 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				21FB33E52194DBA9006A06D3 /* routeInfo.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
 		2942A5E5216BD74F00B1FDBF /* Bluetooth */ = {
 			isa = PBXGroup;
 			children = (
@@ -137,10 +145,10 @@
 			isa = PBXGroup;
 			children = (
 				2942A5E5216BD74F00B1FDBF /* Bluetooth */,
+				21FB33E42194DB84006A06D3 /* Images */,
 				297BBFCE2161097B00A3026E /* AppDelegate.swift */,
 				297BBFFE21611B8A00A3026E /* Singleton.swift */,
 				297BBFD02161097B00A3026E /* ViewController.swift */,
-				213BC12C2182217F004B3B40 /* RouteInfoView.swift */,
 				294F6FB42162C5CE00A1A402 /* Settings.bundle */,
 				297BBFFC216118E900A3026E /* Utils.swift */,
 				297BBFD22161097B00A3026E /* Main.storyboard */,
@@ -302,6 +310,7 @@
 				297BBFD92161097E00A3026E /* LaunchScreen.storyboard in Resources */,
 				297BBFD62161097E00A3026E /* Assets.xcassets in Resources */,
 				297BBFD42161097B00A3026E /* Main.storyboard in Resources */,
+				21FB33E62194DBA9006A06D3 /* routeInfo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,7 +412,6 @@
 			files = (
 				29E0651A216D58500021C799 /* HorizontalAnimator.swift in Sources */,
 				297BBFD12161097B00A3026E /* ViewController.swift in Sources */,
-				213BC12D2182217F004B3B40 /* RouteInfoView.swift in Sources */,
 				2919A7D421655FBE00828104 /* Bluetooth.swift in Sources */,
 				297BBFFF21611B8A00A3026E /* Singleton.swift in Sources */,
 				2942A5E4216BD74400B1FDBF /* BluetoothTableCell.swift in Sources */,

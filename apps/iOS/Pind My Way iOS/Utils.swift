@@ -123,7 +123,7 @@ class Utils {
         var summary : [String : [String:Any]] = [:]
         for (pollutant, values) in allPollutionReadings {
             if values == [] {
-                summary[pollutant] = ["available" : false, "average" : 0, "total":0]
+                summary[pollutant] = ["available" : false, "average" : "N/A", "total" : "N/A"]
             }
             else {
                 let total = values.reduce(0, +)
