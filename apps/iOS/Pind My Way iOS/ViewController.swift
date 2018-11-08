@@ -261,7 +261,7 @@ class ViewController: UIViewController {
         
         // store info about what the marker's info window should display in the marker
         marker.title = name
-        marker.icon = #imageLiteral(resourceName: "routeInfo.png")
+        marker.icon = #imageLiteral(resourceName: "RouteInfo")
         let pollutionInfo = Utils.getRoutePollution(route: nonDrawnPointsIncluded)
         var description = "NO2 rating: \(pollutionInfo["NO2"]!["total"]!)\n"
         description.append(contentsOf: "SO2 rating: \(pollutionInfo["SO2"]!["total"]!)\n")
