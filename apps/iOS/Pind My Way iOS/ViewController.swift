@@ -52,14 +52,12 @@ class ViewController: UIViewController {
             if let data = data {
                 do {
                     pollutionResp = try JSON(data: data)
-                    print("loaded")
+                    print("Info: Pollution: Data Loaded")
                 }  catch let error {
-                    print("oof")
-                    print(error.localizedDescription)
+                    print("Error: Polution: \(error.localizedDescription)")
                 }
             } else if let error = error {
-                print("oof")
-                print(error.localizedDescription)
+                print("Error: Polution: \(error.localizedDescription)")
             }
         }
         task.resume()

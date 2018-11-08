@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1EEB84BD8A8D2A3D806E26AA /* Pods_Pind_My_Way_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A58CE46EDDFB37530E65245D /* Pods_Pind_My_Way_iOS.framework */; };
 		213BC12D2182217F004B3B40 /* RouteInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213BC12C2182217F004B3B40 /* RouteInfoView.swift */; };
 		2919A7D421655FBE00828104 /* Bluetooth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2919A7D321655FBE00828104 /* Bluetooth.swift */; };
 		2942A5E2216B881C00B1FDBF /* BluetoothViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2942A5E1216B881C00B1FDBF /* BluetoothViewController.swift */; };
@@ -25,7 +26,6 @@
 		29B2C2B8216D329000C867B8 /* Introduction.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 29B2C2B7216D329000C867B8 /* Introduction.storyboard */; };
 		29B2C2BA216D37FE00C867B8 /* IntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B2C2B9216D37FE00C867B8 /* IntroductionViewController.swift */; };
 		29E0651A216D58500021C799 /* HorizontalAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E06519216D58500021C799 /* HorizontalAnimator.swift */; };
-		81CD71EAAFAD8858CD70B456 /* Pods_Pind_My_Way_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E15403167219507B2A6A8364 /* Pods_Pind_My_Way_iOS.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,9 +70,9 @@
 		29B2C2B7216D329000C867B8 /* Introduction.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Introduction.storyboard; sourceTree = "<group>"; };
 		29B2C2B9216D37FE00C867B8 /* IntroductionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroductionViewController.swift; sourceTree = "<group>"; };
 		29E06519216D58500021C799 /* HorizontalAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalAnimator.swift; sourceTree = "<group>"; };
-		98BA2840BCB006D5535F2E2C /* Pods-Pind My Way iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pind My Way iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS.debug.xcconfig"; sourceTree = "<group>"; };
-		BCD620F4FBA825665D82A8BE /* Pods-Pind My Way iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pind My Way iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS.release.xcconfig"; sourceTree = "<group>"; };
-		E15403167219507B2A6A8364 /* Pods_Pind_My_Way_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pind_My_Way_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5BCEADBEB56117926C47D781 /* Pods-Pind My Way iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pind My Way iOS.release.xcconfig"; path = "Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS.release.xcconfig"; sourceTree = "<group>"; };
+		960FA303126327954117AD3A /* Pods-Pind My Way iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pind My Way iOS.debug.xcconfig"; path = "Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS.debug.xcconfig"; sourceTree = "<group>"; };
+		A58CE46EDDFB37530E65245D /* Pods_Pind_My_Way_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pind_My_Way_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,7 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81CD71EAAFAD8858CD70B456 /* Pods_Pind_My_Way_iOS.framework in Frameworks */,
+				1EEB84BD8A8D2A3D806E26AA /* Pods_Pind_My_Way_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,8 +118,8 @@
 				297BBFE22161097E00A3026E /* Pind My Way iOSTests */,
 				297BBFED2161097E00A3026E /* Pind My Way iOSUITests */,
 				297BBFCC2161097B00A3026E /* Products */,
-				C1EB5660DAE52388C30B597F /* Pods */,
-				829B9EE2D76E05E340733560 /* Frameworks */,
+				AFAD9E22C95B0E7CDCC5FAE5 /* Pods */,
+				EC8FA8CF91CE0D538E69B7F2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -137,20 +137,20 @@
 			isa = PBXGroup;
 			children = (
 				2942A5E5216BD74F00B1FDBF /* Bluetooth */,
-				297BBFCE2161097B00A3026E /* AppDelegate.swift */,
-				297BBFFE21611B8A00A3026E /* Singleton.swift */,
-				297BBFD02161097B00A3026E /* ViewController.swift */,
-				213BC12C2182217F004B3B40 /* RouteInfoView.swift */,
-				294F6FB42162C5CE00A1A402 /* Settings.bundle */,
-				297BBFFC216118E900A3026E /* Utils.swift */,
-				297BBFD22161097B00A3026E /* Main.storyboard */,
-				29B2C2B7216D329000C867B8 /* Introduction.storyboard */,
-				29B2C2B9216D37FE00C867B8 /* IntroductionViewController.swift */,
-				29E06519216D58500021C799 /* HorizontalAnimator.swift */,
 				297BBFD52161097E00A3026E /* Assets.xcassets */,
-				297BBFD72161097E00A3026E /* LaunchScreen.storyboard */,
-				297BBFDA2161097E00A3026E /* Info.plist */,
+				297BBFCE2161097B00A3026E /* AppDelegate.swift */,
+				29E06519216D58500021C799 /* HorizontalAnimator.swift */,
+				29B2C2B9216D37FE00C867B8 /* IntroductionViewController.swift */,
 				29B2C2B5216D1E8C00C867B8 /* Reachability.swift */,
+				213BC12C2182217F004B3B40 /* RouteInfoView.swift */,
+				297BBFFE21611B8A00A3026E /* Singleton.swift */,
+				297BBFFC216118E900A3026E /* Utils.swift */,
+				297BBFD02161097B00A3026E /* ViewController.swift */,
+				29B2C2B7216D329000C867B8 /* Introduction.storyboard */,
+				297BBFD72161097E00A3026E /* LaunchScreen.storyboard */,
+				297BBFD22161097B00A3026E /* Main.storyboard */,
+				294F6FB42162C5CE00A1A402 /* Settings.bundle */,
+				297BBFDA2161097E00A3026E /* Info.plist */,
 			);
 			path = "Pind My Way iOS";
 			sourceTree = "<group>";
@@ -173,21 +173,21 @@
 			path = "Pind My Way iOSUITests";
 			sourceTree = "<group>";
 		};
-		829B9EE2D76E05E340733560 /* Frameworks */ = {
+		AFAD9E22C95B0E7CDCC5FAE5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				E15403167219507B2A6A8364 /* Pods_Pind_My_Way_iOS.framework */,
+				960FA303126327954117AD3A /* Pods-Pind My Way iOS.debug.xcconfig */,
+				5BCEADBEB56117926C47D781 /* Pods-Pind My Way iOS.release.xcconfig */,
 			);
-			name = Frameworks;
+			path = Pods;
 			sourceTree = "<group>";
 		};
-		C1EB5660DAE52388C30B597F /* Pods */ = {
+		EC8FA8CF91CE0D538E69B7F2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				98BA2840BCB006D5535F2E2C /* Pods-Pind My Way iOS.debug.xcconfig */,
-				BCD620F4FBA825665D82A8BE /* Pods-Pind My Way iOS.release.xcconfig */,
+				A58CE46EDDFB37530E65245D /* Pods_Pind_My_Way_iOS.framework */,
 			);
-			name = Pods;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -197,12 +197,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 297BBFF32161097E00A3026E /* Build configuration list for PBXNativeTarget "Pind My Way iOS" */;
 			buildPhases = (
-				06F071AEF6EE280FD23131EE /* [CP] Check Pods Manifest.lock */,
+				4C7D68BB5D9135D162488DA6 /* [CP] Check Pods Manifest.lock */,
 				297BBFC72161097B00A3026E /* Sources */,
 				297BBFC82161097B00A3026E /* Frameworks */,
 				297BBFC92161097B00A3026E /* Resources */,
-				29A55F25F9209AD7D24F45E7 /* [CP] Embed Pods Frameworks */,
-				32DCEE7461F584F24F96155D /* [CP] Copy Pods Resources */,
+				FB68EE9DDA2CABFE2551B407 /* [CP] Embed Pods Frameworks */,
+				B113B135EB1429A29FE5FD76 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -322,7 +322,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		06F071AEF6EE280FD23131EE /* [CP] Check Pods Manifest.lock */ = {
+		4C7D68BB5D9135D162488DA6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -344,7 +344,31 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		29A55F25F9209AD7D24F45E7 /* [CP] Embed Pods Frameworks */ = {
+		B113B135EB1429A29FE5FD76 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-resources.sh",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FB68EE9DDA2CABFE2551B407 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -368,30 +392,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		32DCEE7461F584F24F96155D /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-resources.sh",
-				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
-				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -584,13 +584,13 @@
 		};
 		297BBFF42161097E00A3026E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 98BA2840BCB006D5535F2E2C /* Pods-Pind My Way iOS.debug.xcconfig */;
+			baseConfigurationReference = 960FA303126327954117AD3A /* Pods-Pind My Way iOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8F276LS8S7;
 				INFOPLIST_FILE = "Pind My Way iOS/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -604,13 +604,13 @@
 		};
 		297BBFF52161097E00A3026E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BCD620F4FBA825665D82A8BE /* Pods-Pind My Way iOS.release.xcconfig */;
+			baseConfigurationReference = 5BCEADBEB56117926C47D781 /* Pods-Pind My Way iOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8F276LS8S7;
 				INFOPLIST_FILE = "Pind My Way iOS/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
