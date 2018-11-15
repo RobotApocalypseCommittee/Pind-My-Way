@@ -141,9 +141,8 @@ class ViewController: UIViewController {
     }
     
     @IBAction func GoButton_touchUpInside(_ sender: Any) {
-        let newViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Bluetooth")
-        newViewController.transitioningDelegate = self
-        self.present(newViewController, animated: true, completion: nil)
+        UserDefaults.standard.set(false, forKey: "introDone")
+        self.performSegue(withIdentifier: "ToIntroduction", sender: self)
     }
     
     // Gets directions and draws them on the map

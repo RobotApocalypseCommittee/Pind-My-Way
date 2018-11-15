@@ -45,7 +45,7 @@
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Connects to the Pind My Way device</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Helps plan directions by using your current location as a starting point</string>
+	<string>Allows directions to be planned by using your current location as a starting point</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

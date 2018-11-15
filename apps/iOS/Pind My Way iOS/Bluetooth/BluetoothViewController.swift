@@ -11,11 +11,15 @@ import UIKit
 class BluetoothViewController: UIViewController {
     
     @IBOutlet weak var peripheralTableView: UITableView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var discoveredDevicesLabel: UILabel!
     
     var bluetoothManager: BluetoothManager? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        activityIndicator.startAnimating()
         
         peripheralTableView.delegate = self
         peripheralTableView.dataSource = self
@@ -25,14 +29,21 @@ class BluetoothViewController: UIViewController {
         }
     }
     
-    
-    @IBAction func backButton_touchUpInside(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+    @IBAction func cancelButton_touchUpInside(_ sender: Any) {
+        UserDefaults.standard.set(true, forKey: "introDone")
+        self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
     }
 }
 
 extension BluetoothViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if bluetoothManager!.raspberryPis.count > 0 {
+            // This means a pi has been found, so no need to look like it's loading anymore
+            activityIndicator.stopAnimating()
+            activityIndicator.isHidden = true
+            peripheralTableView.isHidden = false
+            discoveredDevicesLabel.isHidden = false
+        }
         return bluetoothManager!.raspberryPis.count
     }
     

@@ -9,6 +9,9 @@
 import UIKit
 
 class IntroductionViewController: UIViewController {
+    
+    let toBluetoothTransition = HorizontalAnimator(goingForwards: true)
+    let fromBluetoothTransition = HorizontalAnimator(goingForwards: false)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,8 +20,12 @@ class IntroductionViewController: UIViewController {
     }
     
     @IBAction func continueButton_touchUpInside(_ sender: Any) {
-        UserDefaults.standard.set(true, forKey: "introDone")
-        self.dismiss(animated: true, completion: nil)
+        /*UserDefaults.standard.set(true, forKey: "introDone")
+        self.dismiss(animated: true, completion: nil)*/
+        
+        let newViewController = UIStoryboard(name: "Introduction", bundle: nil).instantiateViewController(withIdentifier: "Bluetooth")
+        newViewController.transitioningDelegate = self
+        self.present(newViewController, animated: true, completion: nil)
     }
     
     /*
@@ -31,4 +38,14 @@ class IntroductionViewController: UIViewController {
     }
     */
 
+}
+
+extension IntroductionViewController: UIViewControllerTransitioningDelegate {
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return toBluetoothTransition
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return fromBluetoothTransition
+    }
 }
