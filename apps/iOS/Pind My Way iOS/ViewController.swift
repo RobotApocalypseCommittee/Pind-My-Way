@@ -260,13 +260,13 @@ class ViewController: UIViewController {
         
         // store info about what the marker's info window should display in the marker
         marker.title = name
-        marker.icon = #imageLiteral(resourceName: "RouteInfo")
+        marker.icon = UIImage(named:"RouteInfo")
         let pollutionInfo = Utils.getRoutePollution(route: nonDrawnPointsIncluded)
-        var description = "NO2 rating: \(pollutionInfo["NO2"]!["total"]!)\n"
-        description.append(contentsOf: "SO2 rating: \(pollutionInfo["SO2"]!["total"]!)\n")
+        var description = "NO₂ rating: \(pollutionInfo["NO2"]!["total"]!)\n"
+        description.append(contentsOf: "SO₂ rating: \(pollutionInfo["SO2"]!["total"]!)\n")
         description.append(contentsOf: "PM10 rating: \(pollutionInfo["PM10"]!["total"]!)\n")
         description.append(contentsOf: "PM25 rating: \(pollutionInfo["PM25"]!["total"]!)\n")
-        description.append(contentsOf: "O3 rating: \(pollutionInfo["O3"]!["total"]!)")
+        description.append(contentsOf: "O₃ rating: \(pollutionInfo["O3"]!["total"]!)")
         marker.snippet = description
         marker.map = mapView
         
@@ -353,11 +353,24 @@ extension ViewController: GMSMapViewDelegate {
         view.layer.cornerRadius = 20
         
         let title = UILabel(frame: CGRect.init(x: 8, y: 8, width: view.frame.size.width - 16, height: 15))
+        
+        
+        
+        
         title.text = marker.title
         view.addSubview(title)
         
         let desc = UILabel(frame: CGRect.init(x: title.frame.origin.x, y: title.frame.origin.y + title.frame.size.height + 3, width: view.frame.size.width - 16, height: 80))
-        desc.text = marker.snippet
+        
+        var descText: String = ""
+        marker.snippet!.enumerateLines { line, _ in
+            if !(line.range(of:"N/A") != nil) {
+                descText = descText + line + "\n"
+            }
+        }
+        
+        
+        desc.text = descText
         desc.lineBreakMode = .byWordWrapping
         desc.numberOfLines = 5
         desc.font = UIFont.systemFont(ofSize: 12, weight: .light)
