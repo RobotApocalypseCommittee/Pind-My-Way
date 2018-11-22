@@ -10,7 +10,7 @@ import Foundation
 import CoreBluetooth
 
 let piServiceUuid = CBUUID(string: "9540")
-let writeCharacteristicUuid = CBUUID(string: "3bf0")
+let routeCharacteristicUuid = CBUUID(string: "3bf0")
 let uniqueIDCharacteristicUuid = CBUUID(string: "fc58")
 let settableNameCharacteristicUuid = CBUUID(string: "fc59")
 
@@ -25,14 +25,17 @@ class BluetoothManager: NSObject {
     var _selectedPi: CBPeripheral? = nil
     var piConnected = false
     
-    var _piDataService: CBService? = nil
+    var _piRouteService: CBService? = nil
 
     var characteristicsDiscovered = false
     
     let peripheralFoundCallback: () -> Void
     
+    var peripheralPairedCallback: (() -> Void)?
+    
     init(withCallback callback: @escaping () -> Void) {
         peripheralFoundCallback = callback
+        peripheralPairedCallback = nil
         
         super.init()
         
@@ -59,7 +62,7 @@ class BluetoothManager: NSObject {
     }
     
     func connectPiAndService(peripheral: CBPeripheral) {
-        _piDataService = nil
+        _piRouteService = nil
         characteristicsDiscovered = false
         
         peripheral.delegate = self
@@ -74,7 +77,7 @@ class BluetoothManager: NSObject {
             _centralManager!.cancelPeripheralConnection(_selectedPi)
         }
         _selectedPi = nil
-        _piDataService = nil
+        _piRouteService = nil
         characteristicsDiscovered = false
     }
     
@@ -124,9 +127,9 @@ extension BluetoothManager: CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         if error == nil {
-            print("Info: Bluetooth: Data service found")
-            _piDataService = peripheral.services![0]
-            _selectedPi!.discoverCharacteristics([writeCharacteristicUuid], for: _piDataService!)
+            print("Info: Bluetooth: Route service found")
+            _piRouteService = peripheral.services![0]
+            _selectedPi!.discoverCharacteristics([routeCharacteristicUuid], for: _piRouteService!)
         } else {
             print("Error: Bluetooth: \(error!)")
         }
@@ -134,28 +137,22 @@ extension BluetoothManager: CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         if error == nil {
-            if service == _piDataService! {
+            if service == _piRouteService! {
                 print("Info: Bluetooth: Characteristics discovered")
-                
-                var number = 0xbabe
                 print("Info: Bluetooth: Max packet length: \(_selectedPi!.maximumWriteValueLength(for: .withResponse))")
-                
-                let data: Data = Data(Data(bytes: &number, count: 2).reversed())
-                var allData: Data = Data()
-                
-                // Test to see if sending 500 bytes works - it does
-                for _ in 1...8 {
-                    allData.append(contentsOf: data)
-                }
-                
                 
                 // The Data constructor (at least in this instance), combined with the pi at normal settings, produces a LITTLE ENDIAN
                 // output from an int.
                 // If we reverse it and then feed that to the Data constructor, it becomes BIG ENDIAN,
                 // Or optionally use CFSwap<Whatever>HostToBig(arg:)
-                _selectedPi!.writeValue(allData, for: _piDataService!.characteristics![0], type: .withResponse)
+                //_selectedPi!.writeValue(Data(), for: _piRouteService!.characteristics![0], type: .withResponse)
                 
                 characteristicsDiscovered = true
+                
+                // TODO, actually pair lol
+                if peripheralPairedCallback != nil {
+                    peripheralPairedCallback!()
+                }
             } else {
                 print("Warning: Bluetooth: A service was discovered that was not the data service!")
             }

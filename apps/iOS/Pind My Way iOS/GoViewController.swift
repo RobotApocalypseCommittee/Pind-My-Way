@@ -1,14 +1,14 @@
 //
-//  IntroductionViewController.swift
+//  GoViewController.swift
 //  Pind My Way iOS
 //
-//  Created by Atto Allas on 09/10/2018.
+//  Created by Atto Allas on 22/11/2018.
 //  Copyright © 2018 Atto Allas. All rights reserved.
 //
 
 import UIKit
 
-class IntroductionViewController: UIViewController {
+class GoViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,13 +16,10 @@ class IntroductionViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    @IBAction func continueButton_touchUpInside(_ sender: Any) {
-        /*UserDefaults.standard.set(true, forKey: "introDone")
-        self.dismiss(animated: true, completion: nil)*/
-        
-        performSegue(withIdentifier: "toBluetooth", sender: self)
+
+    @IBAction func backButton_touchUpInside(_ sender: Any) {
+        performSegue(withIdentifier: "returnFromGo", sender: self)
     }
-    
     /*
     // MARK: - Navigation
 

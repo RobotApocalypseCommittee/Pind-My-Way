@@ -20,9 +20,6 @@ var isFirstLoad = true
 
 class ViewController: UIViewController {
     
-    let toBluetoothTransition = HorizontalAnimator(goingForwards: true)
-    let fromBluetoothTransition = HorizontalAnimator(goingForwards: false)
-    
     var locationManager = CLLocationManager()
     var currentLocation: CLLocation? = nil
     var mapView: GMSMapView!
@@ -33,15 +30,19 @@ class ViewController: UIViewController {
     var zoomLevel: Float = 15.0
     
     var marker : GMSMarker = GMSMarker()
+    var selectedRouteIndex = 0
     
     var routePolylines: Array<Array<GMSPolyline>> = []
     var routeCoordinates: Array<Array<CLLocationCoordinate2D>> = []
     
     var networkCheckerTimer = Timer()
-
-    @IBOutlet weak var GoButton: UIButton!
-
+    
+    @IBOutlet weak var animationView: UIView!
+    @IBOutlet weak var goControlView: UIControl!
+    
     override func viewDidLoad() {
+        UIApplication.shared.windows.first?.layer.speed = 0.1
+        
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
@@ -61,10 +62,13 @@ class ViewController: UIViewController {
         }
         task.resume()
         
+        // This is so that it's over the GMSMapView
+        self.goControlView.layer.zPosition = 1
+        self.goControlView.layer.cornerRadius = 25
         
-        
-        // This is the same color as the search bar
-        self.view.backgroundColor = UIColor(displayP3Red: 199/255, green: 198/255, blue: 204/255, alpha: 1)
+        // So that it's under the map until it's needed
+        self.animationView.layer.zPosition = -1
+        self.animationView.layer.cornerRadius = 25-goControlViewBezel
         
         locationManager = CLLocationManager()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -80,8 +84,6 @@ class ViewController: UIViewController {
         self.mapView = GMSMapView.map(withFrame: CGRect(x: self.view.bounds.minX, y: window.safeAreaInsets.top+spaceOnTop, width: self.view.bounds.width, height: self.view.bounds.height-(spaceOnTop+spaceOnBottom+(window.safeAreaInsets.bottom+window.safeAreaInsets.top))), camera: camera)
         
         self.view.insertSubview(mapView, at: 0)
-        
-        self.GoButton.layer.zPosition = 1
         
         mapView.settings.myLocationButton = false
         mapView.isMyLocationEnabled = true
@@ -104,20 +106,19 @@ class ViewController: UIViewController {
         
         definesPresentationContext = true
         
-        
-        
         // TODO make this better!
         networkCheckerTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
             if !Reachability.isConnectedToNetwork() {
                 self.mapView.isHidden = true
-                self.GoButton.isHidden = true
+                self.goControlView.isHidden = true
                 self.addressSearchController.searchBar.isHidden = true
                 self.view.backgroundColor = .white
                 //print("Info: Connection: The device is not connected to the internet.")
             } else {
                 self.mapView.isHidden = false
-                self.GoButton.isHidden = false
+                self.goControlView.isHidden = false
                 self.addressSearchController.searchBar.isHidden = false
+                // Same colour as search bar, ish
                 self.view.backgroundColor = UIColor(displayP3Red: 199/255, green: 198/255, blue: 204/255, alpha: 1)
                 //print("Info: Connection: The device is connected to the internet.")
             }
@@ -129,7 +130,7 @@ class ViewController: UIViewController {
         
         // Only shows the introduction if the user has never completed it
         if !UserDefaults.standard.bool(forKey: "introDone") {
-            performSegue(withIdentifier: "ToIntroduction", sender: self)
+            performSegue(withIdentifier: "toIntroduction", sender: self)
         }
     }
     
@@ -140,9 +141,13 @@ class ViewController: UIViewController {
         addressSearchController.searchBar.frame = addressSearchBarFrame
     }
     
-    @IBAction func GoButton_touchUpInside(_ sender: Any) {
-        UserDefaults.standard.set(false, forKey: "introDone")
-        self.performSegue(withIdentifier: "ToIntroduction", sender: self)
+    @IBAction func goControlView_touchUpInside(_ sender: Any) {
+        //UserDefaults.standard.set(false, forKey: "introDone")
+        self.performSegue(withIdentifier: "toGo", sender: self)
+    }
+    
+    @IBAction func returnFromSegueActions(sender: UIStoryboardSegue) {
+        // Just here
     }
     
     // Gets directions and draws them on the map
@@ -260,7 +265,7 @@ class ViewController: UIViewController {
         
         // store info about what the marker's info window should display in the marker
         marker.title = name
-        marker.icon = UIImage(named:"RouteInfo")
+        marker.icon = #imageLiteral(resourceName: "RouteInfo")
         let pollutionInfo = Utils.getRoutePollution(route: nonDrawnPointsIncluded)
         var description = "NO₂ rating: \(pollutionInfo["NO2"]!["total"]!)\n"
         description.append(contentsOf: "SO₂ rating: \(pollutionInfo["SO2"]!["total"]!)\n")
@@ -285,18 +290,6 @@ class ViewController: UIViewController {
     
 }
 
-
-extension ViewController: UIViewControllerTransitioningDelegate {
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return toBluetoothTransition
-    }
-    
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return fromBluetoothTransition
-    }
-}
-
-
 extension ViewController: GMSMapViewDelegate {
     // Called when user touches to place a marker
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
@@ -312,11 +305,21 @@ extension ViewController: GMSMapViewDelegate {
 
             // 15.60405 is the zoom level at which 50m is appropriate
             // When you get into very zoomed in levels, google maps gets the point at which you clicked slightly wrong lat-long-wise, so if it's under 30m, we assume you tried to click it anyway
-            if smallestDistances.min() != nil && (smallestDistances.min()! < 30 || smallestDistances.min()! < Double(50 * pow(2, 15.60405-mapView.camera.zoom))) {
-                let indexOfSelected = smallestDistances.firstIndex(of: smallestDistances.min()!)!
+            let smallestDistance = smallestDistances.min() ?? -1
+            if smallestDistance != -1 && (smallestDistance < 30 || smallestDistance < Double(50 * pow(2, 15.60405-mapView.camera.zoom))) {
+                
+                let indexesOfSelected = smallestDistances.indices(ofItem: smallestDistance)
+                
+                if indexesOfSelected.contains(selectedRouteIndex) {
+                    // Don't update anything, they might as well have clicked their own line again
+                    return
+                }
+                
+                // Might as well choose the first one...
+                selectedRouteIndex = indexesOfSelected[0]
                 
                 for i in 0...routePolylines.count-1 {
-                    let selected = i == indexOfSelected
+                    let selected = i == selectedRouteIndex
                     
                     let polyline = routePolylines[i][0]
                     polyline.strokeWidth = selected ? 3.0 : 2.5
@@ -339,6 +342,9 @@ extension ViewController: GMSMapViewDelegate {
     }
     
     func placeMarker(_ mapView: GMSMapView, at coordinate: CLLocationCoordinate2D) {
+        // Resets the selected route index
+        selectedRouteIndex = 0
+        
         mapView.clear()
         
         marker = GMSMarker(position: coordinate)
@@ -353,9 +359,6 @@ extension ViewController: GMSMapViewDelegate {
         view.layer.cornerRadius = 20
         
         let title = UILabel(frame: CGRect.init(x: 8, y: 8, width: view.frame.size.width - 16, height: 15))
-        
-        
-        
         
         title.text = marker.title
         view.addSubview(title)
@@ -400,11 +403,11 @@ extension ViewController: CLLocationManagerDelegate {
         
         addressResultsViewController.autocompleteBounds = autocompleteBiasBounds
         
-        
         if currentLocation == nil {
             mapView.animate(to: camera)
-            currentLocation = location
         }
+        
+        currentLocation = location
     }
     
     // Handle authorization for the location manager.
@@ -449,5 +452,11 @@ extension ViewController: GMSAutocompleteResultsViewControllerDelegate {
     
     func didUpdateAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
+    }
+}
+
+extension Array where Element: Equatable {
+    func indices(ofItem item: Element) -> [Int] {
+        return enumerated().compactMap { $0.element == item ? $0.offset : nil }
     }
 }

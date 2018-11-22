@@ -10,14 +10,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Introduction-->
-        <scene sceneID="n7p-l1-QYs">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Introduction" id="leR-00-D5g" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="qKK-zM-bQE" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="570" y="-402"/>
-        </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -26,29 +18,303 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pSS-Lx-PsK">
-                                <rect key="frame" x="321" y="748" width="30" height="30"/>
-                                <state key="normal" title="Go"/>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4WS-11-wwo" userLabel="Animation View">
+                                <rect key="frame" x="187" y="405.66666666666669" width="1" height="1"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="Vt1-Nb-Ywd"/>
+                                    <constraint firstAttribute="width" constant="1" id="W5N-Af-6YE"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jKY-VU-ysY" userLabel="Go Control View" customClass="UIControl">
+                                <rect key="frame" x="284" y="721" width="75" height="75"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Go" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IgN-3o-N7h">
+                                        <rect key="frame" x="21.666666666666686" y="22.666666666666629" width="32" height="30"/>
+                                        <accessibility key="accessibilityConfiguration">
+                                            <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
+                                        </accessibility>
+                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.71764705880000002" blue="0.1529411765" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" button="YES"/>
+                                </accessibility>
+                                <constraints>
+                                    <constraint firstItem="IgN-3o-N7h" firstAttribute="centerX" secondItem="jKY-VU-ysY" secondAttribute="centerX" id="QbF-p9-YKF"/>
+                                    <constraint firstAttribute="width" constant="75" id="oC9-s6-CSY"/>
+                                    <constraint firstAttribute="height" constant="75" id="uAD-tF-6UL"/>
+                                    <constraint firstItem="IgN-3o-N7h" firstAttribute="centerY" secondItem="jKY-VU-ysY" secondAttribute="centerY" id="v6v-yz-3lA"/>
+                                </constraints>
                                 <connections>
-                                    <action selector="GoButton_touchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7Ru-3C-Cdu"/>
+                                    <action selector="goControlView_touchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dsX-El-zlq"/>
                                 </connections>
-                            </button>
+                            </view>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.7803921568627451" green="0.77647058823529413" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="pSS-Lx-PsK" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="AcH-a0-abg"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="pSS-Lx-PsK" secondAttribute="trailing" constant="24" id="vVl-dr-EFY"/>
+                            <constraint firstItem="4WS-11-wwo" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="C3O-gs-pVW"/>
+                            <constraint firstItem="4WS-11-wwo" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Iml-TS-ohg"/>
+                            <constraint firstItem="jKY-VU-ysY" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" constant="-16" id="fkr-HL-mOa"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="jKY-VU-ysY" secondAttribute="trailing" constant="16" id="xPI-zR-59K"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="GoButton" destination="pSS-Lx-PsK" id="SnA-QM-FOl"/>
-                        <segue destination="leR-00-D5g" kind="presentation" identifier="ToIntroduction" id="AWa-UL-l5y"/>
+                        <outlet property="animationView" destination="4WS-11-wwo" id="oeZ-xI-OOg"/>
+                        <outlet property="goControlView" destination="jKY-VU-ysY" id="Dg1-Kc-4za"/>
+                        <segue destination="9QC-G7-jmV" kind="presentation" identifier="toIntroduction" id="zfW-gu-Sdg"/>
+                        <segue destination="1m6-Ub-Jr5" kind="custom" identifier="toGo" customClass="FakeTwitterSegue" customModule="Pind_My_Way_iOS" customModuleProvider="target" id="vLg-b0-YNA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="6" y="23"/>
         </scene>
+        <!--Go View Controller-->
+        <scene sceneID="YVT-15-00D">
+            <objects>
+                <viewController id="1m6-Ub-Jr5" customClass="GoViewController" customModule="Pind_My_Way_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Wrh-Hl-kxf">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vYA-0v-QhC">
+                                <rect key="frame" x="166" y="44" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9n0-9D-vwl">
+                                <rect key="frame" x="22" y="748" width="34" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Back"/>
+                                <connections>
+                                    <action selector="backButton_touchUpInside:" destination="1m6-Ub-Jr5" eventType="touchUpInside" id="xla-51-nQc"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="v0q-z1-9lz"/>
+                    </view>
+                    <connections>
+                        <segue destination="Okq-kd-j8B" kind="unwind" identifier="returnFromGo" customClass="UnwindFakeTwitterSegue" customModule="Pind_My_Way_iOS" customModuleProvider="target" unwindAction="returnFromSegueActionsWithSender:" id="nQY-EL-9Hk"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="C9Y-df-pdg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Okq-kd-j8B" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="748" y="23"/>
+        </scene>
+        <!--Intro-->
+        <scene sceneID="eKT-bj-IMk">
+            <objects>
+                <viewController title="Intro" id="9QC-G7-jmV" customClass="IntroductionViewController" customModule="Pind_My_Way_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="pLa-J8-YQQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jXe-fx-jT8">
+                                <rect key="frame" x="106.33333333333333" y="69" width="162.66666666666669" height="64.666666666666686"/>
+                                <string key="text">Welcome to
+Pi-nd My Way</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="27"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gOz-3R-bTS">
+                                <rect key="frame" x="146" y="715" width="83" height="38"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <state key="normal" title="Continue"/>
+                                <connections>
+                                    <action selector="continueButton_touchUpInside:" destination="9QC-G7-jmV" eventType="touchUpInside" id="IFi-JD-Y9X"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You will need to pair your Pi-nd My Way Hub, so make sure you have it near" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d8L-LJ-ipf">
+                                <rect key="frame" x="16" y="649.33333333333337" width="343" height="40.666666666666629"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="gOz-3R-bTS" firstAttribute="centerX" secondItem="pLa-J8-YQQ" secondAttribute="centerX" id="5ms-L5-VAc"/>
+                            <constraint firstItem="d8L-LJ-ipf" firstAttribute="leading" secondItem="pLa-J8-YQQ" secondAttribute="leading" constant="16" id="9CR-bD-cc7"/>
+                            <constraint firstItem="jXe-fx-jT8" firstAttribute="top" secondItem="yf7-Lq-2Lr" secondAttribute="top" constant="25" id="SmW-Pu-kCx"/>
+                            <constraint firstItem="jXe-fx-jT8" firstAttribute="centerX" secondItem="pLa-J8-YQQ" secondAttribute="centerX" id="boM-ja-IQy"/>
+                            <constraint firstItem="yf7-Lq-2Lr" firstAttribute="bottom" secondItem="gOz-3R-bTS" secondAttribute="bottom" constant="25" id="eqI-Cg-a0l"/>
+                            <constraint firstItem="gOz-3R-bTS" firstAttribute="top" secondItem="d8L-LJ-ipf" secondAttribute="bottom" constant="25" id="gUs-Rp-TNQ"/>
+                            <constraint firstAttribute="trailing" secondItem="d8L-LJ-ipf" secondAttribute="trailing" constant="16" id="gWE-L5-9Dh"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="yf7-Lq-2Lr"/>
+                    </view>
+                    <connections>
+                        <segue destination="PLY-6X-XdV" kind="custom" identifier="toBluetooth" customClass="HorizontalSegue" customModule="Pind_My_Way_iOS" customModuleProvider="target" id="UzI-Gc-SVN"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kzX-mJ-GfX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6" y="-695"/>
+        </scene>
+        <!--Bluetooth View Controller-->
+        <scene sceneID="bgb-7u-nnw">
+            <objects>
+                <viewController storyboardIdentifier="Bluetooth" id="PLY-6X-XdV" customClass="BluetoothViewController" customModule="Pind_My_Way_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="RWi-yv-4Vb">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="duX-or-Mq6">
+                                <rect key="frame" x="0.0" y="148.66666666666669" width="375" height="629.33333333333326"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BluetoothCell" id="Xbq-Hh-GAE" customClass="BluetoothTableCell" customModule="Pind_My_Way_iOS" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Xbq-Hh-GAE" id="Ta7-D0-bog">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PlaceholderDeviceID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CGE-C1-HCw">
+                                                    <rect key="frame" x="15" y="11.333333333333336" width="159" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="CGE-C1-HCw" firstAttribute="centerY" secondItem="Ta7-D0-bog" secondAttribute="centerY" id="79R-hy-kpY"/>
+                                                <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="CGE-C1-HCw" secondAttribute="trailing" id="RNK-Kd-ZAE"/>
+                                                <constraint firstItem="CGE-C1-HCw" firstAttribute="leading" secondItem="Ta7-D0-bog" secondAttribute="leadingMargin" id="lXL-vr-TkY"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="DeviceIDLabel" destination="CGE-C1-HCw" id="m9T-15-lYq"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="usJ-TB-xNe">
+                                <rect key="frame" x="16" y="748" width="48" height="30"/>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="cancelButton_touchUpInside:" destination="PLY-6X-XdV" eventType="touchUpInside" id="vU4-2A-Oyx"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4vo-9B-30W">
+                                <rect key="frame" x="84.666666666666671" y="44.000000000000007" width="205.66666666666663" height="64.666666666666686"/>
+                                <string key="text">Pair your
+Pind My Way Hub</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="27"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Discovered Devices:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="buc-Vt-MEd">
+                                <rect key="frame" x="16" y="124.66666666666669" width="177.33333333333334" height="24"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="6LE-zj-Pfv">
+                                <rect key="frame" x="177.66666666666666" y="396" width="20" height="20"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="buc-Vt-MEd" firstAttribute="top" secondItem="4vo-9B-30W" secondAttribute="bottom" constant="16" id="06z-rM-ejZ"/>
+                            <constraint firstItem="buc-Vt-MEd" firstAttribute="leading" secondItem="nHo-Fh-uRX" secondAttribute="leading" constant="16" id="2zK-99-fo4"/>
+                            <constraint firstItem="4vo-9B-30W" firstAttribute="centerX" secondItem="RWi-yv-4Vb" secondAttribute="centerX" id="Qdi-gq-pl8"/>
+                            <constraint firstItem="4vo-9B-30W" firstAttribute="top" secondItem="nHo-Fh-uRX" secondAttribute="top" id="Ygx-zm-c5P"/>
+                            <constraint firstItem="nHo-Fh-uRX" firstAttribute="bottom" secondItem="duX-or-Mq6" secondAttribute="bottom" id="hwy-xu-bMD"/>
+                            <constraint firstItem="6LE-zj-Pfv" firstAttribute="centerX" secondItem="RWi-yv-4Vb" secondAttribute="centerX" id="j9p-KO-nrt"/>
+                            <constraint firstItem="usJ-TB-xNe" firstAttribute="leading" secondItem="nHo-Fh-uRX" secondAttribute="leading" constant="16" id="jpB-sA-uEw"/>
+                            <constraint firstItem="duX-or-Mq6" firstAttribute="leading" secondItem="nHo-Fh-uRX" secondAttribute="leading" id="jro-rx-3fD"/>
+                            <constraint firstItem="nHo-Fh-uRX" firstAttribute="trailing" secondItem="duX-or-Mq6" secondAttribute="trailing" id="keM-12-6iH"/>
+                            <constraint firstItem="nHo-Fh-uRX" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="usJ-TB-xNe" secondAttribute="trailing" constant="16" id="mPj-Ba-eq2"/>
+                            <constraint firstItem="duX-or-Mq6" firstAttribute="top" secondItem="buc-Vt-MEd" secondAttribute="bottom" id="srn-KR-cj9"/>
+                            <constraint firstItem="6LE-zj-Pfv" firstAttribute="centerY" secondItem="RWi-yv-4Vb" secondAttribute="centerY" id="tDn-fL-5i0"/>
+                            <constraint firstItem="usJ-TB-xNe" firstAttribute="bottom" secondItem="nHo-Fh-uRX" secondAttribute="bottom" id="xaa-U4-Cva"/>
+                            <constraint firstItem="nHo-Fh-uRX" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="buc-Vt-MEd" secondAttribute="trailing" constant="16" id="zXC-30-lm6"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="nHo-Fh-uRX"/>
+                    </view>
+                    <connections>
+                        <outlet property="activityIndicator" destination="6LE-zj-Pfv" id="I2u-Vj-Nkl"/>
+                        <outlet property="discoveredDevicesLabel" destination="buc-Vt-MEd" id="cQH-oP-Tah"/>
+                        <outlet property="peripheralTableView" destination="duX-or-Mq6" id="EQI-zW-lFb"/>
+                        <segue destination="gLB-NB-yh6" kind="custom" identifier="toConnect" customClass="HorizontalSegue" customModule="Pind_My_Way_iOS" customModuleProvider="target" id="pwn-AN-CJB"/>
+                        <segue destination="bH6-gt-5iz" kind="unwind" identifier="returnFromBluetooth" customClass="UnwindIntroSegue" customModule="Pind_My_Way_iOS" customModuleProvider="target" unwindAction="returnFromSegueActionsWithSender:" id="gWd-nL-ana"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bmU-UP-k2H" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="bH6-gt-5iz" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="718" y="-695"/>
+        </scene>
+        <!--Connect Bluetooth View Controller-->
+        <scene sceneID="tIR-co-mW1">
+            <objects>
+                <viewController id="gLB-NB-yh6" customClass="ConnectBluetoothViewController" customModule="Pind_My_Way_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="b0J-dd-Kgy">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="0vo-Jm-uoe">
+                                <rect key="frame" x="177.66666666666666" y="396" width="20" height="20"/>
+                            </activityIndicatorView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F7v-Qm-xe9">
+                                <rect key="frame" x="118.66666666666667" y="44.000000000000007" width="137.66666666666663" height="64.666666666666686"/>
+                                <string key="text">Pairing to
+Placeholder</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="27"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hag-ph-Qeh">
+                                <rect key="frame" x="16" y="748" width="48" height="30"/>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="cancelButton_touchUpInside:" destination="gLB-NB-yh6" eventType="touchUpInside" id="4OC-9t-hKc"/>
+                                    <action selector="cancelButton_touchUpInside:" destination="PLY-6X-XdV" eventType="touchUpInside" id="uNM-Sa-rfP"/>
+                                </connections>
+                            </button>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PairComplete" translatesAutoresizingMaskIntoConstraints="NO" id="Vcf-IO-yKA">
+                                <rect key="frame" x="17.666666666666657" y="236" width="340" height="340"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Hag-ph-Qeh" firstAttribute="leading" secondItem="hA1-qg-4XM" secondAttribute="leading" constant="16" id="39O-Z2-dMn"/>
+                            <constraint firstItem="Hag-ph-Qeh" firstAttribute="bottom" secondItem="hA1-qg-4XM" secondAttribute="bottom" id="8hb-KG-mSp"/>
+                            <constraint firstItem="hA1-qg-4XM" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Hag-ph-Qeh" secondAttribute="trailing" constant="16" id="KAL-6q-AQz"/>
+                            <constraint firstItem="Vcf-IO-yKA" firstAttribute="centerY" secondItem="b0J-dd-Kgy" secondAttribute="centerY" id="N6P-wb-Ijo"/>
+                            <constraint firstItem="0vo-Jm-uoe" firstAttribute="centerY" secondItem="b0J-dd-Kgy" secondAttribute="centerY" id="YhS-sK-h68"/>
+                            <constraint firstItem="Vcf-IO-yKA" firstAttribute="centerX" secondItem="b0J-dd-Kgy" secondAttribute="centerX" id="fSM-4k-S7E"/>
+                            <constraint firstItem="F7v-Qm-xe9" firstAttribute="centerX" secondItem="b0J-dd-Kgy" secondAttribute="centerX" id="kuA-Xa-rcB"/>
+                            <constraint firstItem="0vo-Jm-uoe" firstAttribute="centerX" secondItem="b0J-dd-Kgy" secondAttribute="centerX" id="uES-HU-UzY"/>
+                            <constraint firstItem="F7v-Qm-xe9" firstAttribute="top" secondItem="hA1-qg-4XM" secondAttribute="top" id="xMg-9e-LNa"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="hA1-qg-4XM"/>
+                    </view>
+                    <connections>
+                        <outlet property="activityIndicator" destination="0vo-Jm-uoe" id="s0w-8U-tqJ"/>
+                        <outlet property="completeImage" destination="Vcf-IO-yKA" id="DSU-pT-mah"/>
+                        <outlet property="pairLabel" destination="F7v-Qm-xe9" id="6Ka-NF-Vv4"/>
+                        <segue destination="MPO-ga-I4f" kind="unwind" identifier="returnFromConnect" customClass="UnwindIntroSegue" customModule="Pind_My_Way_iOS" customModuleProvider="target" unwindAction="returnFromSegueActionsWithSender:" id="sVB-YZ-o7U"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uhP-cK-Xq1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="MPO-ga-I4f" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="1430" y="-695"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="PairComplete" width="340" height="340"/>
+    </resources>
 </document>

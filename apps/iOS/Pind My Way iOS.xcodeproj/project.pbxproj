@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		1EEB84BD8A8D2A3D806E26AA /* Pods_Pind_My_Way_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A58CE46EDDFB37530E65245D /* Pods_Pind_My_Way_iOS.framework */; };
 		2919A7D421655FBE00828104 /* Bluetooth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2919A7D321655FBE00828104 /* Bluetooth.swift */; };
+		2940D29721A71DA1002B90C7 /* GoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2940D29621A71DA1002B90C7 /* GoViewController.swift */; };
+		2940D29921A71DE0002B90C7 /* FakeTwitterSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2940D29821A71DE0002B90C7 /* FakeTwitterSegue.swift */; };
+		2940D29C21A71E36002B90C7 /* UnwindFakeTwitterSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2940D29B21A71E36002B90C7 /* UnwindFakeTwitterSegue.swift */; };
 		2942A5E2216B881C00B1FDBF /* BluetoothViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2942A5E1216B881C00B1FDBF /* BluetoothViewController.swift */; };
 		2942A5E4216BD74400B1FDBF /* BluetoothTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2942A5E3216BD74400B1FDBF /* BluetoothTableCell.swift */; };
 		294F6FB52162C5CE00A1A402 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 294F6FB42162C5CE00A1A402 /* Settings.bundle */; };
@@ -22,9 +25,10 @@
 		297BBFFD216118E900A3026E /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFFC216118E900A3026E /* Utils.swift */; };
 		297BBFFF21611B8A00A3026E /* Singleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFFE21611B8A00A3026E /* Singleton.swift */; };
 		29B2C2B6216D1E8C00C867B8 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B2C2B5216D1E8C00C867B8 /* Reachability.swift */; };
-		29B2C2B8216D329000C867B8 /* Introduction.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 29B2C2B7216D329000C867B8 /* Introduction.storyboard */; };
 		29B2C2BA216D37FE00C867B8 /* IntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B2C2B9216D37FE00C867B8 /* IntroductionViewController.swift */; };
-		29E0651A216D58500021C799 /* HorizontalAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E06519216D58500021C799 /* HorizontalAnimator.swift */; };
+		29E7A4C421A46F9300866464 /* ConnectBluetoothViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E7A4C321A46F9300866464 /* ConnectBluetoothViewController.swift */; };
+		29E7A4C621A4728F00866464 /* HorizontalSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E7A4C521A4728F00866464 /* HorizontalSegue.swift */; };
+		29E7A4CA21A47BF400866464 /* UnwindIntroSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E7A4C921A47BF400866464 /* UnwindIntroSegue.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +50,9 @@
 
 /* Begin PBXFileReference section */
 		2919A7D321655FBE00828104 /* Bluetooth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bluetooth.swift; sourceTree = "<group>"; };
+		2940D29621A71DA1002B90C7 /* GoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoViewController.swift; sourceTree = "<group>"; };
+		2940D29821A71DE0002B90C7 /* FakeTwitterSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeTwitterSegue.swift; sourceTree = "<group>"; };
+		2940D29B21A71E36002B90C7 /* UnwindFakeTwitterSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnwindFakeTwitterSegue.swift; sourceTree = "<group>"; };
 		2942A5E1216B881C00B1FDBF /* BluetoothViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothViewController.swift; sourceTree = "<group>"; };
 		2942A5E3216BD74400B1FDBF /* BluetoothTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothTableCell.swift; sourceTree = "<group>"; };
 		294F6FB42162C5CE00A1A402 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -65,9 +72,10 @@
 		297BBFFC216118E900A3026E /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		297BBFFE21611B8A00A3026E /* Singleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Singleton.swift; sourceTree = "<group>"; };
 		29B2C2B5216D1E8C00C867B8 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
-		29B2C2B7216D329000C867B8 /* Introduction.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Introduction.storyboard; sourceTree = "<group>"; };
 		29B2C2B9216D37FE00C867B8 /* IntroductionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroductionViewController.swift; sourceTree = "<group>"; };
-		29E06519216D58500021C799 /* HorizontalAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalAnimator.swift; sourceTree = "<group>"; };
+		29E7A4C321A46F9300866464 /* ConnectBluetoothViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectBluetoothViewController.swift; sourceTree = "<group>"; };
+		29E7A4C521A4728F00866464 /* HorizontalSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSegue.swift; sourceTree = "<group>"; };
+		29E7A4C921A47BF400866464 /* UnwindIntroSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnwindIntroSegue.swift; sourceTree = "<group>"; };
 		5BCEADBEB56117926C47D781 /* Pods-Pind My Way iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pind My Way iOS.release.xcconfig"; path = "Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS.release.xcconfig"; sourceTree = "<group>"; };
 		960FA303126327954117AD3A /* Pods-Pind My Way iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pind My Way iOS.debug.xcconfig"; path = "Target Support Files/Pods-Pind My Way iOS/Pods-Pind My Way iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		A58CE46EDDFB37530E65245D /* Pods_Pind_My_Way_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pind_My_Way_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -99,12 +107,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2940D29A21A71DED002B90C7 /* Segues */ = {
+			isa = PBXGroup;
+			children = (
+				29E7A4C521A4728F00866464 /* HorizontalSegue.swift */,
+				29E7A4C921A47BF400866464 /* UnwindIntroSegue.swift */,
+				2940D29821A71DE0002B90C7 /* FakeTwitterSegue.swift */,
+				2940D29B21A71E36002B90C7 /* UnwindFakeTwitterSegue.swift */,
+			);
+			path = Segues;
+			sourceTree = "<group>";
+		};
 		2942A5E5216BD74F00B1FDBF /* Bluetooth */ = {
 			isa = PBXGroup;
 			children = (
 				2942A5E3216BD74400B1FDBF /* BluetoothTableCell.swift */,
 				2919A7D321655FBE00828104 /* Bluetooth.swift */,
 				2942A5E1216B881C00B1FDBF /* BluetoothViewController.swift */,
+				29E7A4C321A46F9300866464 /* ConnectBluetoothViewController.swift */,
 			);
 			path = Bluetooth;
 			sourceTree = "<group>";
@@ -134,16 +154,16 @@
 		297BBFCD2161097B00A3026E /* Pind My Way iOS */ = {
 			isa = PBXGroup;
 			children = (
+				2940D29A21A71DED002B90C7 /* Segues */,
 				2942A5E5216BD74F00B1FDBF /* Bluetooth */,
 				297BBFD52161097E00A3026E /* Assets.xcassets */,
 				297BBFCE2161097B00A3026E /* AppDelegate.swift */,
-				29E06519216D58500021C799 /* HorizontalAnimator.swift */,
 				29B2C2B9216D37FE00C867B8 /* IntroductionViewController.swift */,
 				29B2C2B5216D1E8C00C867B8 /* Reachability.swift */,
 				297BBFFE21611B8A00A3026E /* Singleton.swift */,
 				297BBFFC216118E900A3026E /* Utils.swift */,
+				2940D29621A71DA1002B90C7 /* GoViewController.swift */,
 				297BBFD02161097B00A3026E /* ViewController.swift */,
-				29B2C2B7216D329000C867B8 /* Introduction.storyboard */,
 				297BBFD72161097E00A3026E /* LaunchScreen.storyboard */,
 				297BBFD22161097B00A3026E /* Main.storyboard */,
 				294F6FB42162C5CE00A1A402 /* Settings.bundle */,
@@ -294,7 +314,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				29B2C2B8216D329000C867B8 /* Introduction.storyboard in Resources */,
 				294F6FB52162C5CE00A1A402 /* Settings.bundle in Resources */,
 				297BBFD92161097E00A3026E /* LaunchScreen.storyboard in Resources */,
 				297BBFD62161097E00A3026E /* Assets.xcassets in Resources */,
@@ -398,16 +417,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				29E0651A216D58500021C799 /* HorizontalAnimator.swift in Sources */,
 				297BBFD12161097B00A3026E /* ViewController.swift in Sources */,
+				29E7A4C421A46F9300866464 /* ConnectBluetoothViewController.swift in Sources */,
+				29E7A4C621A4728F00866464 /* HorizontalSegue.swift in Sources */,
 				2919A7D421655FBE00828104 /* Bluetooth.swift in Sources */,
+				2940D29921A71DE0002B90C7 /* FakeTwitterSegue.swift in Sources */,
 				297BBFFF21611B8A00A3026E /* Singleton.swift in Sources */,
+				29E7A4CA21A47BF400866464 /* UnwindIntroSegue.swift in Sources */,
 				2942A5E4216BD74400B1FDBF /* BluetoothTableCell.swift in Sources */,
 				29B2C2B6216D1E8C00C867B8 /* Reachability.swift in Sources */,
+				2940D29721A71DA1002B90C7 /* GoViewController.swift in Sources */,
 				29B2C2BA216D37FE00C867B8 /* IntroductionViewController.swift in Sources */,
 				2942A5E2216B881C00B1FDBF /* BluetoothViewController.swift in Sources */,
 				297BBFCF2161097B00A3026E /* AppDelegate.swift in Sources */,
 				297BBFFD216118E900A3026E /* Utils.swift in Sources */,
+				2940D29C21A71E36002B90C7 /* UnwindFakeTwitterSegue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

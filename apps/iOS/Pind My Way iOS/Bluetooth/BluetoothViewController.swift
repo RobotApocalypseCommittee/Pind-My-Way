@@ -14,12 +14,12 @@ class BluetoothViewController: UIViewController {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var discoveredDevicesLabel: UILabel!
     
-    var bluetoothManager: BluetoothManager? = nil
+    var bluetoothManager: BluetoothManager?
+    
+    var chosenRow = -1
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        activityIndicator.startAnimating()
         
         peripheralTableView.delegate = self
         peripheralTableView.dataSource = self
@@ -31,7 +31,16 @@ class BluetoothViewController: UIViewController {
     
     @IBAction func cancelButton_touchUpInside(_ sender: Any) {
         UserDefaults.standard.set(true, forKey: "introDone")
-        self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
+        performSegue(withIdentifier: "returnFromBluetooth", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toConnect" {
+            let connectViewController = segue.destination as! ConnectBluetoothViewController
+            
+            connectViewController.peripheral = bluetoothManager!.raspberryPis[chosenRow]
+            connectViewController.bluetoothManager = bluetoothManager
+        }
     }
 }
 
@@ -40,7 +49,6 @@ extension BluetoothViewController: UITableViewDelegate, UITableViewDataSource {
         if bluetoothManager!.raspberryPis.count > 0 {
             // This means a pi has been found, so no need to look like it's loading anymore
             activityIndicator.stopAnimating()
-            activityIndicator.isHidden = true
             peripheralTableView.isHidden = false
             discoveredDevicesLabel.isHidden = false
         }
@@ -56,7 +64,9 @@ extension BluetoothViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        bluetoothManager!.connectPiAndService(peripheral: bluetoothManager!.raspberryPis[indexPath.row])
         tableView.deselectRow(at: indexPath, animated: true)
+        chosenRow = indexPath.row
+        
+        performSegue(withIdentifier: "toConnect", sender: self)
     }
 }
