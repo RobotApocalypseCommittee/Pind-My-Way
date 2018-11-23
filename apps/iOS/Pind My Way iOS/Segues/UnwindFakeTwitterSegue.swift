@@ -28,31 +28,29 @@ class UnwindFakeTwitterSegue: UIStoryboardSegue {
         
         window?.insertSubview(mapViewController.view, aboveSubview: goViewControllerView)
         
-        UIView.animateKeyframes(withDuration: 1, delay: 0, options: .calculationModeLinear, animations: {
+        UIView.animateKeyframes(withDuration: 0.8, delay: 0, options: .calculationModeLinear, animations: {
             // Add animations
             
             UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0, animations: {
                 // Sets it to the state it was at before
-                mapViewController.animationView.frame = CGRect(x: -curvatureLeeway, y: -curvatureLeeway, width: 2*curvatureLeeway+screenWidth, height: 2*curvatureLeeway+screenHeight)
+                mapViewController.animationView.frame = CGRect(x: -curvatureLeeway, y: -curvatureLeeway*screenHeight/screenWidth, width: 2*curvatureLeeway+screenWidth, height: 2*curvatureLeeway*screenHeight/screenWidth+screenHeight)
                 
-                mapViewController.goControlView.frame = CGRect(x: -curvatureLeeway-goControlViewBezel, y: -curvatureLeeway-goControlViewBezel, width: 2*(goControlViewBezel+curvatureLeeway)+screenWidth, height: 2*(goControlViewBezel+curvatureLeeway)+screenHeight)
+                mapViewController.goControlView.frame = CGRect(x: -curvatureLeeway-goControlViewBezel, y: (-curvatureLeeway)*screenHeight/screenWidth-goControlViewBezel, width: 2*(goControlViewBezel+curvatureLeeway)+screenWidth, height: 2*(curvatureLeeway)*screenHeight/screenWidth+2*goControlViewBezel+screenHeight)
             })
             
-            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.2, animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.25, animations: {
                 mapViewController.view.alpha = 1
             })
             
-            UIView.addKeyframe(withRelativeStartTime: 0.2, relativeDuration: 0.4, animations: {
-                mapViewController.animationView.frame = CGRect(origin: CGPoint(x: centerX-(75/2-goControlViewBezel), y: centerY-(75/2-goControlViewBezel)), size: CGSize(width: 75-2*goControlViewBezel, height: 75-2*goControlViewBezel))
+            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.55, animations: {
+                mapViewController.animationView.frame = CGRect(x: centerX-75/2+goControlViewBezel, y: centerY-75/2+goControlViewBezel, width: 75-goControlViewBezel*2, height: 75-goControlViewBezel*2)
                 
                 mapViewController.goControlView.frame = CGRect(origin: CGPoint(x: centerX-(75/2), y: centerY-(75/2)), size: CGSize(width: 75, height: 75))
             })
             
-            UIView.addKeyframe(withRelativeStartTime: 0.6, relativeDuration: 0.2, animations: {
-                mapViewController.animationView.frame = CGRect(x: centerX, y: centerY, width: 1, height: 1)
-            })
-            
             UIView.addKeyframe(withRelativeStartTime: 0.8, relativeDuration: 0.2, animations: {
+                mapViewController.animationView.frame = CGRect(x: screenWidth-16-75/2, y: screenHeight-16-75/2, width: 1, height: 1)
+                
                 mapViewController.goControlView.center = CGPoint(x: screenWidth-16-75/2, y: screenHeight-16-75/2)
             })
         }, completion: { _ in

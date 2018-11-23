@@ -41,7 +41,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var goControlView: UIControl!
     
     override func viewDidLoad() {
-        UIApplication.shared.windows.first?.layer.speed = 0.1
+        UIApplication.shared.windows.first?.layer.speed = 1
         
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -142,7 +142,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func goControlView_touchUpInside(_ sender: Any) {
-        //UserDefaults.standard.set(false, forKey: "introDone")
+        UserDefaults.standard.set(false, forKey: "introDone")
         self.performSegue(withIdentifier: "toGo", sender: self)
     }
     
