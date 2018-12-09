@@ -71,3 +71,5 @@ class GlovesLink extends EventEmitter {
     // TODO: Until william figures out what the glove will be able to display, I cannot make a data format for it...
   }
 }
+
+module.exports = GlovesLink
