@@ -16,6 +16,14 @@
     "settable_name": {
       "uuid": "fc59",
       "description": "A name, set by the user, for ease of connection on other devices"
+    },
+    "status": {
+      "uuid": "fc60",
+      "description": "A byte of binary flags"
+    },
+    "control": {
+      "uuid": "fc61",
+      "description": "Send some control bits"
     }
   },
   "primaryService": "9540"

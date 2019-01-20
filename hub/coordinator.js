@@ -1,20 +1,29 @@
 const FollowingConfig = require("./following_config")
 const GPSManager = require("./gps_manager")
 const GlovesLink = require("./led_interface")
+const EventEmitter = require("events")
 
 // Polls/second -> minimum ms per poll
 const poll_period = 1000/FollowingConfig.maxPollRate
 
-class Coordinator {
+class Coordinator extends EventEmitter {
   constructor() {
+    super()
     this.route = null
     this.running = false
     this.gps = new GPSManager()
+    this.gps.on("fix", ()=>{
+      this.emit("statusUpdate", this.getStatus())
+    })
     this.leds = new GlovesLink()
+    this.leds.on("stateChange", ()=>{
+      this.emit("statusUpdate", this.getStatus())
+    })
     this.interval = null;
   }
   registerNewRoute(route) {
     this.route = route
+    this.emit("statusUpdate", this.getStatus())
     // TODO: Gloves indicate successful load
   }
 
@@ -22,6 +31,7 @@ class Coordinator {
     this.currentPointID = 0
     // Init GPS etc
     this.running = true;
+    this.emit("statusUpdate", this.getStatus())
     this.interval = setInterval(()=>this.updateFollowing(), poll_period)
   }
 
@@ -51,8 +61,23 @@ class Coordinator {
     if (this.running) {
       clearInterval(this.interval)
       this.running = false;
+      this.route = null;
+      this.emit("statusUpdate", this.getStatus())
     }
+  }
 
+  isReady() {
+    return (this.gps.fixed && this.route !== null && ! this.running)
+  }
+
+  getStatus() {
+    // Bits in format(lowest first) [Left Glove Connected][Right Glove Connected][GPS Connected][Route Provided][Ready To Start][Running]
+    return (this.leds.gloves.left !== null)
+      | (this.leds.gloves.right !== null << 1)
+      | (this.gps.fixed << 2)
+      | (this.route !== null << 3)
+      | (this.isReady() << 4)
+      | (this.running << 5)
   }
 }
 

@@ -20,9 +20,6 @@ class GlovesLink extends EventEmitter {
       ws.once("message", this._registerNewGlove.bind(this, ws))
     })
   }
-  get ready() {
-    return (this.gloves.left !== null && this.gloves.right !== null)
-  }
 
   _registerNewGlove(ws, data) {
     // Data is binary buffer
@@ -31,28 +28,22 @@ class GlovesLink extends EventEmitter {
       this.gloves.left = ws
       ws.on("close", ()=> {
         this.gloves.left = null
-        this.emit("unready")
+        this.emit("stateChange")
       })
     } else {
       this.gloves.right = ws
       ws.on("close", ()=> {
         this.gloves.right = null
-        this.emit("unready")
+        this.emit("stateChange")
       })
     }
-    if (this.ready) {
-      this.emit("ready")
-    }
+    this.emit("stateChange")
   }
 
   broadcast(data) {
-    if (this.ready) {
       this.server.clients.forEach((client)=>{
         client.send(data, {binary: true})
       })
-    } else {
-      throw new Error("Cannot broadcast: GlovesLink is not ready.")
-    }
   }
 
   signalDirection(direction, level) {

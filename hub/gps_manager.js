@@ -1,14 +1,18 @@
 const {GeoCoord} = require("./GeoCoords")
 const GPS = require("gps")
 const SerialPort = require("serialport")
+const EventEmitter = require("events")
 
-class GPSManager {
+class GPSManager extends EventEmitter {
   constructor(port, rate, rollingAvg){
+    super()
     this.ser = new SerialPort.SerialPort(port, {
       baudrate: rate,
       parser: SerialPort.parsers.readline('\r\n')
     });
     this.gps = new GPS
+    // Does the GPS have a fix?
+    this.fixed = false
 
     this.current = new GeoCoord(0, 0);
     this.old = new GeoCoord(0, 0);
@@ -16,6 +20,8 @@ class GPSManager {
       if (!(data.lat === null || data.lon === null)) {
         this.old = this.current
         this.current = new GeoCoord(dats.lat, data.lon)
+        this.fixed = true;
+        this.emit("fix")
       }
     })
 

@@ -20,8 +20,8 @@ class Route {
   constructor() {
     this.points = []
     this.buffer_complete = true
-    // Space for one message
-    this.input_buffer = Buffer.alloc(17)
+    // Nothing in buffer as of yet.
+    this.input_buffer = Buffer.alloc(0)
 
   }
 
