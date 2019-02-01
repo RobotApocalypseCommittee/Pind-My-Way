@@ -4,7 +4,7 @@ const SerialPort = require("serialport")
 const EventEmitter = require("events")
 
 class GPSManager extends EventEmitter {
-  constructor(port, rate, rollingAvg){
+  constructor(port, rate){
     super()
     this.ser = new SerialPort.SerialPort(port, {
       baudrate: rate,
@@ -37,4 +37,22 @@ class GPSManager extends EventEmitter {
   }
 }
 
-module.exports = GPSManager
+class MockGPSManager extends EventEmitter {
+  constructor(){
+    super()
+    // Does the GPS have a fix?
+    this.fixed = false
+
+    this.current = new GeoCoord(0, 0);
+    this.old = new GeoCoord(0, 0);
+    setTimeout(()=>this.emit("fix"), 1000);
+  }
+  get location(){
+    return this.current
+  }
+  get previousLocation() {
+    return this.old
+  }
+}
+
+module.exports = {GPSManager, MockGPSManager}

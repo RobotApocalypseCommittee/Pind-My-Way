@@ -1,17 +1,21 @@
-const FollowingConfig = require("./following_config")
-const GPSManager = require("./gps_manager")
+const config = require("./config")
+const {GPSManager, MockGPSManager} = require("./gps_manager")
 const GlovesLink = require("./led_interface")
 const EventEmitter = require("events")
 
 // Polls/second -> minimum ms per poll
-const poll_period = 1000/FollowingConfig.maxPollRate
+const poll_period = 1000/config.pollRate;
 
 class Coordinator extends EventEmitter {
   constructor() {
     super()
     this.route = null
     this.running = false
-    this.gps = new GPSManager()
+    if (!config.fakesGPS) {
+      this.gps = new GPSManager(config.serialPort, config.baudrate)
+    } else {
+      this.gps = new MockGPSManager()
+    }
     this.gps.on("fix", ()=>{
       this.emit("statusUpdate", this.getStatus())
     })
