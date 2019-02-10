@@ -37,8 +37,8 @@ def apt_update():
 
 def install_node():
     log("Checking for node")
-    try: 
-        if exec_command("node", "-v").startswith(b"v8."):
+    try:
+        if exec_command("node", "-v").startswith("v8."):
             log("Node already installed")
             return
     except SetupError:
