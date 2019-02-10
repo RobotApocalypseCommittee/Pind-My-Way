@@ -4,7 +4,6 @@
   "stageDistances": [100, 50, 20],
   "completedDistance": 30,
   "pollRate": 5,
-  "serialPort": "/usb/???",
-  "baudrate": 9600,
-  "fakesGPS": false
+  "port": "/usb/???",
+  "baudrate": 9600
 }

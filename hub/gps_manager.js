@@ -4,7 +4,7 @@ const SerialPort = require("serialport")
 const EventEmitter = require("events")
 
 class GPSManager extends EventEmitter {
-  constructor(port, rate){
+  constructor(port, rate) {
     super()
     this.ser = new SerialPort.SerialPort(port, {
       baudrate: rate,
@@ -19,9 +19,12 @@ class GPSManager extends EventEmitter {
     this.gps.on("GGA", (data)=>{
       if (!(data.lat === null || data.lon === null)) {
         this.old = this.current
-        this.current = new GeoCoord(dats.lat, data.lon)
+        this.current = new GeoCoord(data.lat, data.lon)
+        if (!this.fixed) {
+          this.emit("fix")
+        }
         this.fixed = true;
-        this.emit("fix")
+
       }
     })
 

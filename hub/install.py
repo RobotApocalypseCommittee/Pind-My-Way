@@ -38,7 +38,7 @@ def apt_update():
 def install_node():
     log("Checking for node")
     try: 
-        if exec_command("dpkg", "-l", "nodejs").startswith("v8."):
+        if exec_command("node", "-v").startswith(b"v8."):
             log("Node already installed")
             return
     except SetupError:
@@ -52,7 +52,7 @@ def install_packages():
     log("Installing apt packages")
     exec_command("apt-get", "install", "-y", "bluetooth", "bluez", "libbluetooth-dev", "libudev-dev")
     log("Installing NPM packages")
-    exec_command("npm", "install")
+    exec_command("npm", "install", "--unsafe-perm")
 
 def log(*args):
     print("[Installer] ", end="")

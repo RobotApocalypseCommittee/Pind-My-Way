@@ -1,6 +1,6 @@
 const bleno = require("bleno")
 const {Route} = require("../route")
-const coordinator = require("../coordinator")
+const coordinator = require("../coordinator").getInstance()
 
 const {characteristics:{routeUpload}} = require("./bleConstants.json")
 

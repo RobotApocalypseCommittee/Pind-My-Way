@@ -2,7 +2,7 @@ const bleno = require("bleno")
 
 const {characteristics: {status}} = require("./bleConstants.json")
 let config = require("../config.json")
-const coordinator = require("../coordinator")
+const coordinator = require("../coordinator").getInstance()
 
 
 let status_characteristic = new bleno.Characteristic({
