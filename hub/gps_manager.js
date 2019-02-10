@@ -1,15 +1,15 @@
 const {GeoCoord} = require("./GeoCoords")
 const GPS = require("gps")
 const SerialPort = require("serialport")
+const Readline = SerialPort.parsers.Readline
 const EventEmitter = require("events")
 
 class GPSManager extends EventEmitter {
   constructor(port, rate) {
     super()
-    this.ser = new SerialPort.SerialPort(port, {
-      baudrate: rate,
-      parser: SerialPort.parsers.readline('\r\n')
-    });
+    this.ser = new SerialPort(port, {baudRate: rate})
+    const parser = this.ser.pipe(new Readline({ delimiter: '\r\n' }))
+
     this.gps = new GPS
     // Does the GPS have a fix?
     this.fixed = false
@@ -27,8 +27,7 @@ class GPSManager extends EventEmitter {
 
       }
     })
-
-    this.ser.on("data", (data)=>{
+    parser.on('data', (data)=>{
       this.gps.updatePartial(data)
     })
   }
