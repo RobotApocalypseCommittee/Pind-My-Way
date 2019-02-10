@@ -19,6 +19,7 @@ def internet_test(host="8.8.8.8", port=53, timeout=3):
 
 
 def system_check():
+    log("Checking system")
     if not internet_test():
         raise SetupError("Cannot setup without internet.")
 
@@ -30,12 +31,33 @@ def exec_command(*command, **kwargs):
 
 
 def apt_update():
-    exec_command("apt-get", "update" "-y" "-q")
-    exec_command("apt-get", "dist-upgrade" "-y" "-q")
+    log("Updating packages")
+    exec_command("apt-get", "update", "-y", "-q")
+    exec_command("apt-get", "dist-upgrade", "-y", "-q")
 
 def install_node():
-    exec_command("curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -", shell=True)
-    exec_command("apt-get", "install" "-y" "nodejs")
+    log("Checking for node")
+    try: 
+        if exec_command("dpkg", "-l", "nodejs").startswith("v8."):
+            log("Node already installed")
+            return
+    except SetupError:
+        pass
+    log("Installing node")
+    exec_command("curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -", shell=True)
+    exec_command("apt-get", "install", "-y", "nodejs")
+    log("Node installed")
+
+def install_packages():
+    log("Installing apt packages")
+    exec_command("apt-get", "install", "-y", "bluetooth", "bluez", "libbluetooth-dev", "libudev-dev")
+    log("Installing NPM packages")
+    exec_command("npm", "install")
+
+def log(*args):
+    print("[Installer] ", end="")
+    print(*args)
+
 
 
 def main():
@@ -52,3 +74,6 @@ def main():
     config_ap()
     restart_wireless()
     # FINISHED
+
+if __name__ == "__main__":
+    main()
