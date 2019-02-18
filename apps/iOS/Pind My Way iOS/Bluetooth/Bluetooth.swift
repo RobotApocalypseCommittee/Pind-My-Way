@@ -29,14 +29,18 @@ class BluetoothManager: NSObject {
 
     var characteristicsDiscovered = false
     
+    /*
     let peripheralFoundCallback: () -> Void
     
     var peripheralPairedCallback: (() -> Void)?
     
-    init(withCallback callback: @escaping () -> Void) {
-        peripheralFoundCallback = callback
-        peripheralPairedCallback = nil
-        
+    var valueWrittenCallback: ((CBCharacteristic) -> Void)? = nil
+    var valueUpdatedCallback: ((CBCharacteristic) -> Void)? = nil
+    */
+    
+    weak var delegate: BluetoothDelegate?
+    
+    override init() {
         super.init()
         
         // Change queue to be more logical for bluetooth transfer
@@ -81,7 +85,30 @@ class BluetoothManager: NSObject {
         characteristicsDiscovered = false
     }
     
+    func send(data: Data, to characteristic: CBCharacteristic) -> Bool {
+        // returns true if succeeded, otherwise false
+        if characteristicsDiscovered {
+            if _selectedPi != nil {
+                _selectedPi!.writeValue(data, for: characteristic, type: .withResponse)
+                return true
+            }
+        }
+        return false
+    }
+    
+    func updateValue(for characteristic: CBCharacteristic) -> Bool {
+        // returns true if succeeded, otherwise false
+        if characteristicsDiscovered {
+            if _selectedPi != nil {
+                _selectedPi!.readValue(for: characteristic)
+                return true
+            }
+        }
+        return false
+    }
+    
     deinit {
+        print("Bluetooth Manager Deinited")
         disconnectPi()
         stopScanning()
     }
@@ -105,9 +132,9 @@ extension BluetoothManager: CBCentralManagerDelegate {
         
         if !raspberryPis.contains(peripheral) {
             raspberryPis.insert(peripheral, at: raspberryPis.endIndex)
-            
-            peripheralFoundCallback()
         }
+        
+        delegate?.peripheralFoundCallback(peripheral)
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
@@ -150,9 +177,7 @@ extension BluetoothManager: CBPeripheralDelegate {
                 characteristicsDiscovered = true
                 
                 // TODO, actually pair lol
-                if peripheralPairedCallback != nil {
-                    peripheralPairedCallback!()
-                }
+                delegate?.characteristicsFoundCallback(service.characteristics!)
             } else {
                 print("Warning: Bluetooth: A service was discovered that was not the data service!")
             }
@@ -161,22 +186,34 @@ extension BluetoothManager: CBPeripheralDelegate {
         }
     }
     
-    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor descriptor: CBCharacteristic, error: Error?) {
+    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
         if let error = error {
-            print("Error: Bluetooth: \(error)")
-        } else {
-            print("Info: Bluetooth: Value written")
+            print("Bluetooth: Error: Write Value: \(error)")
         }
+        
+        delegate?.valueWrittenCallback(characteristic)
     }
     
-    /*
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        print(error)
-        print("Value read")
-        
-        characteristic.value!.withUnsafeBytes { characteristicBytes in
-            print(Array(UnsafeBufferPointer(start: UnsafePointer<UInt16>(characteristicBytes), count: 8)).map { String(CFSwapInt16BigToHost($0), radix: 16) })
+        if let error = error {
+            print("Bluetooth: Error: Update Value: \(error)")
         }
+        
+        delegate?.valueUpdatedCallback(characteristic)
     }
-    */
+    
+}
+
+protocol BluetoothDelegate: AnyObject {
+    func peripheralFoundCallback(_: CBPeripheral)
+    func characteristicsFoundCallback(_: Array<CBCharacteristic>)
+    func valueWrittenCallback(_: CBCharacteristic)
+    func valueUpdatedCallback(_: CBCharacteristic)
+}
+
+extension BluetoothDelegate {
+    func peripheralFoundCallback(_: CBPeripheral) {}
+    func characteristicsFoundCallback(_: Array<CBCharacteristic>) {}
+    func valueWrittenCallback(_: CBCharacteristic) {}
+    func valueUpdatedCallback(_: CBCharacteristic) {}
 }

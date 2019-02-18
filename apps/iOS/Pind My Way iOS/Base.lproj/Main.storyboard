@@ -18,6 +18,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BikeIcon" translatesAutoresizingMaskIntoConstraints="NO" id="baV-1s-oeM">
+                                <rect key="frame" x="294" y="740.33333333333337" width="55" height="36.333333333333371"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="baV-1s-oeM" secondAttribute="height" multiplier="512:338" id="MyF-cF-HhF"/>
+                                </constraints>
+                            </imageView>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4WS-11-wwo" userLabel="Animation View">
                                 <rect key="frame" x="321" y="758" width="1" height="1"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -26,28 +32,15 @@
                                     <constraint firstAttribute="width" constant="1" id="W5N-Af-6YE"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jKY-VU-ysY" userLabel="Go Control View" customClass="UIControl">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jKY-VU-ysY" userLabel="Go Control View" customClass="UIControl">
                                 <rect key="frame" x="284" y="721" width="75" height="75"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Go" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IgN-3o-N7h">
-                                        <rect key="frame" x="21.666666666666686" y="22.666666666666629" width="32" height="30"/>
-                                        <accessibility key="accessibilityConfiguration">
-                                            <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
-                                        </accessibility>
-                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.71764705880000002" blue="0.1529411765" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" button="YES"/>
                                 </accessibility>
                                 <constraints>
-                                    <constraint firstItem="IgN-3o-N7h" firstAttribute="centerX" secondItem="jKY-VU-ysY" secondAttribute="centerX" id="QbF-p9-YKF"/>
-                                    <constraint firstAttribute="width" constant="75" id="oC9-s6-CSY"/>
-                                    <constraint firstAttribute="height" constant="75" id="uAD-tF-6UL"/>
-                                    <constraint firstItem="IgN-3o-N7h" firstAttribute="centerY" secondItem="jKY-VU-ysY" secondAttribute="centerY" id="v6v-yz-3lA"/>
+                                    <constraint firstAttribute="width" constant="75" id="PIa-cC-z20"/>
+                                    <constraint firstAttribute="height" constant="75" id="zGs-Vh-HXO"/>
                                 </constraints>
                                 <connections>
                                     <action selector="goControlView_touchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dsX-El-zlq"/>
@@ -56,15 +49,19 @@
                         </subviews>
                         <color key="backgroundColor" red="0.7803921568627451" green="0.77647058823529413" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="4WS-11-wwo" firstAttribute="centerX" secondItem="jKY-VU-ysY" secondAttribute="centerX" id="C3O-gs-pVW"/>
                             <constraint firstItem="4WS-11-wwo" firstAttribute="centerY" secondItem="jKY-VU-ysY" secondAttribute="centerY" id="Iml-TS-ohg"/>
-                            <constraint firstItem="jKY-VU-ysY" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" constant="-16" id="fkr-HL-mOa"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="jKY-VU-ysY" secondAttribute="trailing" constant="16" id="xPI-zR-59K"/>
+                            <constraint firstItem="jKY-VU-ysY" firstAttribute="centerY" secondItem="baV-1s-oeM" secondAttribute="centerY" id="S7t-kx-zRS"/>
+                            <constraint firstAttribute="trailing" secondItem="jKY-VU-ysY" secondAttribute="trailing" constant="16" id="Zrr-kq-xFT"/>
+                            <constraint firstItem="4WS-11-wwo" firstAttribute="centerX" secondItem="jKY-VU-ysY" secondAttribute="centerX" id="fCz-Ms-XdT"/>
+                            <constraint firstItem="jKY-VU-ysY" firstAttribute="centerX" secondItem="baV-1s-oeM" secondAttribute="centerX" id="gyZ-VN-elo"/>
+                            <constraint firstAttribute="bottom" secondItem="jKY-VU-ysY" secondAttribute="bottom" constant="16" id="rt2-za-Auj"/>
+                            <constraint firstItem="jKY-VU-ysY" firstAttribute="trailing" secondItem="baV-1s-oeM" secondAttribute="trailing" constant="10" id="yrK-iR-bnb"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="animationView" destination="4WS-11-wwo" id="oeZ-xI-OOg"/>
+                        <outlet property="bikeIcon" destination="baV-1s-oeM" id="lIx-SZ-8ad"/>
                         <outlet property="goControlView" destination="jKY-VU-ysY" id="Dg1-Kc-4za"/>
                         <segue destination="9QC-G7-jmV" kind="presentation" identifier="toIntroduction" id="zfW-gu-Sdg"/>
                         <segue destination="1m6-Ub-Jr5" kind="custom" identifier="toGo" customClass="FakeTwitterSegue" customModule="Pind_My_Way_iOS" customModuleProvider="target" id="vLg-b0-YNA"/>
@@ -95,6 +92,14 @@
                                 <state key="normal" title="Back"/>
                                 <connections>
                                     <action selector="backButton_touchUpInside:" destination="1m6-Ub-Jr5" eventType="touchUpInside" id="xla-51-nQc"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gn9-MI-Xe0">
+                                <rect key="frame" x="169" y="592" width="36" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Send"/>
+                                <connections>
+                                    <action selector="sendButton_touchUpInside:" destination="1m6-Ub-Jr5" eventType="touchUpInside" id="zjA-bx-wxj"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -315,6 +320,7 @@ Placeholder</string>
         </scene>
     </scenes>
     <resources>
+        <image name="BikeIcon" width="512" height="338"/>
         <image name="PairComplete" width="340" height="340"/>
     </resources>
 </document>

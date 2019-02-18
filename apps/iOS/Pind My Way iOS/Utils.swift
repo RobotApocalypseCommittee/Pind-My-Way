@@ -63,7 +63,24 @@ class Utils {
         return earthRadius * c
     }
     
+    static func getBearing(from coord1: CLLocationCoordinate2D, to coord2: CLLocationCoordinate2D) -> Double {
+        let lat1 = coord1.latitude.degreesToRadians
+        let lat2 = coord2.latitude.degreesToRadians
+        
+        let deltaLon = (coord2.longitude-coord1.longitude).degreesToRadians
+        
+        let y = sin(deltaLon) * cos(lat2)
+        let x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(deltaLon)
+        
+        // The + 360 mod 360 is because atan2 returns -180 to 180, and this should really be 0 to 360
+        // Remainder is literally just mod for floating point
+        let bear = atan2(y, x).radiansToDegrees + 360
+        return bear < 360 ? bear : bear - 360
+    }
+    
     static func getRoutePollution(route: [CLLocationCoordinate2D]) -> [String : [String : Any]] {
+        return [:]
+        
         //Thins out the route, only using points every ~100m
         var thinRoute : [CLLocationCoordinate2D] = []
         for i in stride(from: 0, to: route.count, by: 10) {
@@ -134,6 +151,76 @@ class Utils {
         
         print(summary)
         return summary
+    }
+    
+    static func getRouteDataForBluetooth(route: JSON, withStart start: CLLocationCoordinate2D) -> Data {
+        var allStepsData = Data()
+        
+        var firstStartPoint = true
+        
+        for leg in route["legs"].array! {
+            for step in leg["steps"].array! {
+                
+                let startStep: CLLocationCoordinate2D
+                
+                // This is to allow the first "start point" from which the bearing is calculated to be specified by the caller
+                // This exists so a more accurate first bearing can be calculated relative to the user's starting position, as opposed to the first point on the Google Maps polyline
+                if firstStartPoint {
+                    startStep = start
+                    firstStartPoint = false
+                } else {
+                    startStep = CLLocationCoordinate2D(latitude: step["start_location"]["lat"].double!, longitude: step["start_location"]["lng"].double!)
+                }
+                
+                let endStep = CLLocationCoordinate2D(latitude: step["end_location"]["lat"].double!, longitude: step["end_location"]["lng"].double!)
+                
+                let bearing = Int(round(getBearing(from: startStep, to: endStep)))
+                var bearingOverTwo = UInt8(bearing / 2)
+                
+                let bearingData = Data(bytes: &bearingOverTwo, count: 1)
+                
+                var maneuver = UInt8(0)
+                if let stringManeuver = step["maneuver"].string {
+                    switch stringManeuver {
+                    case "turn-slight-right": maneuver = 1
+                    case "turn-right": maneuver = 2
+                    case "turn-sharp-right": maneuver = 3
+                    case "uturn-right": maneuver = 4
+                    case "uturn-left": maneuver = 5
+                    case "turn-sharp-left": maneuver = 6
+                    case "turn-left": maneuver = 7
+                    case "turn-slight-left": maneuver = 8
+                    case "straight": maneuver = 0
+                    case "ramp-right": maneuver = 17
+                    case "ramp-left": maneuver = 18
+                    case "roundabout-right": maneuver = 33
+                    case "roundabout-left": maneuver = 34
+                    default: maneuver = 255
+                    }
+                }
+                
+                let maneuverData = Data(bytes: &maneuver, count: 1)
+                
+                var endStepLatitude = Double(endStep.latitude)
+                var endStepLongitude = Double(endStep.longitude)
+                
+                let endStepLatitudeData = Data(bytes: &endStepLatitude, count: 8)
+                let endStepLongitudeData = Data(bytes: &endStepLongitude, count: 8)
+                
+                allStepsData.append(bearingData)
+                allStepsData.append(maneuverData)
+                allStepsData.append(endStepLatitudeData)
+                allStepsData.append(endStepLongitudeData)
+            }
+        }
+        
+        return allStepsData
+    }
+    
+    static func getRouteDataForBluetooth(route: JSON) -> Data {
+        let firstStep = route["legs"][0]["steps"][0]
+        
+        return getRouteDataForBluetooth(route: route, withStart: CLLocationCoordinate2D(latitude: firstStep["start_location"]["lat"].double!, longitude: firstStep["start_location"]["lng"].double!))
     }
 }
 

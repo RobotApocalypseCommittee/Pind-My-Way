@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreBluetooth
 
 class BluetoothViewController: UIViewController {
     
@@ -24,9 +25,8 @@ class BluetoothViewController: UIViewController {
         peripheralTableView.delegate = self
         peripheralTableView.dataSource = self
         
-        bluetoothManager = BluetoothManager() { () -> Void in
-            self.peripheralTableView.reloadData()
-        }
+        bluetoothManager = BluetoothManager()
+        bluetoothManager?.delegate = self
     }
     
     @IBAction func cancelButton_touchUpInside(_ sender: Any) {
@@ -40,6 +40,7 @@ class BluetoothViewController: UIViewController {
             
             connectViewController.peripheral = bluetoothManager!.raspberryPis[chosenRow]
             connectViewController.bluetoothManager = bluetoothManager
+            connectViewController.bluetoothManager?.delegate = connectViewController
         }
     }
 }
@@ -68,5 +69,11 @@ extension BluetoothViewController: UITableViewDelegate, UITableViewDataSource {
         chosenRow = indexPath.row
         
         performSegue(withIdentifier: "toConnect", sender: self)
+    }
+}
+
+extension BluetoothViewController: BluetoothDelegate {
+    func peripheralFoundCallback(_: CBPeripheral) {
+        self.peripheralTableView.reloadData()
     }
 }
