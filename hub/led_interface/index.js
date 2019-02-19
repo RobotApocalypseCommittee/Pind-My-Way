@@ -3,12 +3,6 @@ const WebSocket = require("ws");
 const Buffer = require("buffer")
 
 
-// There are 3 levels - 0, 1, 2; the numbers assigned are ms blink periods
-const blinkDelays = [500, 250, 100]
-
-
-const directionIDs = ["forward", "left", "right", "reverse"]
-
 class GlovesLink extends EventEmitter {
   constructor() {
     super()
@@ -47,19 +41,29 @@ class GlovesLink extends EventEmitter {
   }
 
   signalDirection(direction, level) {
-    let dirID = directionIDs.indexOf(direction)
-    if (dirID < 0) {
-      throw new Error("Invalid Direction Specified")
-    }
-    let toSend = Buffer.alloc(4)
+    let toSend = Buffer.alloc(3)
+    // Command 1 = direction
     toSend.writeUInt8(0x1, 0)
+    // -3 to 4
     toSend.writeUInt8(direction, 1)
-    toSend.writeInt16LE(level, 2)
+    // 0, 1 or 2
+    toSend.writeUInt8(level, 2)
     this.broadcast(toSend)
   }
-
-  signalInfo() {
-    // TODO: Until william figures out what the glove will be able to display, I cannot make a data format for it...
+  signalData(number, r, g, b) {
+    let toSend = Buffer.alloc(5)
+    // Command 2 = led override
+    toSend.writeUInt8(0x2, 0)
+    toSend.writeUInt8(number, 1)
+    toSend.writeUInt8(r, 2)
+    toSend.writeUInt8(g, 3)
+    toSend.writeUInt8(b, 4)
+    this.broadcast(toSend)
+  }
+  signalNeutral() {
+    let toSend = Buffer.alloc(1)
+    toSend.writeUInt8(0x3, 0)
+    this.broadcast(toSend)
   }
 }
 
