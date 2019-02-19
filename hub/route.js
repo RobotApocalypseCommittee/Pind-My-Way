@@ -2,17 +2,49 @@ const {GeoCoord} = require("./GeoCoords")
 
 class RoutePoint {
   constructor(command, lat, lon) {
-    if (typeof command === 'number') {
-      switch (command) {
-        case 0: command = "forward"; break;
-        case 1: command = "left"; break;
-        case 2: command = "right"; break;
-        case 3: command = "reverse"; break;
-        default: throw `Unknown command ${command}`;
-      }
-    }
     this.direction = command
     this.loc = new GeoCoord(lat, lon)
+  }
+
+  static getAngleIndicationFromManeuver(maneuverID) {
+    /* The angle indication is thus
+       -1 0  1
+        \ | /
+     -2 - X - 2
+        / | \
+      -3  4  3
+        */
+    switch (maneuverID) {
+      case 0:
+        return 0
+      case 1:
+        return 1
+      case 2:
+        return 2
+      case 3:
+        return 2
+      case 4:
+        return 3
+      case 5:
+        return -3
+      case 6:
+        return -2
+      case 7:
+        return -2
+      case 8:
+        return -1
+      case 17:
+        return 1
+      case 18:
+        return -1
+      case 33:
+        // Roundabouts tricky
+        return 2
+      case 34:
+        return -2
+      default:
+        return 0
+    }
   }
 }
 class Route {
@@ -43,14 +75,16 @@ class Route {
       buf = Buffer.concat([this.input_buffer, buf])
     }
     let offset = 0
-    while (offset+16 < buf.length) {
+    while (offset+17 < buf.length) {
       let cbuf = buf.slice(offset, offset+17)
       // Read a byte at position 0
-      let command = cbuf.readUInt8(0)
-      let lat = cbuf.readDoubleLE(1)
-      let lon = cbuf.readDoubleLE(9)
+      let bearing = cbuf.readUInt8(0)
+      let maneuver = cbuf.readUInt8(1)
+      let command = RoutePoint.getAngleIndicationFromManeuver(maneuver)
+      let lat = cbuf.readDoubleLE(2)
+      let lon = cbuf.readDoubleLE(10)
       this.add_point(new RoutePoint(command, lat, lon))
-      offset += 17
+      offset += 18
     }
     if (offset+1 !== buf.length) {
       this.buffer_complete = false
