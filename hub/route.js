@@ -79,10 +79,10 @@ class Route {
       let cbuf = buf.slice(offset, offset+17)
       // Read a byte at position 0
       let bearing = cbuf.readUInt8(0)
-      let maneuver = cbuf.readUInt8(1)
+      let maneuver = cbuf.readUInt8(0)
       let command = RoutePoint.getAngleIndicationFromManeuver(maneuver)
-      let lat = cbuf.readDoubleLE(2)
-      let lon = cbuf.readDoubleLE(10)
+      let lat = cbuf.readDoubleLE(0)
+      let lon = cbuf.readDoubleLE(0)
       this.add_point(new RoutePoint(command, lat, lon))
       offset += 18
     }
