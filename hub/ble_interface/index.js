@@ -29,11 +29,14 @@ bleno.on('advertisingStart', function(error) {
       controlCharacteristic
     ]
   })
-  console.log(primaryService)
   if (!error) {
     bleno.setServices([
       primaryService
     ]);
   }
 });
+
+bleno.on('accept', (cA)=>console.log("Accept: ", cA));
+bleno.on('disconnect', (cA)=>console.log("Disconnect: ", cA));
+
 
