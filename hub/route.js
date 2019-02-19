@@ -4,6 +4,8 @@ class RoutePoint {
   constructor(command, lat, lon) {
     this.direction = command
     this.loc = new GeoCoord(lat, lon)
+    console.log(command)
+    console.log(this.loc)
   }
 
   static getAngleIndicationFromManeuver(maneuverID) {
@@ -76,13 +78,14 @@ class Route {
     }
     let offset = 0
     while (offset+17 < buf.length) {
-      let cbuf = buf.slice(offset, offset+17)
+      let cbuf = buf.slice(offset, offset+18)
       // Read a byte at position 0
       let bearing = cbuf.readUInt8(0)
-      let maneuver = cbuf.readUInt8(0)
+      let maneuver = cbuf.readUInt8(1)
+      console.log("Maneuver", maneuver)
       let command = RoutePoint.getAngleIndicationFromManeuver(maneuver)
-      let lat = cbuf.readDoubleLE(0)
-      let lon = cbuf.readDoubleLE(0)
+      let lat = cbuf.readDoubleLE(2)
+      let lon = cbuf.readDoubleLE(10)
       this.add_point(new RoutePoint(command, lat, lon))
       offset += 18
     }
