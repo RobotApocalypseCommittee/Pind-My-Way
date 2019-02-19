@@ -7,8 +7,8 @@
   #include <avr/power.h>
 #endif
 
-const char* ssid     = "BTHub6-97Z9";
-const char* password = "TfNVYpn7rfGx";
+const char* ssid     = "";
+const char* password = "";
 const char* PI_IP    = "172.24.1.1";
 int delayval = 100; 
 
