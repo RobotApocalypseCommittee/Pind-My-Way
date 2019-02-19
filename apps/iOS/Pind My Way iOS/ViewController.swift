@@ -16,8 +16,6 @@ let spaceOnTop: CGFloat = 50.0
 // Really hacky for now to ignore the safe area
 let spaceOnBottom: CGFloat = -(UIApplication.shared.delegate as! AppDelegate).window!.safeAreaInsets.bottom
 
-var isFirstLoad = true
-
 class ViewController: UIViewController {
     
     var locationManager = CLLocationManager()
@@ -32,13 +30,17 @@ class ViewController: UIViewController {
     var marker : GMSMarker = GMSMarker()
     var selectedRouteIndex = 0
     
+    var routeJSONs: Array<JSON> = []
     var routePolylines: Array<Array<GMSPolyline>> = []
     var routeCoordinates: Array<Array<CLLocationCoordinate2D>> = []
     
     var networkCheckerTimer = Timer()
+    var keepGoButtonHidden = true
     
     @IBOutlet weak var animationView: UIView!
     @IBOutlet weak var goControlView: UIControl!
+    var savedGoControlViewFrame: CGRect = CGRect(x: 0, y: 0, width: 1, height: 1)
+    @IBOutlet weak var bikeIcon: UIImageView!
     
     override func viewDidLoad() {
         UIApplication.shared.windows.first?.layer.speed = 1
@@ -63,12 +65,13 @@ class ViewController: UIViewController {
         task.resume()
         
         // This is so that it's over the GMSMapView
-        self.goControlView.layer.zPosition = 1
-        self.goControlView.layer.cornerRadius = 25
+        goControlView.layer.zPosition = 1
+        
+        bikeIcon.layer.zPosition = 2
         
         // So that it's under the map until it's needed
-        self.animationView.layer.zPosition = -1
-        self.animationView.layer.cornerRadius = 25-goControlViewBezel
+        animationView.layer.zPosition = -1
+        animationView.layer.cornerRadius = 25-goControlViewBezel
         
         locationManager = CLLocationManager()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -110,16 +113,24 @@ class ViewController: UIViewController {
         networkCheckerTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
             if !Reachability.isConnectedToNetwork() {
                 self.mapView.isHidden = true
-                self.goControlView.isHidden = true
                 self.addressSearchController.searchBar.isHidden = true
                 self.view.backgroundColor = .white
+                
+                self.keepGoButtonHidden = self.goControlView.isHidden
+                
+                self.goControlView.isHidden = true
+                self.bikeIcon.isHidden = true
                 //print("Info: Connection: The device is not connected to the internet.")
             } else {
                 self.mapView.isHidden = false
-                self.goControlView.isHidden = false
                 self.addressSearchController.searchBar.isHidden = false
                 // Same colour as search bar, ish
                 self.view.backgroundColor = UIColor(displayP3Red: 199/255, green: 198/255, blue: 204/255, alpha: 1)
+                
+                if !self.keepGoButtonHidden {
+                    self.goControlView.isHidden = false
+                    self.bikeIcon.isHidden = false
+                }
                 //print("Info: Connection: The device is connected to the internet.")
             }
         }
@@ -143,6 +154,10 @@ class ViewController: UIViewController {
     
     @IBAction func goControlView_touchUpInside(_ sender: Any) {
         UserDefaults.standard.set(false, forKey: "introDone")
+        
+        print(Utils.getRouteDataForBluetooth(route: routeJSONs[selectedRouteIndex], withStart: currentLocation!.coordinate).hexEncodedString())
+        print(Utils.getRouteDataForBluetooth(route: routeJSONs[selectedRouteIndex]).hexEncodedString())
+        
         self.performSegue(withIdentifier: "toGo", sender: self)
     }
     
@@ -150,10 +165,17 @@ class ViewController: UIViewController {
         // Just here
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toGo" {
+            let destinationVC = segue.destination as! GoViewController
+            destinationVC.routeJSON = routeJSONs[selectedRouteIndex]
+        }
+    }
+    
     // Gets directions and draws them on the map
     func getDirections(endCoordinates: CLLocationCoordinate2D) {
         let startCoordinates: CLLocationCoordinate2D = currentLocation!.coordinate
-        
+
         routePolylines = []
         routeCoordinates = []
 
@@ -210,6 +232,32 @@ class ViewController: UIViewController {
                     // I do these as two seperate things so the resize happens first of all
                     for i in 0...routes.count-1 {
                         self.drawRoute(route: routes[i], asSelected: i == 0, name: "Route \(i+1)")
+                        self.routeJSONs.append(routes[i])
+                    }
+                    
+                    // And finally show the go button if it was hidden
+                    if self.goControlView.isHidden {
+                        let controlFrame = self.goControlView.frame
+                        let bikeFrame = self.bikeIcon.frame
+                        
+                        let center = self.goControlView.center
+                        let invisibleRect = CGRect(origin: center, size: CGSize(width: 1, height: 1))
+                        
+                        self.goControlView.frame = invisibleRect
+                        self.bikeIcon.frame = invisibleRect
+                        
+                        self.goControlView.isHidden = false
+                        self.bikeIcon.isHidden = false
+
+                        UIView.animate(withDuration: 0.5, animations: { () -> Void in
+                            
+                            self.goControlView.frame = controlFrame
+                            
+                            self.bikeIcon.frame = bikeFrame
+                            
+                        })
+                        
+                        self.goControlView.addCornerRadiusAnimation(from: 0, to: 25, duration: 0.5, withTimingFunction: .easeInEaseOut)
                     }
                 }
             }
@@ -267,11 +315,16 @@ class ViewController: UIViewController {
         marker.title = name
         marker.icon = #imageLiteral(resourceName: "RouteInfo")
         let pollutionInfo = Utils.getRoutePollution(route: nonDrawnPointsIncluded)
-        var description = "NO₂ rating: \(pollutionInfo["NO2"]!["total"]!)\n"
-        description.append(contentsOf: "SO₂ rating: \(pollutionInfo["SO2"]!["total"]!)\n")
-        description.append(contentsOf: "PM10 rating: \(pollutionInfo["PM10"]!["total"]!)\n")
-        description.append(contentsOf: "PM25 rating: \(pollutionInfo["PM25"]!["total"]!)\n")
-        description.append(contentsOf: "O₃ rating: \(pollutionInfo["O3"]!["total"]!)")
+        
+        var description = "N/A"
+        
+        if pollutionInfo["NO2"] != nil {
+            description.append("NO₂ rating: \(pollutionInfo["NO2"]!["total"]!)\n")
+            description.append(contentsOf: "SO₂ rating: \(pollutionInfo["SO2"]!["total"]!)\n")
+            description.append(contentsOf: "PM10 rating: \(pollutionInfo["PM10"]!["total"]!)\n")
+            description.append(contentsOf: "PM25 rating: \(pollutionInfo["PM25"]!["total"]!)\n")
+            description.append(contentsOf: "O₃ rating: \(pollutionInfo["O3"]!["total"]!)")
+        }
         marker.snippet = description
         marker.map = mapView
         
@@ -352,8 +405,18 @@ extension ViewController: GMSMapViewDelegate {
         marker.map = mapView
     }
     
+    func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        mapView.selectedMarker = marker
+        return true
+    }
+    
     // called every time a marker info window may need to be created
     func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
+        // don't return a view if the marker is just a random regular marker
+        if marker.title == nil {
+            return nil
+        }
+        
         let view = UIView(frame: CGRect.init(x: 0, y: 0, width: 200, height: 120))
         view.backgroundColor = UIColor.white
         view.layer.cornerRadius = 20
@@ -379,11 +442,7 @@ extension ViewController: GMSMapViewDelegate {
         desc.font = UIFont.systemFont(ofSize: 12, weight: .light)
         view.addSubview(desc)
         
-        // don't return a view if the marker is just a random regular marker
-        if marker.title != nil {
-            return view
-        }
-        return nil
+        return view
     }
 
 }
@@ -458,5 +517,30 @@ extension ViewController: GMSAutocompleteResultsViewControllerDelegate {
 extension Array where Element: Equatable {
     func indices(ofItem item: Element) -> [Int] {
         return enumerated().compactMap { $0.element == item ? $0.offset : nil }
+    }
+}
+
+extension Data {
+    private static let hexAlphabet = "0123456789abcdef".unicodeScalars.map { $0 }
+    
+    public func hexEncodedString() -> String {
+        return String(self.reduce(into: "".unicodeScalars, { (result, value) in
+            result.append(Data.hexAlphabet[Int(value/16)])
+            result.append(Data.hexAlphabet[Int(value%16)])
+        }))
+    }
+}
+
+extension UIView
+{
+    func addCornerRadiusAnimation(from: CGFloat, to: CGFloat, duration: CFTimeInterval, withTimingFunction timingFunction: CAMediaTimingFunctionName)
+    {
+        let animation = CABasicAnimation(keyPath:"cornerRadius")
+        animation.timingFunction = CAMediaTimingFunction(name: timingFunction)
+        animation.fromValue = from
+        animation.toValue = to
+        animation.duration = duration
+        layer.add(animation, forKey: "cornerRadius")
+        layer.cornerRadius = to
     }
 }

@@ -15,6 +15,8 @@ class FakeTwitterSegue: UIStoryboardSegue {
     override func perform() {
         let mapViewController = self.source as! ViewController
         
+        mapViewController.savedGoControlViewFrame = mapViewController.goControlView.frame
+        
         let goViewControllerView = self.destination.view!
         
         let screenWidth = UIScreen.main.bounds.width
@@ -45,6 +47,7 @@ class FakeTwitterSegue: UIStoryboardSegue {
                 mapViewController.animationView.frame = CGRect(x: centerX-animationViewRadius, y: centerY-animationViewRadius, width: animationViewRadius*2, height: animationViewRadius*2)
                 
                 mapViewController.goControlView.center = CGPoint(x: centerX, y: centerY)
+                mapViewController.bikeIcon.center = CGPoint(x: centerX, y: centerY)
                 mapViewController.animationView.center = CGPoint(x: centerX, y: centerY)
             })
             
