@@ -8,12 +8,6 @@ const coordinator = require("../coordinator").getInstance()
 let status_characteristic = new bleno.Characteristic({
   uuid: status.uuid, // or 'fff1' for 16-bit
   properties: ["read", "notify"], // can be a combination of 'read', 'write', 'writeWithoutResponse', 'notify', 'indicate'
-  descriptors: [
-    new bleno.Descriptor({
-      uuid: "2901",
-      value: status.description
-    })
-  ],
   onReadRequest: function(offset, callback) {
     if (offset) {
       callback(this.RESULT_ATTR_NOT_LONG, null);

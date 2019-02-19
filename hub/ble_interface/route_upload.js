@@ -20,13 +20,7 @@ let route_upload_characteristic = new bleno.Characteristic({
     } else {
       callback(bleno.Characteristic.RESULT_INVALID_ATTRIBUTE_LENGTH)
     }
-  },
-  descriptors: [
-    new bleno.Descriptor({
-      uuid: "2901",
-      value: routeUpload.description
-    })
-  ]
+  }
 
 })
 

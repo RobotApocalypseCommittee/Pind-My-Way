@@ -11,24 +11,12 @@ let random_id_characteristic = new bleno.Characteristic({
   uuid: unique_identify.uuid, // or 'fff1' for 16-bit
   properties: ["read"], // can be a combination of 'read', 'write', 'writeWithoutResponse', 'notify', 'indicate'
   value: rand_ID_buffer, // optional static value, must be of type Buffer - for read only characteristics
-  descriptors: [
-    new bleno.Descriptor({
-      uuid: "2901",
-      value: unique_identify.description
-    })
-  ]
 
 })
 
 let name_characteristic = new bleno.Characteristic({
   uuid: settable_name.uuid, // or 'fff1' for 16-bit
   properties: ["read", "write"], // can be a combination of 'read', 'write', 'writeWithoutResponse', 'notify', 'indicate'
-  descriptors: [
-    new bleno.Descriptor({
-      uuid: "2901",
-      value: settable_name.description
-    })
-  ],
   onWriteRequest: function (data, offset, withoutResponse, callback) {
     if (offset) {
       callback(this.RESULT_ATTR_NOT_LONG)

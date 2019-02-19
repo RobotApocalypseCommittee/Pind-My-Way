@@ -28,13 +28,7 @@ let control_characteristic = new bleno.Characteristic({
       }
       callback(bleno.Characteristic.RESULT_SUCCESS)
     }
-  },
-  descriptors: [
-    new bleno.Descriptor({
-      uuid: "2901",
-      value: control.description
-    })
-  ]
+  }
 
 })
 
