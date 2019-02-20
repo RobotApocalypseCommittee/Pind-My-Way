@@ -37,6 +37,13 @@ bleno.on('advertisingStart', function(error) {
 });
 
 bleno.on('accept', (cA)=>console.log("Accept: ", cA));
-bleno.on('disconnect', (cA)=>console.log("Disconnect: ", cA));
+bleno.on('disconnect', (cA)=>{
+  console.log("Disconnect: ", cA)
+  bleno.stopAdvertising(()=>{
+    console.log("Stopped")
+    bleno.startAdvertising(bleConstants.deviceName, [bleConstants.primaryService]);
+  })
+}
+});
 
 
