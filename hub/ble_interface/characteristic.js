@@ -4,9 +4,9 @@ var bleno = require('bleno');
 
 var BlenoCharacteristic = bleno.Characteristic;
 
-class EchoCharacteristic extends BlenoCharacteristic {
+class EchoCharacteristic{
   constructor() {
-    super({
+    EchoCharacteristic.super_.call(this, {
       uuid: 'ec0e',
       properties: ['read', 'write', 'notify'],
       value: null
@@ -44,5 +44,5 @@ class EchoCharacteristic extends BlenoCharacteristic {
     this._updateValueCallback = null;
   }
 }
-
+util.inherits(EchoCharacteristic, BlenoCharacteristic)
 module.exports = EchoCharacteristic;
