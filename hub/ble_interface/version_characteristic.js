@@ -13,12 +13,11 @@ class VersionCharacteristic {
       value: null
     });
 
-    this._value = new Buffer(0);
-    this._updateValueCallback = null;
+    this._value = Buffer.from("0.0.2");
   }
 
   onReadRequest(offset, callback) {
-    console.log('EchoCharacteristic - onReadRequest: value = ' + this._value.toString('hex'));
+    console.log('VersionCharacteristic - onReadRequest: value = ' + this._value.toString('hex'));
 
     callback(this.RESULT_SUCCESS, this._value);
   }
