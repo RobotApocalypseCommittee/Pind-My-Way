@@ -12,7 +12,6 @@ import CoreBluetooth
 class ConnectBluetoothViewController: UIViewController {
     
     var peripheral: CBPeripheral?
-    var bluetoothManager: BluetoothManager?
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var pairLabel: UILabel!
@@ -24,13 +23,13 @@ class ConnectBluetoothViewController: UIViewController {
         // Do any additional setup after loading the view.
         pairLabel.text = "Pairing to\n\(peripheral?.name ?? "your Pi-nd My Way Hub")"
         
-        bluetoothManager?.connectPiAndService(peripheral: peripheral!)
+        sharedBluetoothManager.connectPiAndService(peripheral: peripheral!)
     }
 
     @IBAction func cancelButton_touchUpInside(_ sender: Any) {
         UserDefaults.standard.set(true, forKey: "introDone")
         
-        bluetoothManager?.disconnectPi()
+        sharedBluetoothManager.disconnectPi()
         
         performSegue(withIdentifier: "returnFromConnect", sender: self)
     }
@@ -38,13 +37,21 @@ class ConnectBluetoothViewController: UIViewController {
 
 extension ConnectBluetoothViewController: BluetoothDelegate {
     func characteristicsFoundCallback(_ characteristics: Array<CBCharacteristic>) {
+        // TODO make unique
+        UserDefaults.standard.set(sharedBluetoothManager._selectedPi?.name, forKey: "pairedPiName")
+        
+        // Stop being the delegate and disconnect the pi
+        sharedBluetoothManager.delegate = nil
+        sharedBluetoothManager.disconnectPi()
+        
+        // TODO, actually pair lol
         DispatchQueue.main.async {
             self.activityIndicator.stopAnimating()
             self.completeImage.frame = CGRect(x: self.view.center.x-5, y: self.view.center.y-5, width: 10, height: 10)
             self.completeImage.isHidden = false
             
             // Change to Unique ID
-            UserDefaults.standard.set(self.bluetoothManager?._selectedPi?.name, forKey: "pairedPiName")
+            
             
             // Numbers that look nice
             UIView.animate(withDuration: 0.5) {

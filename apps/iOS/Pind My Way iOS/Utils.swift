@@ -1,5 +1,5 @@
 //
-//  DirectionManager.swift
+//  Utils.swift
 //  Pind-My-Way-Map
 //
 //  Created by Atto Allas on 30/09/2018.
@@ -206,7 +206,7 @@ class Utils {
                 
                 let endStepLatitudeData = Data(bytes: &endStepLatitude, count: 8)
                 let endStepLongitudeData = Data(bytes: &endStepLongitude, count: 8)
-                
+
                 allStepsData.append(bearingData)
                 allStepsData.append(maneuverData)
                 allStepsData.append(endStepLatitudeData)

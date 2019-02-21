@@ -9,12 +9,15 @@
 import Foundation
 import CoreBluetooth
 
-let piServiceUuid = CBUUID(string: "9540")
-let routeCharacteristicUuid = CBUUID(string: "3bf0")
-let uniqueIDCharacteristicUuid = CBUUID(string: "fc58")
-let settableNameCharacteristicUuid = CBUUID(string: "fc59")
-let statusCharacteristicUuid = CBUUID(string: "fc60")
-let controlCharacteristicUuid = CBUUID(string: "fc61")
+let piServiceUuid = CBUUID(string: "ed00")
+let versionCharacteristicUuid = CBUUID(string: "ed01")
+let routeCharacteristicUuid = CBUUID(string: "ed02")
+let uniqueIDCharacteristicUuid = CBUUID(string: "ed03")
+let settableNameCharacteristicUuid = CBUUID(string: "ed04")
+let statusCharacteristicUuid = CBUUID(string: "ed05")
+let controlCharacteristicUuid = CBUUID(string: "ed06")
+
+let allCharacteristicsUuids = [versionCharacteristicUuid, routeCharacteristicUuid, uniqueIDCharacteristicUuid, settableNameCharacteristicUuid, statusCharacteristicUuid, controlCharacteristicUuid]
 
 class BluetoothManager: NSObject {
     
@@ -27,7 +30,7 @@ class BluetoothManager: NSObject {
     var _selectedPi: CBPeripheral? = nil
     var piConnected = false
     
-    var _piRouteService: CBService? = nil
+    var _piService: CBService? = nil
 
     var characteristicsDiscovered = false
     
@@ -49,44 +52,70 @@ class BluetoothManager: NSObject {
         _centralManager = CBCentralManager(delegate: self, queue: nil)
     }
     
-    func startScanning() {
-        if let manager = _centralManager, manager.state != .poweredOn {
-            print("Warning: Bluetooth: Cannot start scanning before being turned on!")
-            return
+    func startScanning() -> Bool {
+        // Returns true for success, false for failure
+        if let manager = _centralManager {
+            if manager.state != .poweredOn {
+                print("Warning: Bluetooth: Cannot start scanning before being turned on!")
+                return false
+            } else if !scanningForPi {
+                manager.scanForPeripherals(withServices: [piServiceUuid], options: nil)
+                scanningForPi = true
+            }
+            
+            return true
         }
-        if !scanningForPi {
-            _centralManager!.scanForPeripherals(withServices: [piServiceUuid], options: nil)
-            scanningForPi = true
-        }
+        
+        return false
     }
     
     func stopScanning() {
         if scanningForPi {
-            _centralManager!.stopScan()
+            _centralManager?.stopScan()
             scanningForPi = false
         }
     }
     
     func connectPiAndService(peripheral: CBPeripheral) {
-        _piRouteService = nil
+        _piService = nil
         characteristicsDiscovered = false
         
         peripheral.delegate = self
         _selectedPi = peripheral
         
         if let manager = _centralManager {
+            manager.cancelPeripheralConnection(peripheral) // To make sure there is nothing pending
             manager.connect(peripheral, options: nil)
         }
     }
     
-    func disconnectPi() {
+    func disconnectPi(noSend legacy: Bool) {
         if let pi = _selectedPi, let manager = _centralManager {
-            pi.delegate = nil
-            manager.cancelPeripheralConnection(pi)
+            if !legacy {
+                if let services = pi.services, services.count > 0, let characteristics = services[0].characteristics {
+                    for characteristic in characteristics {
+                        switch characteristic.uuid {
+                        case controlCharacteristicUuid:
+                            var disconnectControl: UInt8 = 3
+                            _ = send(data: Data(bytes: &disconnectControl, count: 1), to: characteristic)
+                        default:
+                            _ = 2
+                        }
+                    }
+                }
+            } else {
+                pi.delegate = nil
+                manager.cancelPeripheralConnection(pi)
+            }
         }
+        
         _selectedPi = nil
-        _piRouteService = nil
+        _piService = nil
         characteristicsDiscovered = false
+    }
+    
+    func disconnectPi() {
+        disconnectPi(noSend: false)
     }
     
     func send(data: Data, to characteristic: CBCharacteristic) -> Bool {
@@ -124,15 +153,12 @@ extension BluetoothManager: CBCentralManagerDelegate {
         switch central.state {
         case .poweredOn:
             print("Info: Bluetooth: Powered on")
-            scanningForPi = true
-            central.scanForPeripherals(withServices: [piServiceUuid], options: nil)
         default:
             return
         }
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        print("Info: Bluetooth: Peripheral found")
         
         if !raspberryPis.contains(peripheral) {
             raspberryPis.insert(peripheral, at: raspberryPis.endIndex)
@@ -143,25 +169,13 @@ extension BluetoothManager: CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         if let pi = _selectedPi, peripheral == pi {
-            print("Info: Bluetooth: Pi connected")
-            switch pi.state {
-            case .connected: print("conn")
-            case .connecting: print("conning")
-            case .disconnected: print("disconn")
-            default: print("disconning")
-            }
+            print("Info: Bluetooth: Pi connected at \(NSDate().timeIntervalSince1970)")
             
-            print("CONN (defo) AT \(NSDate().timeIntervalSince1970)")
-            
-            // Immediately (1 second later, because dodge) tries to discover the data writing service
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
-                print("Trying for services")
-                switch pi.state {
-                case .connected: print("conn")
-                case .connecting: print("conning")
-                case .disconnected: print("disconn")
-                default: print("disconning")
-                }
+            // Needed because of CoreBluetooth caching
+            if peripheral.services != nil {
+                self.peripheral(peripheral, didDiscoverServices: nil)
+            } else {
+                // Immediately tries to discover the data writing service
                 pi.discoverServices([piServiceUuid])
             }
         } else {
@@ -171,7 +185,7 @@ extension BluetoothManager: CBCentralManagerDelegate {
     
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        print("DISCONN AT \(NSDate().timeIntervalSince1970)")
+        print("Info: Bluetooth: DISCONN AT \(NSDate().timeIntervalSince1970)")
     }
 }
 
@@ -179,19 +193,23 @@ extension BluetoothManager: CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         if error == nil {
-            print("????")
             if let pi = _selectedPi, pi == peripheral {
                 print("Info: Bluetooth: Route service found")
                 
                 for service in pi.services! {
                     if service.uuid == piServiceUuid {
-                        _piRouteService = service
+                        _piService = service
                         break
                     }
                 }
                 
-                if let service = _piRouteService {
-                    pi.discoverCharacteristics([routeCharacteristicUuid], for: service)
+                if let service = _piService {
+                    // Needed because of CoreBluetooth caching
+                    if service.characteristics != nil {
+                        self.peripheral(peripheral, didDiscoverCharacteristicsFor: service, error: nil)
+                    } else {
+                        pi.discoverCharacteristics(allCharacteristicsUuids, for: service)
+                    }
                 }
             } else {
                 print("Error: Bluetooth: Services were discovered for something that wasn't the pi!")
@@ -203,8 +221,7 @@ extension BluetoothManager: CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         if error == nil {
-            if let piService = _piRouteService, service == piService {
-                print("Info: Bluetooth: Characteristics discovered")
+            if let piService = _piService, service == piService {
                 print("Info: Bluetooth: Max packet length: \(peripheral.maximumWriteValueLength(for: .withResponse))")
                 
                 for characteristic in service.characteristics! {
@@ -212,20 +229,16 @@ extension BluetoothManager: CBPeripheralDelegate {
                     case statusCharacteristicUuid:
                         peripheral.setNotifyValue(true, for: characteristic)
                         print("Info: Bluetooth: Set notify for the status characteristic")
+                    case versionCharacteristicUuid:
+                        print("Hello")
+                        peripheral.readValue(for: characteristic)
                     default:
                         _ = 2
                     }
                 }
                 
-                // The Data constructor (at least in this instance), combined with the pi at normal settings, produces a LITTLE ENDIAN
-                // output from an int.
-                // If we reverse it and then feed that to the Data constructor, it becomes BIG ENDIAN,
-                // Or optionally use CFSwap<Whatever>HostToBig(arg:)
-                //_selectedPi!.writeValue(Data(), for: _piRouteService!.characteristics![0], type: .withResponse)
-                
                 characteristicsDiscovered = true
                 
-                // TODO, actually pair lol
                 delegate?.characteristicsFoundCallback(service.characteristics!)
             } else {
                 print("Warning: Bluetooth: A service was discovered that was not the pi service!")
@@ -254,15 +267,38 @@ extension BluetoothManager: CBPeripheralDelegate {
 }
 
 protocol BluetoothDelegate: AnyObject {
-    func peripheralFoundCallback(_: CBPeripheral)
-    func characteristicsFoundCallback(_: Array<CBCharacteristic>)
-    func valueWrittenCallback(_: CBCharacteristic)
-    func valueUpdatedCallback(_: CBCharacteristic)
+    func peripheralFoundCallback(_ peripheral: CBPeripheral)
+    func characteristicsFoundCallback(_ characteristics: Array<CBCharacteristic>)
+    func valueWrittenCallback(_ characteristic: CBCharacteristic)
+    func valueUpdatedCallback(_ characteristic: CBCharacteristic)
 }
 
 extension BluetoothDelegate {
-    func peripheralFoundCallback(_: CBPeripheral) {}
-    func characteristicsFoundCallback(_: Array<CBCharacteristic>) {}
-    func valueWrittenCallback(_: CBCharacteristic) {}
-    func valueUpdatedCallback(_: CBCharacteristic) {}
+    func defaultPeripheralFoundCallback(_ peripheral: CBPeripheral) {
+        print("Info: Bluetooth: Peripheral found with name \"\(peripheral.name ?? "nil")\"")
+    }
+    func defaultCharacteristicsFoundCallback(_ characteristics: Array<CBCharacteristic>) {
+        print("Info: Bluetooth: Characteristics were found")
+    }
+    func defaultValueWrittenCallback(_ characteristic: CBCharacteristic) {
+        print("Info: Bluetooth: Value written to a characteristic with UUID \"\(characteristic.uuid)\"")
+    }
+    func defaultValueUpdatedCallback(_ characteristic: CBCharacteristic) {
+        // Technically the ?? "nil" is never used, but otherwise Xcode complains
+        print("Info: Bluetooth: Characteristic with UUID \"\(characteristic.uuid)\" has a value of \"\(characteristic.value?.hexEncodedString() ?? "nil")\"")
+    }
+    
+    
+    func peripheralFoundCallback(_ peripheral: CBPeripheral) {
+        defaultPeripheralFoundCallback(peripheral)
+    }
+    func characteristicsFoundCallback(_ characteristics: Array<CBCharacteristic>) {
+        defaultCharacteristicsFoundCallback(characteristics)
+    }
+    func valueWrittenCallback(_ characteristic: CBCharacteristic) {
+        defaultValueWrittenCallback(characteristic)
+    }
+    func valueUpdatedCallback(_ characteristic: CBCharacteristic) {
+        defaultValueUpdatedCallback(characteristic)
+    }
 }

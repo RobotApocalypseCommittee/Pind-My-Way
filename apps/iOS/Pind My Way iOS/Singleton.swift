@@ -12,4 +12,6 @@ import SwiftyJSON
 #warning("Enter the real Google Maps API Key")
 let apiKey = ""
 
+let sharedBluetoothManager = BluetoothManager()
+
 var pollutionResp : JSON = []

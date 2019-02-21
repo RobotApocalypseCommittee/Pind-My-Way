@@ -14,25 +14,26 @@ import CoreLocation
 class GoViewController: UIViewController {
     
     var routeJSON = JSON()
-    
-    var bluetoothManager: BluetoothManager? = nil
+
     var currentLocation: CLLocationCoordinate2D? = nil
+    
+    var startScanningScheduledTimer: Timer? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
-        bluetoothManager = BluetoothManager()
+        sharedBluetoothManager.delegate = self
         
-        bluetoothManager?.delegate = self
+        if !sharedBluetoothManager.startScanning() {
+            startScanningScheduledTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) {_ in
+                if sharedBluetoothManager.startScanning() {
+                    self.startScanningScheduledTimer?.invalidate()
+                }
+            }
+        }
     }
     
     @IBAction func sendButton_touchUpInside(_ sender: Any) {
-        guard let bluetoothManager = bluetoothManager else {
-            print("No BT Manager!")
-            return
-        }
-        
         // Add current location TODO
         let routeData: Data
         if let startLocation = currentLocation {
@@ -41,23 +42,23 @@ class GoViewController: UIViewController {
             routeData = Utils.getRouteDataForBluetooth(route: routeJSON)
         }
         
-        if !bluetoothManager.characteristicsDiscovered {
+        if !sharedBluetoothManager.characteristicsDiscovered {
             print("Characteristics not discovered!")
             return
         }
         
-        let allCharacteristics = bluetoothManager._selectedPi!.services![0].characteristics!
+        let allCharacteristics = sharedBluetoothManager._selectedPi!.services![0].characteristics!
         for characteristic in allCharacteristics {
             switch characteristic.uuid {
             case routeCharacteristicUuid:
-                if bluetoothManager.send(data: routeData, to: characteristic) {
+                if sharedBluetoothManager.send(data: routeData, to: characteristic) {
                     print("Route sent")
                 } else {
                     print("Some error sending route")
                 }
             case controlCharacteristicUuid:
                 var num: UInt8 = 1
-                if bluetoothManager.send(data: Data(bytes: &num, count: 1), to: characteristic) {
+                if sharedBluetoothManager.send(data: Data(bytes: &num, count: 1), to: characteristic) {
                     print("Control written")
                 } else {
                     print("Error in writing control")
@@ -69,25 +70,27 @@ class GoViewController: UIViewController {
     }
     
     @IBAction func backButton_touchUpInside(_ sender: Any) {
+        sharedBluetoothManager.stopScanning()
+        sharedBluetoothManager.disconnectPi()
+        
         performSegue(withIdentifier: "returnFromGo", sender: self)
     }
 }
 
 extension GoViewController: BluetoothDelegate {
-    func valueWrittenCallback(_: CBCharacteristic) {
-        print("Value Written from GO VIEW CONTROLLER")
+    func valueWrittenCallback(_ characteristic: CBCharacteristic) {
+        defaultValueWrittenCallback(characteristic)
+        print("Info: Bluetooth: This value was written from GoViewController")
     }
     
     func peripheralFoundCallback(_ peripheral: CBPeripheral) {
-        print("Periph found: \(peripheral.name ?? "Unknown")")
+        defaultPeripheralFoundCallback(peripheral)
         
+        // TODO fix
         if peripheral.name == UserDefaults.standard.object(forKey: "pairedPiName") as? String || true {
             print("Trying to connect")
-            bluetoothManager!.connectPiAndService(peripheral: peripheral)
+            sharedBluetoothManager.stopScanning()
+            sharedBluetoothManager.connectPiAndService(peripheral: peripheral)
         }
-    }
-    
-    func characteristicsFoundCallback(_: Array<CBCharacteristic>) {
-        print("Characteristics found")
     }
 }
