@@ -41,6 +41,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var goControlView: UIControl!
     var savedGoControlViewFrame: CGRect = CGRect(x: 0, y: 0, width: 1, height: 1)
     @IBOutlet weak var bikeIcon: UIImageView!
+    @IBOutlet weak var noWifiLabel: UILabel!
+    @IBOutlet weak var noWifiImage: UIImageView!
     
     override func viewDidLoad() {
         UIApplication.shared.windows.first?.layer.speed = 1
@@ -120,6 +122,9 @@ class ViewController: UIViewController {
                 
                 self.goControlView.isHidden = true
                 self.bikeIcon.isHidden = true
+                
+                self.noWifiLabel.isHidden = false
+                self.noWifiImage.isHidden = false
                 //print("Info: Connection: The device is not connected to the internet.")
             } else {
                 self.mapView.isHidden = false
@@ -131,6 +136,9 @@ class ViewController: UIViewController {
                     self.goControlView.isHidden = false
                     self.bikeIcon.isHidden = false
                 }
+                
+                self.noWifiLabel.isHidden = true
+                self.noWifiImage.isHidden = true
                 //print("Info: Connection: The device is connected to the internet.")
             }
         }
@@ -169,6 +177,7 @@ class ViewController: UIViewController {
         if segue.identifier == "toGo" {
             let destinationVC = segue.destination as! GoViewController
             destinationVC.routeJSON = routeJSONs[selectedRouteIndex]
+            destinationVC.currentLocation = currentLocation?.coordinate
         }
     }
     

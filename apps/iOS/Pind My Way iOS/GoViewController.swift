@@ -9,12 +9,14 @@
 import UIKit
 import CoreBluetooth
 import SwiftyJSON
+import CoreLocation
 
 class GoViewController: UIViewController {
     
     var routeJSON = JSON()
     
     var bluetoothManager: BluetoothManager? = nil
+    var currentLocation: CLLocationCoordinate2D? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +34,12 @@ class GoViewController: UIViewController {
         }
         
         // Add current location TODO
-        let routeData = Utils.getRouteDataForBluetooth(route: routeJSON)
+        let routeData: Data
+        if let startLocation = currentLocation {
+            routeData = Utils.getRouteDataForBluetooth(route: routeJSON, withStart: startLocation)
+        } else {
+            routeData = Utils.getRouteDataForBluetooth(route: routeJSON)
+        }
         
         if !bluetoothManager.characteristicsDiscovered {
             print("Characteristics not discovered!")
@@ -41,12 +48,22 @@ class GoViewController: UIViewController {
         
         let allCharacteristics = bluetoothManager._selectedPi!.services![0].characteristics!
         for characteristic in allCharacteristics {
-            if characteristic.uuid == routeCharacteristicUuid {
-                if !bluetoothManager.send(data: routeData, to: characteristic) {
-                    print("Some error sending")
+            switch characteristic.uuid {
+            case routeCharacteristicUuid:
+                if bluetoothManager.send(data: routeData, to: characteristic) {
+                    print("Route sent")
                 } else {
-                    print("Seems all gouda")
+                    print("Some error sending route")
                 }
+            case controlCharacteristicUuid:
+                var num: UInt8 = 1
+                if bluetoothManager.send(data: Data(bytes: &num, count: 1), to: characteristic) {
+                    print("Control written")
+                } else {
+                    print("Error in writing control")
+                }
+            default:
+                _ = 2
             }
         }
     }
@@ -64,8 +81,9 @@ extension GoViewController: BluetoothDelegate {
     func peripheralFoundCallback(_ peripheral: CBPeripheral) {
         print("Periph found: \(peripheral.name ?? "Unknown")")
         
-        if peripheral.name == UserDefaults.standard.object(forKey: "pairedPiName") as? String {
-            bluetoothManager?.connectPiAndService(peripheral: peripheral)
+        if peripheral.name == UserDefaults.standard.object(forKey: "pairedPiName") as? String || true {
+            print("Trying to connect")
+            bluetoothManager!.connectPiAndService(peripheral: peripheral)
         }
     }
     

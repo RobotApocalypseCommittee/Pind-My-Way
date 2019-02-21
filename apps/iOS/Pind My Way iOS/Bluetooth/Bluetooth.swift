@@ -13,6 +13,8 @@ let piServiceUuid = CBUUID(string: "9540")
 let routeCharacteristicUuid = CBUUID(string: "3bf0")
 let uniqueIDCharacteristicUuid = CBUUID(string: "fc58")
 let settableNameCharacteristicUuid = CBUUID(string: "fc59")
+let statusCharacteristicUuid = CBUUID(string: "fc60")
+let controlCharacteristicUuid = CBUUID(string: "fc61")
 
 class BluetoothManager: NSObject {
     
@@ -48,7 +50,7 @@ class BluetoothManager: NSObject {
     }
     
     func startScanning() {
-        if _centralManager!.state != .poweredOn {
+        if let manager = _centralManager, manager.state != .poweredOn {
             print("Warning: Bluetooth: Cannot start scanning before being turned on!")
             return
         }
@@ -72,13 +74,15 @@ class BluetoothManager: NSObject {
         peripheral.delegate = self
         _selectedPi = peripheral
         
-        _centralManager!.connect(_selectedPi!, options: nil)
+        if let manager = _centralManager {
+            manager.connect(peripheral, options: nil)
+        }
     }
     
     func disconnectPi() {
-        if let _selectedPi = _selectedPi {
-            _selectedPi.delegate = nil
-            _centralManager!.cancelPeripheralConnection(_selectedPi)
+        if let pi = _selectedPi, let manager = _centralManager {
+            pi.delegate = nil
+            manager.cancelPeripheralConnection(pi)
         }
         _selectedPi = nil
         _piRouteService = nil
@@ -88,8 +92,8 @@ class BluetoothManager: NSObject {
     func send(data: Data, to characteristic: CBCharacteristic) -> Bool {
         // returns true if succeeded, otherwise false
         if characteristicsDiscovered {
-            if _selectedPi != nil {
-                _selectedPi!.writeValue(data, for: characteristic, type: .withResponse)
+            if let pi = _selectedPi {
+                pi.writeValue(data, for: characteristic, type: .withResponse)
                 return true
             }
         }
@@ -99,8 +103,8 @@ class BluetoothManager: NSObject {
     func updateValue(for characteristic: CBCharacteristic) -> Bool {
         // returns true if succeeded, otherwise false
         if characteristicsDiscovered {
-            if _selectedPi != nil {
-                _selectedPi!.readValue(for: characteristic)
+            if let pi = _selectedPi {
+                pi.readValue(for: characteristic)
                 return true
             }
         }
@@ -138,25 +142,60 @@ extension BluetoothManager: CBCentralManagerDelegate {
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        if peripheral == _selectedPi! {
+        if let pi = _selectedPi, peripheral == pi {
             print("Info: Bluetooth: Pi connected")
+            switch pi.state {
+            case .connected: print("conn")
+            case .connecting: print("conning")
+            case .disconnected: print("disconn")
+            default: print("disconning")
+            }
             
-            // Immediately tries to discover the data writing service
-            _selectedPi!.discoverServices([piServiceUuid])
+            print("CONN (defo) AT \(NSDate().timeIntervalSince1970)")
+            
+            // Immediately (1 second later, because dodge) tries to discover the data writing service
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
+                print("Trying for services")
+                switch pi.state {
+                case .connected: print("conn")
+                case .connecting: print("conning")
+                case .disconnected: print("disconn")
+                default: print("disconning")
+                }
+                pi.discoverServices([piServiceUuid])
+            }
         } else {
             print("Warning: Bluetooth: An unknown peripheral connected!")
         }
     }
     
+    
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        print("DISCONN AT \(NSDate().timeIntervalSince1970)")
+    }
 }
 
 extension BluetoothManager: CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         if error == nil {
-            print("Info: Bluetooth: Route service found")
-            _piRouteService = peripheral.services![0]
-            _selectedPi!.discoverCharacteristics([routeCharacteristicUuid], for: _piRouteService!)
+            print("????")
+            if let pi = _selectedPi, pi == peripheral {
+                print("Info: Bluetooth: Route service found")
+                
+                for service in pi.services! {
+                    if service.uuid == piServiceUuid {
+                        _piRouteService = service
+                        break
+                    }
+                }
+                
+                if let service = _piRouteService {
+                    pi.discoverCharacteristics([routeCharacteristicUuid], for: service)
+                }
+            } else {
+                print("Error: Bluetooth: Services were discovered for something that wasn't the pi!")
+            }
         } else {
             print("Error: Bluetooth: \(error!)")
         }
@@ -164,9 +203,19 @@ extension BluetoothManager: CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         if error == nil {
-            if service == _piRouteService! {
+            if let piService = _piRouteService, service == piService {
                 print("Info: Bluetooth: Characteristics discovered")
-                print("Info: Bluetooth: Max packet length: \(_selectedPi!.maximumWriteValueLength(for: .withResponse))")
+                print("Info: Bluetooth: Max packet length: \(peripheral.maximumWriteValueLength(for: .withResponse))")
+                
+                for characteristic in service.characteristics! {
+                    switch characteristic.uuid {
+                    case statusCharacteristicUuid:
+                        peripheral.setNotifyValue(true, for: characteristic)
+                        print("Info: Bluetooth: Set notify for the status characteristic")
+                    default:
+                        _ = 2
+                    }
+                }
                 
                 // The Data constructor (at least in this instance), combined with the pi at normal settings, produces a LITTLE ENDIAN
                 // output from an int.
@@ -179,7 +228,7 @@ extension BluetoothManager: CBPeripheralDelegate {
                 // TODO, actually pair lol
                 delegate?.characteristicsFoundCallback(service.characteristics!)
             } else {
-                print("Warning: Bluetooth: A service was discovered that was not the data service!")
+                print("Warning: Bluetooth: A service was discovered that was not the pi service!")
             }
         } else {
             print("Error: Bluetooth: \(error!)")
