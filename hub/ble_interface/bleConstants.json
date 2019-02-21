@@ -2,29 +2,29 @@
   "deviceName": "PIMW-1",
   "characteristics": {
     "version": {
-      "uuid": "d0668495159f405ecebe4014a716de2e1",
+      "uuid": "ed01",
       "description": "Version of PIMW Software"
     },
     "routeUpload": {
-      "uuid": "3bf0",
+      "uuid": "ed02",
       "description": "Recieves the route description"
     },
     "unique_identify": {
-      "uuid": "fc58",
+      "uuid": "ed03",
       "description": "A number unique to the device"
     },
     "settable_name": {
-      "uuid": "fc59",
+      "uuid": "ed04",
       "description": "A name, set by the user, for ease of connection on other devices"
     },
     "status": {
-      "uuid": "fc60",
+      "uuid": "ed05",
       "description": "A byte of binary flags"
     },
     "control": {
-      "uuid": "fc61",
+      "uuid": "ed06",
       "description": "Send some control bits"
     }
   },
-  "primaryService": "9540"
+  "primaryService": "ed00"
 }

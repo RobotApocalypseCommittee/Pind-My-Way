@@ -1,12 +1,28 @@
-const bleno = require("bleno")
+var util = require('util');
 
-const {characteristics:{version}} = require("./bleConstants.json")
+var bleno = require('bleno');
+const bleConstants = require("./bleConstants")
 
-let version_characteristic = new bleno.Characteristic({
-  uuid: version.uuid, // or 'fff1' for 16-bit
-  properties: [ "read" ], // can be a combination of 'read', 'write', 'writeWithoutResponse', 'notify', 'indicate'
-  value: Buffer.from("0.0.1"), // optional static value, must be of type Buffer - for read only characteristics
+var BlenoCharacteristic = bleno.Characteristic;
 
-})
+class VersionCharacteristic {
+  constructor() {
+    VersionCharacteristic.super_.call(this, {
+      uuid: bleConstants.characteristics.version.uuid,
+      properties: ['read'],
+      value: null
+    });
 
-module.exports = version_characteristic
+    this._value = new Buffer(0);
+    this._updateValueCallback = null;
+  }
+
+  onReadRequest(offset, callback) {
+    console.log('EchoCharacteristic - onReadRequest: value = ' + this._value.toString('hex'));
+
+    callback(this.RESULT_SUCCESS, this._value);
+  }
+}
+
+util.inherits(VersionCharacteristic, BlenoCharacteristic)
+module.exports = VersionCharacteristic;
