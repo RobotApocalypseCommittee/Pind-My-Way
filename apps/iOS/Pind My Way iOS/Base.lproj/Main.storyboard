@@ -46,14 +46,33 @@
                                     <action selector="goControlView_touchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dsX-El-zlq"/>
                                 </connections>
                             </view>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NoWifi" translatesAutoresizingMaskIntoConstraints="NO" id="A0K-ZZ-wQt">
+                                <rect key="frame" x="150" y="368.66666666666669" width="75" height="75"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="75" id="3x6-Vp-U9X"/>
+                                    <constraint firstAttribute="height" constant="75" id="fPB-cL-dVG"/>
+                                </constraints>
+                            </imageView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please connect to the internet to use Pind My Way" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fd1-y8-ZGi">
+                                <rect key="frame" x="16" y="481.66666666666669" width="343" height="52.666666666666686"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.7803921568627451" green="0.77647058823529413" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="4WS-11-wwo" firstAttribute="centerY" secondItem="jKY-VU-ysY" secondAttribute="centerY" id="Iml-TS-ohg"/>
+                            <constraint firstItem="Fd1-y8-ZGi" firstAttribute="top" secondItem="A0K-ZZ-wQt" secondAttribute="bottom" constant="38" id="MFP-ND-RKE"/>
+                            <constraint firstItem="A0K-ZZ-wQt" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="McE-04-Oib"/>
                             <constraint firstItem="jKY-VU-ysY" firstAttribute="centerY" secondItem="baV-1s-oeM" secondAttribute="centerY" id="S7t-kx-zRS"/>
+                            <constraint firstItem="A0K-ZZ-wQt" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="WUB-gJ-8zT"/>
+                            <constraint firstAttribute="trailing" secondItem="Fd1-y8-ZGi" secondAttribute="trailing" constant="16" id="XLd-I6-a7o"/>
+                            <constraint firstItem="Fd1-y8-ZGi" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="16" id="XxF-F0-9fc"/>
                             <constraint firstAttribute="trailing" secondItem="jKY-VU-ysY" secondAttribute="trailing" constant="16" id="Zrr-kq-xFT"/>
                             <constraint firstItem="4WS-11-wwo" firstAttribute="centerX" secondItem="jKY-VU-ysY" secondAttribute="centerX" id="fCz-Ms-XdT"/>
                             <constraint firstItem="jKY-VU-ysY" firstAttribute="centerX" secondItem="baV-1s-oeM" secondAttribute="centerX" id="gyZ-VN-elo"/>
+                            <constraint firstItem="Fd1-y8-ZGi" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="j7M-zI-JgS"/>
                             <constraint firstAttribute="bottom" secondItem="jKY-VU-ysY" secondAttribute="bottom" constant="16" id="rt2-za-Auj"/>
                             <constraint firstItem="jKY-VU-ysY" firstAttribute="trailing" secondItem="baV-1s-oeM" secondAttribute="trailing" constant="10" id="yrK-iR-bnb"/>
                         </constraints>
@@ -63,6 +82,8 @@
                         <outlet property="animationView" destination="4WS-11-wwo" id="oeZ-xI-OOg"/>
                         <outlet property="bikeIcon" destination="baV-1s-oeM" id="lIx-SZ-8ad"/>
                         <outlet property="goControlView" destination="jKY-VU-ysY" id="Dg1-Kc-4za"/>
+                        <outlet property="noWifiImage" destination="A0K-ZZ-wQt" id="j3R-fq-CuE"/>
+                        <outlet property="noWifiLabel" destination="Fd1-y8-ZGi" id="HeK-BM-iTh"/>
                         <segue destination="9QC-G7-jmV" kind="presentation" identifier="toIntroduction" id="zfW-gu-Sdg"/>
                         <segue destination="1m6-Ub-Jr5" kind="custom" identifier="toGo" customClass="FakeTwitterSegue" customModule="Pind_My_Way_iOS" customModuleProvider="target" id="vLg-b0-YNA"/>
                     </connections>
@@ -321,6 +342,7 @@ Placeholder</string>
     </scenes>
     <resources>
         <image name="BikeIcon" width="512" height="338"/>
+        <image name="NoWifi" width="1024" height="1024"/>
         <image name="PairComplete" width="340" height="340"/>
     </resources>
 </document>

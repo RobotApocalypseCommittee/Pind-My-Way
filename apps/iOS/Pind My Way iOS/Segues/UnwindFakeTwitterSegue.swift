@@ -18,9 +18,6 @@ class UnwindFakeTwitterSegue: UIStoryboardSegue {
         let savedX = savedGoControlViewFrame.midX
         let savedY = savedGoControlViewFrame.midY
         
-        print(savedX)
-        print(savedY)
-        
         let goViewControllerView = self.source.view!
         
         let screenWidth = UIScreen.main.bounds.width

@@ -9,67 +9,88 @@
 import UIKit
 import CoreBluetooth
 import SwiftyJSON
+import CoreLocation
 
 class GoViewController: UIViewController {
     
     var routeJSON = JSON()
+
+    var currentLocation: CLLocationCoordinate2D? = nil
     
-    var bluetoothManager: BluetoothManager? = nil
+    var startScanningScheduledTimer: Timer? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
-        bluetoothManager = BluetoothManager()
+        sharedBluetoothManager.delegate = self
         
-        bluetoothManager?.delegate = self
-    }
-    
-    @IBAction func sendButton_touchUpInside(_ sender: Any) {
-        guard let bluetoothManager = bluetoothManager else {
-            print("No BT Manager!")
-            return
-        }
-        
-        // Add current location TODO
-        let routeData = Utils.getRouteDataForBluetooth(route: routeJSON)
-        
-        if !bluetoothManager.characteristicsDiscovered {
-            print("Characteristics not discovered!")
-            return
-        }
-        
-        let allCharacteristics = bluetoothManager._selectedPi!.services![0].characteristics!
-        for characteristic in allCharacteristics {
-            if characteristic.uuid == routeCharacteristicUuid {
-                if !bluetoothManager.send(data: routeData, to: characteristic) {
-                    print("Some error sending")
-                } else {
-                    print("Seems all gouda")
+        if !sharedBluetoothManager.startScanning() {
+            startScanningScheduledTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) {_ in
+                if sharedBluetoothManager.startScanning() {
+                    self.startScanningScheduledTimer?.invalidate()
                 }
             }
         }
     }
     
+    @IBAction func sendButton_touchUpInside(_ sender: Any) {
+        // Add current location TODO
+        let routeData: Data
+        if let startLocation = currentLocation {
+            routeData = Utils.getRouteDataForBluetooth(route: routeJSON, withStart: startLocation)
+        } else {
+            routeData = Utils.getRouteDataForBluetooth(route: routeJSON)
+        }
+        
+        if !sharedBluetoothManager.characteristicsDiscovered {
+            print("Characteristics not discovered!")
+            return
+        }
+        
+        let allCharacteristics = sharedBluetoothManager._selectedPi!.services![0].characteristics!
+        for characteristic in allCharacteristics {
+            switch characteristic.uuid {
+            case routeCharacteristicUuid:
+                if sharedBluetoothManager.send(data: routeData, to: characteristic) {
+                    print("Route sent")
+                } else {
+                    print("Some error sending route")
+                }
+            case controlCharacteristicUuid:
+                var num: UInt8 = 1
+                if sharedBluetoothManager.send(data: Data(bytes: &num, count: 1), to: characteristic) {
+                    print("Control written")
+                } else {
+                    print("Error in writing control")
+                }
+            default:
+                _ = 2
+            }
+        }
+    }
+    
     @IBAction func backButton_touchUpInside(_ sender: Any) {
+        sharedBluetoothManager.stopScanning()
+        sharedBluetoothManager.disconnectPi()
+        
         performSegue(withIdentifier: "returnFromGo", sender: self)
     }
 }
 
 extension GoViewController: BluetoothDelegate {
-    func valueWrittenCallback(_: CBCharacteristic) {
-        print("Value Written from GO VIEW CONTROLLER")
+    func valueWrittenCallback(_ characteristic: CBCharacteristic) {
+        defaultValueWrittenCallback(characteristic)
+        print("Info: Bluetooth: This value was written from GoViewController")
     }
     
     func peripheralFoundCallback(_ peripheral: CBPeripheral) {
-        print("Periph found: \(peripheral.name ?? "Unknown")")
+        defaultPeripheralFoundCallback(peripheral)
         
-        if peripheral.name == UserDefaults.standard.object(forKey: "pairedPiName") as? String {
-            bluetoothManager?.connectPiAndService(peripheral: peripheral)
+        // TODO fix
+        if peripheral.name == UserDefaults.standard.object(forKey: "pairedPiName") as? String || true {
+            print("Trying to connect")
+            sharedBluetoothManager.stopScanning()
+            sharedBluetoothManager.connectPiAndService(peripheral: peripheral)
         }
-    }
-    
-    func characteristicsFoundCallback(_: Array<CBCharacteristic>) {
-        print("Characteristics found")
     }
 }
