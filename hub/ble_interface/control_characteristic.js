@@ -1,35 +1,43 @@
-const bleno = require("bleno")
-const {Route} = require("../route")
+var util = require('util');
+
+var bleno = require("bleno")
 const coordinator = require("../coordinator").getInstance()
+const bleConstants = require("./bleConstants")
 
-const {characteristics:{control}} = require("./bleConstants.json")
+var BlenoCharacteristic = bleno.Characteristic;
 
-let control_characteristic = new bleno.Characteristic({
-  uuid: control.uuid, // or 'fff1' for 16-bit
-  properties: [ "write" ], // can be a combination of 'read', 'write', 'writeWithoutResponse', 'notify', 'indicate'
-  onWriteRequest: function(data, offset, withoutResponse, callback) {
-    console.log("Write Request")
-    console.log("Data: ", data)
-    console.log("Offset: ", offset)
-    console.log("WithoutResponse: ", withoutResponse)
-    if (data.length !== 1) {
-      callback(bleno.Characteristic.RESULT_INVALID_ATTRIBUTE_LENGTH)
-    } else {
-      // Map it to action
-      let action = data.getUint8(0)
-      switch (action) {
-        case 1: coordinator.beginFollowing()
-          break;
-        case 2: coordinator.endFollowing()
-          break;
-        default:
-          callback(bleno.Characteristic.RESULT_UNLIKELY_ERROR)
-          return;
-      }
-      callback(bleno.Characteristic.RESULT_SUCCESS)
-    }
+class ControlCharacteristic {
+  constructor() {
+    ControlCharacteristic.super_.call(this, {
+      uuid: bleConstants.characteristics.control.uuid,
+      properties: ['write'],
+      value: null
+    });
   }
 
-})
+  onWriteRequest(data, offset, withoutResponse, callback) {
+    // Map it to action
+    let action = data.getUint8(0)
+    switch (action) {
+      case 1:
+        console.log('ControlCharacteristic - Begin Following');
+        coordinator.beginFollowing()
+        break;
+      case 2:
+        console.log('ControlCharacteristic - End Following');
+        coordinator.endFollowing()
+        break;
+      case 3:
+        console.log('ControlCharacteristic - Manual Disconnect');
+        bleno.disconnect();
+        break;
+      default:
+        callback(this.RESULT_UNLIKELY_ERROR)
+        return;
+    }
+    callback(this.RESULT_SUCCESS)
+  }
+}
 
-module.exports = control_characteristic
+util.inherits(ControlCharacteristic, BlenoCharacteristic)
+module.exports = ControlCharacteristic;

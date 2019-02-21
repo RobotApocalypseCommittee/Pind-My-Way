@@ -6,6 +6,7 @@ var BlenoPrimaryService = bleno.PrimaryService;
 
 var VersionCharacteristic = require("./version_characteristic")
 var StatusCharacteristic = require("./status_characteristic")
+var ControlCharacteristic = require("./control_characteristic")
 
 console.log('bleno - echo');
 
@@ -28,7 +29,8 @@ bleno.on('advertisingStart', function(error) {
         uuid: bleConstants.primaryService,
         characteristics: [
           new VersionCharacteristic(),
-          new StatusCharacteristic()
+          new StatusCharacteristic(),
+          new ControlCharacteristic()
         ]
       })
     ]);
