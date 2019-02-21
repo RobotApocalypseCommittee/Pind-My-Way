@@ -17,7 +17,7 @@ class ControlCharacteristic {
 
   onWriteRequest(data, offset, withoutResponse, callback) {
     // Map it to action
-    let action = data.getUint8(0)
+    let action = data.readUInt8(0)
     switch (action) {
       case 1:
         console.log('ControlCharacteristic - Begin Following');
