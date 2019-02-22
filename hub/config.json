@@ -1,6 +1,5 @@
 {
-  "random_id": 275362,
-  "assigned_name": "",
+  "assignedName": "PIMW",
   "stageDistances": [100, 50, 20],
   "completedDistance": 30,
   "pollRate": 5,
