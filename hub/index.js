@@ -16,12 +16,12 @@ let argv = yargs.config(config).command('run [port] [baudrate]', 'Run the full s
   gps.on("fix", () => {
     winston.info("GPS Fixed")
   })
-  setTimeout(() => winston.silly("Location: ", gps.current.lat, gps.current.lon), 1000)
+  setTimeout(() => winston.silly("Location", {point: gps.current}), 1000)
 }).command('bluetest', 'Test the bluetooth system - mocks GPS', {}, (argv) => {
   const coordinator = require("./coordinator").createCoordinator(new MockGPSManager(), new GlovesLink())
   winston.info("Running...")
   coordinator.on("statusUpdate", (status) => {
-    winston.verbose("New Status: ", status);
+    winston.verbose("New Status:"+status.toString(2));
   })
   require("./ble_interface")
 }).command('walktest [port] [baudrate] [walk]', 'Test on a pre-set walk', {}, (argv) => {

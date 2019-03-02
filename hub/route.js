@@ -107,7 +107,7 @@ class Route {
       // Read a byte at position 0
       let bearing = cbuf.readUInt8(0)
       let maneuver = cbuf.readUInt8(1)
-      winston.silly("Maneuver", maneuver)
+      winston.silly("Maneuver", {maneuver: maneuver})
       let command = RoutePoint.getAngleIndicationFromManeuver(maneuver)
       let lat = cbuf.readDoubleLE(2)
       let lon = cbuf.readDoubleLE(10)
