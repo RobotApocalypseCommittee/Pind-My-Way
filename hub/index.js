@@ -24,7 +24,7 @@ let argv = yargs.config(config).command('run [port] [baudrate]', 'Run the full s
     winston.verbose("New Status:"+status.toString(2));
   })
   require("./ble_interface")
-}).command('walktest [port] [baudrate] [walk]', 'Test on a pre-set walk', {}, (argv) => {
+}).command('walktest <walk> [port] [baudrate]', 'Test on a pre-set walk', {}, (argv) => {
   let buf = Buffer.from(argv.walk, 'hex')
   const coordinator = require("./coordinator").createCoordinator(new GPSManager(argv.port, argv.baudrate), new GlovesLink())
   require("./ble_interface")
