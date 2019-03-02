@@ -1,4 +1,5 @@
 {
+  "loggingLevel": "silly",
   "assignedName": "PIMW",
   "stageDistances": [30, 20, 15],
   "completedDistance": 10,

@@ -5,7 +5,7 @@ const config = require("./config")
 const {setupLogging} = require("./logging")
 const winston = require("winston")
 
-setupLogging()
+setupLogging(config.loggingLevel)
 
 let argv = yargs.config(config).command('run [port] [baudrate]', 'Run the full system', {}, (argv) => {
   const coordinator = require("./coordinator").createCoordinator(new GPSManager(argv.port, argv.baudrate), new GlovesLink())

@@ -5,7 +5,7 @@ function printLog({timestamp, message, level, metadata}) {
   return `[${timestamp}] ${level}: ${message} ${JSON.stringify(metadata)}`;
 }
 
-function setupLogging() {
+function setupLogging(level) {
   const mainFormat = winston.format.combine(
     winston.format.splat(),
     winston.format.timestamp({
@@ -19,11 +19,12 @@ function setupLogging() {
   winston.add(
     new winston.transports.File({
       filename: 'route_debug.log',
-      level: 'debug',
+      level: level,
       format: mainFormat
     })
   ).add(
     new winston.transports.Console({
+      level: level
       format: winston.format.combine(
         winston.format.colorize(),
         mainFormat

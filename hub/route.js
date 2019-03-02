@@ -5,8 +5,8 @@ class RoutePoint {
   constructor(command, lat, lon) {
     this.direction = command
     this.loc = new GeoCoord(lat, lon)
-    winston.silly(command)
-    winston.silly(this.loc)
+    winston.silly("Command", {command})
+    winston.silly("Location", {loc: this.loc})
   }
   toJSON() {
     return { point: this.point, direction: RoutePoint.getUserFriendlyDirection(this.direction)}
@@ -102,7 +102,7 @@ class Route {
       buf = Buffer.concat([this.input_buffer, buf])
     }
     let offset = 0
-    while (offset+17 < buf.length) {
+    while (offset+18 < buf.length) {
       let cbuf = buf.slice(offset, offset+18)
       // Read a byte at position 0
       let bearing = cbuf.readUInt8(0)
