@@ -1,8 +1,8 @@
 {
   "assignedName": "PIMW",
-  "stageDistances": [100, 50, 20],
-  "completedDistance": 30,
-  "pollRate": 5,
-  "port": "/usb/???",
+  "stageDistances": [30, 20, 15],
+  "completedDistance": 10,
+  "pollRate": 1,
+  "port": "/dev/serial0",
   "baudrate": 9600
 }

@@ -17,11 +17,12 @@ class RouteUploadCharacteristic {
   }
 
   onWriteRequest(data, offset, withoutResponse, callback) {
-    console.log("Received route:")
-    console.log("Data: ", data)
+    winston.info("Received route:")
+    winston.info("Data: ", data)
     // Hoping it works
     let route = new Route()
     if (route.decode_data(data)) {
+      route.finalise()
       coordinator.registerNewRoute(route)
       callback(bleno.Characteristic.RESULT_SUCCESS)
     } else {

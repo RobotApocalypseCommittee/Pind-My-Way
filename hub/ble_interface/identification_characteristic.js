@@ -21,12 +21,12 @@ class IdentificationCharacteristic {
   }
 
   onReadRequest(offset, callback) {
-    console.log('IdentificationCharacteristic - onReadRequest: value = ' + this._value.toString());
+    winston.verbose('IdentificationCharacteristic - onReadRequest: value = ' + this._value.toString());
 
     callback(this.RESULT_SUCCESS, this._value);
   }
   onWriteRequest(data, offset, withoutResponse, callback) {
-    console.log('IdentificationCharacteristic - onWriteRequest: value = ' + this._value.toString());
+    winston.verbose('IdentificationCharacteristic - onWriteRequest: value = ' + this._value.toString());
     this._writeAssignedName(data.toString());
     this._updateName();
     callback(this.RESULT_SUCCESS)
@@ -35,7 +35,7 @@ class IdentificationCharacteristic {
     fs.readFile(this._configPath, 'utf8',(err, contents)=> {
       if (err) throw err;
       this._value = Buffer.from(JSON.parse(contents).assignedName);
-      console.log('IdentificationCharacteristic - Read JSON')
+      winston.verbose('IdentificationCharacteristic - Read JSON')
     })
   }
   _writeAssignedName(newName) {
@@ -45,7 +45,7 @@ class IdentificationCharacteristic {
       obj.assignedName = newName
       fs.writeFile(this._configPath, JSON.stringify(obj), (err)=>{
         if (err) throw err;
-        console.log('IdentificationCharacteristic - Wrote JSON')
+        winston.verbose('IdentificationCharacteristic - Wrote JSON')
       })
     })
   }
