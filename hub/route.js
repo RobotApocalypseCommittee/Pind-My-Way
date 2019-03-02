@@ -102,7 +102,7 @@ class Route {
       buf = Buffer.concat([this.input_buffer, buf])
     }
     let offset = 0
-    while (offset+18 < buf.length) {
+    while (offset < buf.length) {
       let cbuf = buf.slice(offset, offset+18)
       // Read a byte at position 0
       let bearing = cbuf.readUInt8(0)
