@@ -4,8 +4,32 @@ class RoutePoint {
   constructor(command, lat, lon) {
     this.direction = command
     this.loc = new GeoCoord(lat, lon)
-    console.log(command)
-    console.log(this.loc)
+    winston.silly(command)
+    winston.silly(this.loc)
+  }
+  toJSON() {
+    return { point: this.point, direction: RoutePoint.getUserFriendlyDirection(this.direction)}
+  }
+
+  static getUserFriendlyDirection(angleIndication) {
+    switch (angleIndication) {
+      case 0:
+        return "straight"
+      case 1:
+        return "bear right"
+      case 2:
+        return "turn right"
+      case 3:
+        return "u-turn right"
+      case -1:
+        return "bear left"
+      case -2:
+        return "turn left"
+      case -3:
+        return "u-turn left"
+      case 4:
+
+    }
   }
 
   static getAngleIndicationFromManeuver(maneuverID) {
@@ -82,7 +106,7 @@ class Route {
       // Read a byte at position 0
       let bearing = cbuf.readUInt8(0)
       let maneuver = cbuf.readUInt8(1)
-      console.log("Maneuver", maneuver)
+      winston.silly("Maneuver", maneuver)
       let command = RoutePoint.getAngleIndicationFromManeuver(maneuver)
       let lat = cbuf.readDoubleLE(2)
       let lon = cbuf.readDoubleLE(10)
@@ -96,6 +120,13 @@ class Route {
       this.buffer_complete = true
     }
     return this.buffer_complete
+  }
+  finalise() {
+    // Odd google maps behaviour
+    for (let i = 0; i < this.points.length - 1; i++) {
+        this.points[i].direction = this.points[i+1].direction
+    }
+    this.points[this.points.length - 1].direction = 0
   }
 
 }

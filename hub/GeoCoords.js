@@ -14,6 +14,9 @@ class GeoCoord {
     this._lat = lat
     this._lon = lon
   }
+  toJSON() {
+    return {lat: this.lat, lon: this.lon}
+  }
 
   get lat() {
     // Latitude in degrees

@@ -9,8 +9,8 @@ class GlovesLink extends EventEmitter {
     this.gloves = {left:null, right:null}
     this.server = new WebSocket.Server({port: 8080})
     this.server.on("connection", (ws)=>{
-      console.log("[WS] New connection")
-      ws.on("close", ()=>console.log("[WS] Closed Connection"))
+      winston.info("[WS] New connection")
+      ws.on("close", ()=>winston.info("[WS] Closed Connection"))
       ws.once("message", this._registerNewGlove.bind(this, ws))
     })
   }
