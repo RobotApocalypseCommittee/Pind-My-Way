@@ -114,7 +114,7 @@ class Route {
       this.add_point(new RoutePoint(command, lat, lon))
       offset += 18
     }
-    if (offset+1 !== buf.length) {
+    if (offset !== buf.length) {
       this.buffer_complete = false
       this.input_buffer = buf.slice(offset)
     } else {
