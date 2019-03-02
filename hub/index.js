@@ -35,11 +35,16 @@ let argv = yargs.config(config).command('run [port] [baudrate]', 'Run the full s
     route.finalise()
     coordinator.registerNewRoute(route)
     winston.info("Successfully registered route - waiting for fix.")
+    if (coordinator.gps.fixed) {
+      winston.info("GPS Fixed - Attempting to begin")
+      coordinator.beginFollowing()
+
+    } else {
     coordinator.gps.on("fix", ()=> {
       winston.info("GPS Fixed - Attempting to begin")
       coordinator.beginFollowing()
       }
-    )
+    ) }
   } else {
     winston.error("Data provided was not correctly formed.")
   }
