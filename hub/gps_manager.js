@@ -20,8 +20,8 @@ class GPSManager extends EventEmitter {
       if (!(data.lat === null || data.lon === null)) {
         this.old = this.current
         this.current = new GeoCoord(data.lat, data.lon)
-        this.fixed = true;
         if (!this.fixed) {
+          this.fixed = true;
           this.emit("fix")
         }
 
