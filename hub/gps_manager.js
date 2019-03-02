@@ -28,7 +28,7 @@ class GPSManager extends EventEmitter {
       }
     })
     parser.on('data', (data)=>{
-      this.gps.updatePartial(data)
+      this.gps.update(data)
     })
   }
   get location(){
