@@ -2,8 +2,10 @@ const yargs = require("yargs")
 const {GPSManager, MockGPSManager} = require("./gps_manager")
 const GlovesLink = require("./led_interface")
 const config = require("./config")
-require("./logging")
+const {setupLogging} = require("./logging")
 const winston = require("winston")
+
+setupLogging()
 
 let argv = yargs.config(config).command('run [port] [baudrate]', 'Run the full system', {}, (argv) => {
   const coordinator = require("./coordinator").createCoordinator(new GPSManager(argv.port, argv.baudrate), new GlovesLink())
