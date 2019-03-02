@@ -1,6 +1,7 @@
 const EventEmitter = require('events');
 const WebSocket = require("ws");
 const Buffer = require("buffer")
+const winston = require("winston")
 
 
 class GlovesLink extends EventEmitter {

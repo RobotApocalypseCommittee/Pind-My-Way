@@ -1,4 +1,5 @@
 const {GeoCoord} = require("./GeoCoords")
+const winston = require("winston")
 
 class RoutePoint {
   constructor(command, lat, lon) {

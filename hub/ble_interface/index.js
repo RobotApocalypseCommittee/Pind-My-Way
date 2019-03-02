@@ -1,6 +1,7 @@
 const bleno = require("bleno")
 
 const bleConstants = require("./bleConstants.json")
+const winston = require("winston")
 
 var BlenoPrimaryService = bleno.PrimaryService;
 

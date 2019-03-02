@@ -4,6 +4,7 @@ const path = require('path');
 
 var bleno = require('bleno');
 const bleConstants = require("./bleConstants")
+const winston = require("winston")
 
 
 var BlenoCharacteristic = bleno.Characteristic;

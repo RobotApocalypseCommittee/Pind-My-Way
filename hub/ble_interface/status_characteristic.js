@@ -5,6 +5,7 @@ var util = require('util');
 var bleno = require("bleno")
 const coordinator = require("../coordinator").getInstance()
 const bleConstants = require("./bleConstants")
+const winston = require("winston")
 
 var BlenoCharacteristic = bleno.Characteristic;
 
