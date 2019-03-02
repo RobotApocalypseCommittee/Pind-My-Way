@@ -17,7 +17,7 @@ class VersionCharacteristic {
   }
 
   onReadRequest(offset, callback) {
-    console.log('VersionCharacteristic - onReadRequest: value = ' + this._value.toString('hex'));
+    winston.verbose('VersionCharacteristic - onReadRequest: value = ' + this._value.toString('hex'));
 
     callback(this.RESULT_SUCCESS, this._value);
   }

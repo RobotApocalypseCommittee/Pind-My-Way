@@ -1,27 +1,35 @@
-const bleno = require("bleno")
-const {Route} = require("../route")
+var util = require('util');
+
+var bleno = require("bleno")
 const coordinator = require("../coordinator").getInstance()
+const {Route} = require("../route")
+const bleConstants = require("./bleConstants")
 
-const {characteristics:{routeUpload}} = require("./bleConstants.json")
+var BlenoCharacteristic = bleno.Characteristic;
 
-let route_upload_characteristic = new bleno.Characteristic({
-  uuid: routeUpload.uuid, // or 'fff1' for 16-bit
-  properties: [ "write" ], // can be a combination of 'read', 'write', 'writeWithoutResponse', 'notify', 'indicate'
-  onWriteRequest: function(data, offset, withoutResponse, callback) {
-    console.log("Write Request")
-    console.log("Data: ", data)
-    console.log("Offset: ", offset)
-    console.log("WithoutResponse: ", withoutResponse)
+class RouteUploadCharacteristic {
+  constructor() {
+    RouteUploadCharacteristic.super_.call(this, {
+      uuid: bleConstants.characteristics.routeUpload.uuid,
+      properties: ['write'],
+      value: null
+    });
+  }
+
+  onWriteRequest(data, offset, withoutResponse, callback) {
+    winston.info("Received route:")
+    winston.info("Data: ", data)
     // Hoping it works
     let route = new Route()
     if (route.decode_data(data)) {
+      route.finalise()
       coordinator.registerNewRoute(route)
       callback(bleno.Characteristic.RESULT_SUCCESS)
     } else {
       callback(bleno.Characteristic.RESULT_INVALID_ATTRIBUTE_LENGTH)
     }
   }
+}
 
-})
-
-module.exports = route_upload_characteristic
+util.inherits(RouteUploadCharacteristic, BlenoCharacteristic)
+module.exports = RouteUploadCharacteristic;
