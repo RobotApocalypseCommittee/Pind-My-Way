@@ -95,9 +95,9 @@ class Coordinator extends EventEmitter {
   getStatus() {
     // Bits in format(lowest first) [Left Glove Connected][Right Glove Connected][GPS Connected][Route Provided][Ready To Start][Running]
     return (this.leds.gloves.left !== null)
-      | (this.leds.gloves.right !== null << 1)
+      | ((this.leds.gloves.right !== null) << 1)
       | (this.gps.fixed << 2)
-      | (this.route !== null << 3)
+      | ((this.route !== null) << 3)
       | (this.isReady() << 4)
       | (this.running << 5)
   }
