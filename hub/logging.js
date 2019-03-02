@@ -24,7 +24,7 @@ function setupLogging(level) {
     })
   ).add(
     new winston.transports.Console({
-      level: level
+      level: level,
       format: winston.format.combine(
         winston.format.colorize(),
         mainFormat
