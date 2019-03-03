@@ -15,3 +15,5 @@ let apiKey = ""
 let sharedBluetoothManager = BluetoothManager()
 
 var pollutionResp : JSON = []
+var localAuthorities : [JSON] = []
+let pollutants = ["PM10", "PM25", "NO2", "SO2", "O3"]

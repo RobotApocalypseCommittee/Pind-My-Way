@@ -79,72 +79,44 @@ class Utils {
     }
     
     static func getRoutePollution(route: [CLLocationCoordinate2D]) -> [String : [String : Any]] {
-        return [:]
-        
-        //Thins out the route, only using points every ~100m
+
+        //Thins out the route, using only 50 route points
         var thinRoute : [CLLocationCoordinate2D] = []
-        for i in stride(from: 0, to: route.count, by: 10) {
+        for i in stride(from: 0, to: route.count, by: route.count/50) {
             thinRoute.append(route[i])
         }
         
-        //Creates an array of all the monitoring stations
-        var dataPoints : [JSON] = []
-        
-        let localAuthority = pollutionResp["DailyAirQualityIndex"]["LocalAuthority"]
-        
-        guard !localAuthority.isEmpty else {
+        guard !localAuthorities.isEmpty else {
             return [:]
         }
         
-        for area in localAuthority {
-            if area.1["Site"].exists() {
-                for site in area.1["Site"] {
-                    dataPoints.append(site.1)
-                }
-            }
-        }
-        
-        var closestReadings : [JSON] = []
-        
-        //Gets the closest monitoring point to every route point
-        for coord in thinRoute {
-            var closestAreaIndex = 0;
-            var closestAreaDistance : Float = 9999.0;
-            var i = 0
-            for area in dataPoints {
-                //Calculates distance from route point to pollution monitoring point
-                let areaLat = area["@Latitude"].floatValue
-                let areaLong = area["@Longitude"].floatValue
-                let distance = Float(pow(abs(Double(areaLat) - coord.latitude), 2) + pow(abs(Double(areaLong) - coord.longitude), 2)).squareRoot()
-
-                if distance < closestAreaDistance {
-                    closestAreaIndex = i
-                    closestAreaDistance = distance;
-                }
-                i += 1
-            }
-            closestReadings.append(dataPoints[closestAreaIndex]["Species"])
-        }
-
-        //Stores all the pollution values for every point on the route
+        //Grabs the pollution data for every point
         var allPollutionReadings : [String:[Float]] = ["O3":[], "PM10":[], "NO2":[], "SO2":[], "PM25":[]]
-        for readings in closestReadings {
-            for reading in readings {
-                if allPollutionReadings[reading.1["@SpeciesCode"].stringValue] != nil {
-                    allPollutionReadings[reading.1["@SpeciesCode"].stringValue]!.append(Float(reading.1["@AirQualityIndex"].intValue))
-                }
-            }
+        for coord in thinRoute {
+            let readings = getPointPollution(coord: coord)
+            allPollutionReadings["O3"]?.append(readings["O3"]!)
+            allPollutionReadings["PM10"]?.append(readings["PM10"]!)
+            allPollutionReadings["NO2"]?.append(readings["NO2"]!)
+            allPollutionReadings["SO2"]?.append(readings["SO2"]!)
+            allPollutionReadings["PM25"]?.append(readings["PM25"]!)
+            
         }
         
         //Summarises, getting average and total for every pollutants
         var summary : [String : [String:Any]] = [:]
         for (pollutant, values) in allPollutionReadings {
-            if values == [] {
+            let total = values.reduce(0, +)
+            if total == 0.0 {
                 summary[pollutant] = ["available" : false, "average" : "N/A", "total" : "N/A"]
             }
             else {
-                let total = values.reduce(0, +)
-                let average = total/Float(values.count)
+                var count = 0
+                for val in values {
+                    if val != 0 {
+                        count += 1
+                    }
+                }
+                let average = total/Float(count)
                 summary[pollutant] = ["available" : true, "average" : average, "total" : total]
             }
         }
@@ -152,6 +124,36 @@ class Utils {
         print(summary)
         return summary
     }
+    
+    static func getPointPollution(coord: CLLocationCoordinate2D) -> [String:Float] {
+        var closestAreaIndex = 0;
+        var closestAreaDistance : Float = 9999.0;
+        var i = 0
+        for area in localAuthorities {
+            //Calculates distance from route point to pollution monitoring point
+            let areaLat = area["@Latitude"].floatValue
+            let areaLong = area["@Longitude"].floatValue
+            let distance = Float(pow(abs(Double(areaLat) - coord.latitude), 2) + pow(abs(Double(areaLong) - coord.longitude), 2)).squareRoot()
+            
+            if distance < closestAreaDistance {
+                closestAreaIndex = i
+                closestAreaDistance = distance;
+            }
+            i += 1
+        }
+        
+        //Formats data nicely
+        var pollutionReading : [String:Float] = ["O3":0, "PM10":0, "NO2":0, "SO2":0, "PM25":0]
+        let info = (localAuthorities[closestAreaIndex]["Species"])
+        for reading in info {
+            if pollutionReading[reading.1["@SpeciesCode"].stringValue] != nil {
+                pollutionReading[reading.1["@SpeciesCode"].stringValue] = Float(reading.1["@AirQualityIndex"].intValue)
+            }
+        }
+        
+        return pollutionReading
+    }
+    
     
     static func getRouteDataForBluetooth(route: JSON, withStart start: CLLocationCoordinate2D) -> Data {
         var allStepsData = Data()

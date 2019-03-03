@@ -33,6 +33,7 @@ class ViewController: UIViewController {
     var routeJSONs: Array<JSON> = []
     var routePolylines: Array<Array<GMSPolyline>> = []
     var routeCoordinates: Array<Array<CLLocationCoordinate2D>> = []
+    var routePollutions: [[String : [String : Any]]] = []
     
     var networkCheckerTimer = Timer()
     var keepGoButtonHidden = true
@@ -57,6 +58,15 @@ class ViewController: UIViewController {
                 do {
                     pollutionResp = try JSON(data: data)
                     print("Info: Pollution: Data Loaded")
+                    
+                    for area in pollutionResp["DailyAirQualityIndex"]["LocalAuthority"] {
+                        if area.1["Site"].exists() {
+                            for site in area.1["Site"] {
+                                localAuthorities.append(site.1)
+                            }
+                        }
+                    }
+                    
                 }  catch let error {
                     print("Error: Polution: \(error.localizedDescription)")
                 }
@@ -178,6 +188,7 @@ class ViewController: UIViewController {
             let destinationVC = segue.destination as! GoViewController
             destinationVC.routeJSON = routeJSONs[selectedRouteIndex]
             destinationVC.currentLocation = currentLocation?.coordinate
+            destinationVC.pollutionDict = routePollutions[selectedRouteIndex]
         }
     }
     
@@ -187,13 +198,15 @@ class ViewController: UIViewController {
 
         routePolylines = []
         routeCoordinates = []
+        routePollutions = []
 
         DispatchQueue.global(qos: .userInitiated).async {
             Utils.getDirections(from: startCoordinates, to: endCoordinates) { json in
                 let routes = json!["routes"].array!
+                print(routes[0])
                 if routes.count == 0 {
                     self.mapView.clear()
-                
+            
                     DispatchQueue.main.async {
                         let alert = UIAlertController(title: "No routes found", message: "There were no cycling routes found to that location, please try another", preferredStyle: .alert)
                         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
@@ -324,16 +337,21 @@ class ViewController: UIViewController {
         marker.title = name
         marker.icon = #imageLiteral(resourceName: "RouteInfo")
         let pollutionInfo = Utils.getRoutePollution(route: nonDrawnPointsIncluded)
+        routePollutions.append(pollutionInfo)
         
         var description = "N/A"
         
+        print(pollutionInfo)
+        
         if pollutionInfo["NO2"] != nil {
-            description.append("NO₂ rating: \(pollutionInfo["NO2"]!["total"]!)\n")
+            description = ""
+            description.append(contentsOf: "NO₂ rating: \(pollutionInfo["NO2"]!["total"]!)\n")
             description.append(contentsOf: "SO₂ rating: \(pollutionInfo["SO2"]!["total"]!)\n")
             description.append(contentsOf: "PM10 rating: \(pollutionInfo["PM10"]!["total"]!)\n")
             description.append(contentsOf: "PM25 rating: \(pollutionInfo["PM25"]!["total"]!)\n")
             description.append(contentsOf: "O₃ rating: \(pollutionInfo["O3"]!["total"]!)")
         }
+        print(description)
         marker.snippet = description
         marker.map = mapView
         
