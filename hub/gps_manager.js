@@ -10,21 +10,16 @@ class GPSManager extends EventEmitter {
     // Start at 9600 baud
     this.ser = new SerialPort(port, {baudRate: 9600})
     // Configure
+    // Set the packets we want
+    this.ser.write("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*28\r\n")
     // 5Hz transmitted updates
     this.ser.write("$PMTK220,200*2C\r\n")
     // Get new location at 5Hz
     this.ser.write("$PMTK300,200,0,0,0,0*2F\r\n")
-    // Set the packets we want
-    this.ser.write("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*28\r\n")
-    // Boost baud to 57600
-    this.ser.write("$PMTK251,57600*2C\r\n")
+
     this.ser.drain(()=> {
-      this.ser.update({baudRate:57600}, ()=>{
-        this.ser.flush()
-        const parser = this.ser.pipe(new Readline({ delimiter: '\r\n' }))
-      })
+      const parser = this.ser.pipe(new Readline({ delimiter: '\r\n' }))
     })
-    const parser = this.ser.pipe(new Readline({ delimiter: '\r\n' }))
 
     this.gps = new GPS
     // Does the GPS have a fix?
