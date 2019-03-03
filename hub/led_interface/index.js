@@ -1,6 +1,6 @@
 const EventEmitter = require('events');
 const WebSocket = require("ws");
-const Buffer = require("buffer")
+const winston = require("winston")
 
 
 class GlovesLink extends EventEmitter {
@@ -9,8 +9,8 @@ class GlovesLink extends EventEmitter {
     this.gloves = {left:null, right:null}
     this.server = new WebSocket.Server({port: 8080})
     this.server.on("connection", (ws)=>{
-      console.log("[WS] New connection")
-      ws.on("close", ()=>console.log("[WS] Closed Connection"))
+      winston.info("[WS] New connection")
+      ws.on("close", ()=>winston.info("[WS] Closed Connection"))
       ws.once("message", this._registerNewGlove.bind(this, ws))
     })
   }
@@ -44,37 +44,25 @@ class GlovesLink extends EventEmitter {
   }
 
   signalDirection(direction, level) {
-    let toSend = Buffer.alloc(3)
     // Command 1 = direction
-    toSend.writeUInt8(0x1, 0)
-    // -3 to 4
-    toSend.writeInt8(direction, 1)
-    // 0, 1 or 2
-    toSend.writeUInt8(level, 2)
+    let toSend = Buffer.from([0x1, direction, level])
+
     this.broadcast(toSend)
   }
   signalData(track, number, r, g, b) {
-    let toSend = Buffer.alloc(6)
     // Command 2 = led override
-    toSend.writeUInt8(0x2, 0)
     // 0 or 1, there are two displays
-    toSend.writeUInt8(track, 1)
     // from 0 to 6
-    toSend.writeUInt8(number, 2)
     // Out of 255
-    toSend.writeUInt8(r, 3)
-    toSend.writeUInt8(g, 4)
-    toSend.writeUInt8(b, 5)
+    let toSend = Buffer.from([0x2, track, number, r, g, b])
     this.broadcast(toSend)
   }
   signalNeutral() {
-    let toSend = Buffer.alloc(1)
-    toSend.writeUInt8(0x3, 0)
+    let toSend = Buffer.from([0x3])
     this.broadcast(toSend)
   }
   signalRelax() {
-    let toSend = Buffer.alloc(1)
-    toSend.writeUInt8(0x4, 0)
+    let toSend = Buffer.from([0x4])
     this.broadcast(toSend)
   }
 }

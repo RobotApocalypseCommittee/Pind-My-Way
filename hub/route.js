@@ -1,11 +1,36 @@
 const {GeoCoord} = require("./GeoCoords")
+const winston = require("winston")
 
 class RoutePoint {
   constructor(command, lat, lon) {
     this.direction = command
     this.loc = new GeoCoord(lat, lon)
-    console.log(command)
-    console.log(this.loc)
+    winston.silly("Command", {command})
+    winston.silly("Location", {loc: this.loc})
+  }
+  toJSON() {
+    return { point: this.point, direction: RoutePoint.getUserFriendlyDirection(this.direction)}
+  }
+
+  static getUserFriendlyDirection(angleIndication) {
+    switch (angleIndication) {
+      case 0:
+        return "straight"
+      case 1:
+        return "bear right"
+      case 2:
+        return "turn right"
+      case 3:
+        return "u-turn right"
+      case -1:
+        return "bear left"
+      case -2:
+        return "turn left"
+      case -3:
+        return "u-turn left"
+      case 4:
+
+    }
   }
 
   static getAngleIndicationFromManeuver(maneuverID) {
@@ -77,25 +102,32 @@ class Route {
       buf = Buffer.concat([this.input_buffer, buf])
     }
     let offset = 0
-    while (offset+17 < buf.length) {
+    while (offset < buf.length) {
       let cbuf = buf.slice(offset, offset+18)
       // Read a byte at position 0
       let bearing = cbuf.readUInt8(0)
       let maneuver = cbuf.readUInt8(1)
-      console.log("Maneuver", maneuver)
+      winston.silly("Maneuver", {maneuver: maneuver})
       let command = RoutePoint.getAngleIndicationFromManeuver(maneuver)
       let lat = cbuf.readDoubleLE(2)
       let lon = cbuf.readDoubleLE(10)
       this.add_point(new RoutePoint(command, lat, lon))
       offset += 18
     }
-    if (offset+1 !== buf.length) {
+    if (offset !== buf.length) {
       this.buffer_complete = false
       this.input_buffer = buf.slice(offset)
     } else {
       this.buffer_complete = true
     }
     return this.buffer_complete
+  }
+  finalise() {
+    // Odd google maps behaviour
+    for (let i = 0; i < this.points.length - 1; i++) {
+        this.points[i].direction = this.points[i+1].direction
+    }
+    this.points[this.points.length - 1].direction = 0
   }
 
 }

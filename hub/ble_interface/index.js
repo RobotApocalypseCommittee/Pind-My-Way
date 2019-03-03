@@ -1,6 +1,7 @@
 const bleno = require("bleno")
 
 const bleConstants = require("./bleConstants.json")
+const winston = require("winston")
 
 var BlenoPrimaryService = bleno.PrimaryService;
 
@@ -8,10 +9,10 @@ var VersionCharacteristic = require("./version_characteristic")
 var StatusCharacteristic = require("./status_characteristic")
 var ControlCharacteristic = require("./control_characteristic")
 
-console.log('bleno - echo');
+winston.info('bleno - echo');
 
 bleno.on('stateChange', function(state) {
-  console.log('on -> stateChange: ' + state);
+  winston.info('on -> stateChange: ' + state);
 
   if (state === 'poweredOn') {
     bleno.startAdvertising('pmw', [bleConstants.primaryService]);
@@ -21,7 +22,7 @@ bleno.on('stateChange', function(state) {
 });
 
 bleno.on('advertisingStart', function(error) {
-  console.log('on -> advertisingStart: ' + (error ? 'error ' + error : 'success'));
+  winston.info('on -> advertisingStart: ' + (error ? 'error ' + error : 'success'));
 
   if (!error) {
     bleno.setServices([

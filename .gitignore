@@ -71,3 +71,6 @@ fastlane/test_output
 
 .idea
 node_modules
+package-lock.json
+.vscode
+*.log

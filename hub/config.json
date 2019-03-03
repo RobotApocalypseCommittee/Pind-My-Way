@@ -1,9 +1,9 @@
 {
-  "random_id": 275362,
-  "assigned_name": "",
-  "stageDistances": [100, 50, 20],
-  "completedDistance": 30,
-  "pollRate": 5,
-  "port": "/usb/???",
-  "baudrate": 9600
+  "loggingLevel": "silly",
+  "assignedName": "PIMW",
+  "stageDistances": [40, 30, 20],
+  "completedDistance": 15,
+  "pollRate": 1,
+  "port": "/dev/serial0",
+  "walk": "16000c957f2dafbe494075779d0df967c4bf42029641b5c189be4940e8f7fd9b1727c4bf700216bf29ac54be49404cfc51d4997bc4bf9c0210255af278be4940bd344580d3bbc4bf15023eaf78ea91be4940b53522180797c4bf"
 }

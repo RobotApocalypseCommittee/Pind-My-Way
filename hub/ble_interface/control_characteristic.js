@@ -3,6 +3,7 @@ var util = require('util');
 var bleno = require("bleno")
 const coordinator = require("../coordinator").getInstance()
 const bleConstants = require("./bleConstants")
+const winston = require("winston")
 
 var BlenoCharacteristic = bleno.Characteristic;
 
@@ -20,15 +21,15 @@ class ControlCharacteristic {
     let action = data.readUInt8(0)
     switch (action) {
       case 1:
-        console.log('ControlCharacteristic - Begin Following');
+        winston.info('ControlCharacteristic - Begin Following');
         coordinator.beginFollowing()
         break;
       case 2:
-        console.log('ControlCharacteristic - End Following');
+        winston.info('ControlCharacteristic - End Following');
         coordinator.endFollowing()
         break;
       case 3:
-        console.log('ControlCharacteristic - Manual Disconnect');
+        winston.info('ControlCharacteristic - Manual Disconnect');
         bleno.disconnect();
         break;
       default:

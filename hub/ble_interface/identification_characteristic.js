@@ -1,44 +1,56 @@
-const bleno = require("bleno")
+var util = require('util');
+const fs = require('fs');
+const path = require('path');
 
-const {characteristics: {unique_identify, settable_name}} = require("./bleConstants.json")
-let config = require("../config.json")
-const fs = require("fs")
+var bleno = require('bleno');
+const bleConstants = require("./bleConstants")
+const winston = require("winston")
 
-const rand_ID_buffer = new Buffer(4);
-rand_ID_buffer.writeInt32LE(config.random_id, 0)
 
-let random_id_characteristic = new bleno.Characteristic({
-  uuid: unique_identify.uuid, // or 'fff1' for 16-bit
-  properties: ["read"], // can be a combination of 'read', 'write', 'writeWithoutResponse', 'notify', 'indicate'
-  value: rand_ID_buffer, // optional static value, must be of type Buffer - for read only characteristics
+var BlenoCharacteristic = bleno.Characteristic;
 
-})
-
-let name_characteristic = new bleno.Characteristic({
-  uuid: settable_name.uuid, // or 'fff1' for 16-bit
-  properties: ["read", "write"], // can be a combination of 'read', 'write', 'writeWithoutResponse', 'notify', 'indicate'
-  onWriteRequest: function (data, offset, withoutResponse, callback) {
-    if (offset) {
-      callback(this.RESULT_ATTR_NOT_LONG)
-    } else {
-
-      config.assigned_name = data.toString()
-      fs.writeFile("../config.json", JSON.stringify(config, null, 2), function (err) {
-        if (err) return console.log(err)
-        callback(this.RESULT_SUCCESS)
-      });
-    }
-  },
-  onReadRequest: function(offset, callback) {
-    if (offset) {
-      callback(this.RESULT_ATTR_NOT_LONG, null);
-    }
-    else {
-      let data = Buffer.from(config.assigned_name)
-      callback(this.RESULT_SUCCESS, data);
-    }
+class IdentificationCharacteristic {
+  constructor() {
+    IdentificationCharacteristic.super_.call(this, {
+      uuid: bleConstants.characteristics.settable_name.uuid,
+      properties: ['read', 'write'],
+      value: null
+    });
+    this._configPath = path.join(__dirname, '..', 'config.json')
+    this._value = Buffer.alloc(0)
+    this._updateName()
   }
 
-})
+  onReadRequest(offset, callback) {
+    winston.verbose('IdentificationCharacteristic - onReadRequest: value = ' + this._value.toString());
 
-module.exports = {random_id_characteristic, name_characteristic}
+    callback(this.RESULT_SUCCESS, this._value);
+  }
+  onWriteRequest(data, offset, withoutResponse, callback) {
+    winston.verbose('IdentificationCharacteristic - onWriteRequest: value = ' + this._value.toString());
+    this._writeAssignedName(data.toString());
+    this._updateName();
+    callback(this.RESULT_SUCCESS)
+  }
+  _updateName() {
+    fs.readFile(this._configPath, 'utf8',(err, contents)=> {
+      if (err) throw err;
+      this._value = Buffer.from(JSON.parse(contents).assignedName);
+      winston.verbose('IdentificationCharacteristic - Read JSON')
+    })
+  }
+  _writeAssignedName(newName) {
+    fs.readFile(this._configPath, 'utf8',(err, contents)=>{
+      if (err) throw err;
+      let obj = JSON.parse(contents)
+      obj.assignedName = newName
+      fs.writeFile(this._configPath, JSON.stringify(obj), (err)=>{
+        if (err) throw err;
+        winston.verbose('IdentificationCharacteristic - Wrote JSON')
+      })
+    })
+  }
+}
+
+util.inherits(IdentificationCharacteristic, BlenoCharacteristic)
+module.exports = IdentificationCharacteristic;

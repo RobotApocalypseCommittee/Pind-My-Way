@@ -2,6 +2,7 @@ var util = require('util');
 
 var bleno = require('bleno');
 const bleConstants = require("./bleConstants")
+const winston = require("winston")
 
 var BlenoCharacteristic = bleno.Characteristic;
 
@@ -17,7 +18,7 @@ class VersionCharacteristic {
   }
 
   onReadRequest(offset, callback) {
-    console.log('VersionCharacteristic - onReadRequest: value = ' + this._value.toString('hex'));
+    winston.verbose('VersionCharacteristic - onReadRequest: value = ' + this._value.toString('hex'));
 
     callback(this.RESULT_SUCCESS, this._value);
   }

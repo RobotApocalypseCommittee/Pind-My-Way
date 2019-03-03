@@ -5,6 +5,7 @@ var util = require('util');
 var bleno = require("bleno")
 const coordinator = require("../coordinator").getInstance()
 const bleConstants = require("./bleConstants")
+const winston = require("winston")
 
 var BlenoCharacteristic = bleno.Characteristic;
 
@@ -22,26 +23,26 @@ class StatusCharacteristic {
     coordinator.on("statusUpdate", (newStatus)=>{
       this._value = Buffer.from([coordinator.getStatus()]);
       if (this._updateValueCallback) {
-        console.log("StatusCharacteristic - notifying: newStatus = " + newStatus.toString('hex'));
+        winston.debug("StatusCharacteristic - notifying: newStatus = " + newStatus.toString('hex'));
         this._updateValueCallback(this._value);
       }
     })
   }
 
   onReadRequest(offset, callback) {
-    console.log('StatusCharacteristic - onReadRequest: value = ' + this._value.toString('hex'));
+    winston.debug('StatusCharacteristic - onReadRequest: value = ' + this._value.toString('hex'));
 
     callback(this.RESULT_SUCCESS, this._value);
   }
 
   onSubscribe(maxValueSize, updateValueCallback) {
-    console.log('StatusCharacteristic - onSubscribe');
+    winston.debug('StatusCharacteristic - onSubscribe');
 
     this._updateValueCallback = updateValueCallback;
   }
 
   onUnsubscribe() {
-    console.log('StatusCharacteristic - onUnsubscribe');
+    winston.debug('StatusCharacteristic - onUnsubscribe');
 
     this._updateValueCallback = null;
   }
