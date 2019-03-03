@@ -19,8 +19,8 @@ class GPSManager extends EventEmitter {
     this.ser.write("$PMTK300,200,0,0,0,0*2F\r\n")
 
     this.ser.drain(()=> {
-      const parser = this.ser.pipe(new Readline({ delimiter: '\r\n' }))
-      parser.on('data', (data)=>{
+      this.parser = this.ser.pipe(new Readline({ delimiter: '\r\n' }))
+      this.parser.on('data', (data)=>{
         winston.silly(data)
         this.gps.update(data)
       })
