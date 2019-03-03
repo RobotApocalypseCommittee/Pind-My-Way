@@ -5,9 +5,21 @@ const Readline = SerialPort.parsers.Readline
 const EventEmitter = require("events")
 
 class GPSManager extends EventEmitter {
-  constructor(port, rate) {
+  constructor(port) {
     super()
-    this.ser = new SerialPort(port, {baudRate: rate})
+    // Start at 9600 baud
+    this.ser = new SerialPort(port, {baudRate: 9600})
+    // Configure
+    // 5Hz transmitted updates
+    this.ser.write("$PMTK220,200*2C\r\n")
+    // Get new location at 5Hz
+    this.ser.write("$PMTK300,200,0,0,0,0*2F\r\n")
+    // Boost baud to 57600
+    this.ser.write("$PMTK251,57600*2C\r\n")
+    this.ser.drain(()=> {
+      this.ser.update(57600)
+      this.ser.flush()
+    })
     const parser = this.ser.pipe(new Readline({ delimiter: '\r\n' }))
 
     this.gps = new GPS

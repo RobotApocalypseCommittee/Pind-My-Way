@@ -43,12 +43,10 @@ class Coordinator extends EventEmitter {
   }
 
   updateFollowing() {
-
-    let prevDistance = this.gps.previousLocation.distanceFrom(this.route.points[this.currentPointID+1].loc)
     let currDistance = this.gps.location.distanceFrom(this.route.points[this.currentPointID].loc)
     winston.verbose("Update Following", {currentPoint: this.currentPointID, currDistance})
     this.geostore.logLocation(this.gps.location.lat, this.gps.location.lon);
-    if (prevDistance < config.completedDistance && prevDistance < currDistance) {
+    if (currDistance < config.completedDistance) {
       winston.verbose("Near end, and moving away")
       // Near end, and moving away -> next point
       this.currentPointID += 1
