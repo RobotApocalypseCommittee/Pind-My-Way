@@ -3,6 +3,7 @@ const GPS = require("gps")
 const SerialPort = require("serialport")
 const Readline = SerialPort.parsers.Readline
 const EventEmitter = require("events")
+const winston = require("winston")
 
 class GPSManager extends EventEmitter {
   constructor(port) {
@@ -19,6 +20,10 @@ class GPSManager extends EventEmitter {
 
     this.ser.drain(()=> {
       const parser = this.ser.pipe(new Readline({ delimiter: '\r\n' }))
+      parser.on('data', (data)=>{
+        winston.silly(data)
+        this.gps.update(data)
+      })
     })
 
     this.gps = new GPS
@@ -39,9 +44,6 @@ class GPSManager extends EventEmitter {
     }
     this.gps.on("GGA", m_callback)
     this.gps.on("RMC", m_callback)
-    parser.on('data', (data)=>{
-      this.gps.update(data)
-    })
   }
   get location(){
     return this.current
