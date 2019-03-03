@@ -14,6 +14,8 @@ class GPSManager extends EventEmitter {
     this.ser.write("$PMTK220,200*2C\r\n")
     // Get new location at 5Hz
     this.ser.write("$PMTK300,200,0,0,0,0*2F\r\n")
+    // Set the packets we want
+    this.ser.write("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*28\r\n")
     // Boost baud to 57600
     this.ser.write("$PMTK251,57600*2C\r\n")
     this.ser.drain(()=> {
@@ -30,7 +32,7 @@ class GPSManager extends EventEmitter {
 
     this.current = new GeoCoord(0, 0);
     this.old = new GeoCoord(0, 0);
-    this.gps.on("GGA", (data)=>{
+    let m_callback = (data)=>{
       if (!(data.lat === null || data.lon === null)) {
         this.old = this.current
         this.current = new GeoCoord(data.lat, data.lon)
@@ -38,9 +40,10 @@ class GPSManager extends EventEmitter {
           this.fixed = true;
           this.emit("fix")
         }
-
       }
-    })
+    }
+    this.gps.on("GGA", m_callback)
+    this.gps.on("RMC", m_callback)
     parser.on('data', (data)=>{
       this.gps.update(data)
     })
