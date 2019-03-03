@@ -17,8 +17,10 @@ class GPSManager extends EventEmitter {
     // Boost baud to 57600
     this.ser.write("$PMTK251,57600*2C\r\n")
     this.ser.drain(()=> {
-      this.ser.update(57600)
-      this.ser.flush()
+      this.ser.update({baudRate:57600}, ()=>{
+        this.ser.flush()
+        const parser = this.ser.pipe(new Readline({ delimiter: '\r\n' }))
+      })
     })
     const parser = this.ser.pipe(new Readline({ delimiter: '\r\n' }))
 
