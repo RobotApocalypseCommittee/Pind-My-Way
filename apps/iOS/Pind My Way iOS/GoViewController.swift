@@ -51,19 +51,26 @@ class GoViewController: UIViewController, UITableViewDataSource, UITableViewDele
             let label = view.subviews[0] as! UILabel
             
             let slider = view.subviews[1] as! UIProgressView
-            //let average = pollutionDict[pollutants[n]]!["average"]! as! Float
-            let average = 22.222 as Float
-            label.text = pollutants[n] + " : " + String(format: "%.2f", average/3*100) + "%"
-            slider.setProgress(average/3, animated: true)
 
-            if average/3 < 0.34 {
-                slider.progressTintColor = UIColor.green
-            }
-            else if average/3 < 0.66 {
-                slider.progressTintColor = UIColor.orange
+            if type(of: pollutionDict[pollutants[n]]!["average"]!) == String.self {
+                label.text = pollutants[n] + " : N/A"
+                slider.setProgress(1.0, animated: true)
+                slider.progressTintColor = UIColor.lightGray
             }
             else {
-                slider.progressTintColor = UIColor.red
+                let average = pollutionDict[pollutants[n]]!["average"]! as! Float
+                label.text = pollutants[n] + " : " + String(format: "%.2f", average/3*100) + "%"
+                slider.setProgress(average/3, animated: true)
+                
+                if average/3 < 0.34 {
+                    slider.progressTintColor = UIColor.green
+                }
+                else if average/3 < 0.66 {
+                    slider.progressTintColor = UIColor.orange
+                }
+                else {
+                    slider.progressTintColor = UIColor.red
+                }
             }
             n += 1
         }
