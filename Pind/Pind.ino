@@ -72,7 +72,7 @@ void webSocketEvent(WStype_t type, uint8_t* payload, size_t length) {
                         break;
                     case 3:
                         if (length == 1) {
-                            disableAnimations();
+                            beginGlowAnimation(255, 0, 0);
                         } else {
                             USE_SERIAL.printf("Invalid length %u for command %u\n", length, payload[0]);
                         }

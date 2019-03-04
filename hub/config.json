@@ -1,7 +1,7 @@
 {
   "loggingLevel": "silly",
   "assignedName": "PIMW",
-  "stageDistances": [40, 30, 20],
+  "stageDistances": [20, 30, 40],
   "completedDistance": 15,
   "pollRate": 1,
   "port": "/dev/serial0",
