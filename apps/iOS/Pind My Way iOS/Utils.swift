@@ -90,6 +90,8 @@ class Utils {
             return [:]
         }
         
+        
+        
         //Grabs the pollution data for every point
         var allPollutionReadings : [String:[Float]] = ["O3":[], "PM10":[], "NO2":[], "SO2":[], "PM25":[]]
         for coord in thinRoute {
@@ -99,7 +101,6 @@ class Utils {
             allPollutionReadings["NO2"]?.append(readings["NO2"]!)
             allPollutionReadings["SO2"]?.append(readings["SO2"]!)
             allPollutionReadings["PM25"]?.append(readings["PM25"]!)
-            
         }
         
         //Summarises, getting average and total for every pollutants
@@ -145,13 +146,39 @@ class Utils {
         //Formats data nicely
         var pollutionReading : [String:Float] = ["O3":0, "PM10":0, "NO2":0, "SO2":0, "PM25":0]
         let info = (localAuthorities[closestAreaIndex]["Species"])
+        
         for reading in info {
             if pollutionReading[reading.1["@SpeciesCode"].stringValue] != nil {
                 pollutionReading[reading.1["@SpeciesCode"].stringValue] = Float(reading.1["@AirQualityIndex"].intValue)
             }
+            else {
+                //Don't question this, the API is bad sometimes and we were losing data due to it
+                if pollutionReading[info["@SpeciesCode"].stringValue] != nil {
+                    pollutionReading[info["@SpeciesCode"].stringValue] = Float(info["@AirQualityIndex"].intValue)
+                }
+            }
         }
-        
         return pollutionReading
+    }
+    
+    //Averages available pollution info for a point (returns general badness - technically as scale of 1-10 but haven't seen anything above 3 yet
+    static func getPointAveragePollution(coord: CLLocationCoordinate2D) -> Float {
+        let pollutionInfo = getPointPollution(coord: coord)
+        var total : Float = 0
+        var count = 0
+        print(pollutionInfo)
+        for pollutant in pollutants {
+            let rating = pollutionInfo[pollutant]
+            if rating != 0 {
+                count += 1
+                total += rating!
+            }
+        }
+        if count == 0 {
+            //THIS MEANS NO DATA AVAILABLE - I.E if joe gets a zero, don't update the pollution scale
+            return Float(exactly: 0)!
+        }
+        return (total/Float(exactly: count)!)/3.5*100
     }
     
     
