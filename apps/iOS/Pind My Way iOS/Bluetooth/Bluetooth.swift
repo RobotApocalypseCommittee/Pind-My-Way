@@ -90,6 +90,8 @@ class BluetoothManager: NSObject {
     }
     
     func disconnectPi(noSend legacy: Bool) {
+        print("Info: Bluetooth: Disconnect called")
+        
         if let pi = _selectedPi, let manager = _centralManager {
             if !legacy {
                 if let services = pi.services, services.count > 0, let characteristics = services[0].characteristics {
