@@ -2,11 +2,14 @@ const {GeoCoord} = require("./GeoCoords")
 const winston = require("winston")
 
 class RoutePoint {
-  constructor(command, lat, lon) {
+  constructor(command, lat, lon, pollution) {
     this.direction = command
     this.loc = new GeoCoord(lat, lon)
+    this.pollution = pollution
     winston.silly("Command", {command})
     winston.silly("Location", {loc: this.loc})
+    winston.silly("Pollution", {pollution})
+
   }
   toJSON() {
     return { point: this.point, direction: RoutePoint.getUserFriendlyDirection(this.direction)}
@@ -103,7 +106,7 @@ class Route {
     }
     let offset = 0
     while (offset < buf.length) {
-      let cbuf = buf.slice(offset, offset+18)
+      let cbuf = buf.slice(offset, offset+26)
       // Read a byte at position 0
       let bearing = cbuf.readUInt8(0)
       let maneuver = cbuf.readUInt8(1)
@@ -111,8 +114,9 @@ class Route {
       let command = RoutePoint.getAngleIndicationFromManeuver(maneuver)
       let lat = cbuf.readDoubleLE(2)
       let lon = cbuf.readDoubleLE(10)
-      this.add_point(new RoutePoint(command, lat, lon))
-      offset += 18
+      let pollution = cbuf.readDoubleLE(18)
+      this.add_point(new RoutePoint(command, lat, lon, pollution))
+      offset += 26
     }
     if (offset !== buf.length) {
       this.buffer_complete = false

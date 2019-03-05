@@ -35,6 +35,7 @@ class Coordinator extends EventEmitter {
       this.running = true;
       this.lastLevel = 3;
       this.leds.signalNeutral()
+      this.leds.signalData(0, Math.round((this.route.points[this.currentPointID].pollution/100)*5), 255, 255, 255)
       this.emit("statusUpdate", this.getStatus())
       this.interval = setInterval(() => this.updateFollowing(), poll_period)
       winston.info("Started following")
@@ -57,12 +58,17 @@ class Coordinator extends EventEmitter {
         // End has been reached
         this.endFollowing(true)
         return;
+      } else {
+        if (this.route.points[this.currentPointID].pollution !== 0) {
+          this.leds.signalData(0, Math.round((this.route.points[this.currentPointID].pollution / 100) * 5), 255, 255, 255)
+        }
       }
     } else if (currDistance < config.stageDistances[2]) {
       // Within thresholds
       // Get the closest stage that we are currently in
       let level =  2 - config.stageDistances.findIndex(x=>x > currDistance)
       if (this.lastLevel !== level) {
+        winston.silly("Notifying signal", {proximity: level})
         this.lastLevel = level
         this.leds.signalDirection(this.route.points[this.currentPointID].direction, level)
       }
@@ -76,6 +82,7 @@ class Coordinator extends EventEmitter {
       // TODO: Is there an indication of how far to go?
       winston.verbose("Doing nothing")
       if (this.lastLevel !== 3) {
+        winston.silly("Notifying neutral")
         this.lastLevel = 3
         this.leds.signalNeutral()
       }
