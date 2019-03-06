@@ -7,8 +7,77 @@
 //
 
 import UIKit
+
+import SwiftyJSON
 import GoogleMaps
 import GooglePlaces
+
+let routeJsonString = """
+{
+"legs":[
+{
+"steps":[
+{
+"start_location":{
+"lat":51.489003,
+"lng":-0.160582
+},
+"end_location":{
+"lat":51.489721,
+"lng":-0.159423
+},
+"maneuver":"straight"
+},
+{
+"start_location":{
+"lat":51.489721,
+"lng":-0.159423
+},
+"end_location":{
+"lat":51.488579,
+"lng":-0.157443
+},
+"maneuver":"turn-right"
+},
+{
+"start_location":{
+"lat":51.488579,
+"lng":-0.157443
+},
+"end_location":{
+"lat":51.486959,
+"lng":-0.160022
+},
+"maneuver":"turn-right"
+},
+{
+"start_location":{
+"lat":51.486959,
+"lng":-0.160022
+},
+"end_location":{
+"lat":51.488066,
+"lng":-0.161982
+},
+"maneuver":"turn-right"
+},
+{
+"start_location":{
+"lat":51.488066,
+"lng":-0.161982
+},
+"end_location":{
+"lat":51.488828,
+"lng":-0.160859
+},
+"maneuver":"turn-right"
+}
+]
+}
+]
+}
+"""
+let routeJsonMAN = JSON(parseJSON: routeJsonString)
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,6 +90,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GMSServices.provideAPIKey(apiKey)
         GMSPlacesClient.provideAPIKey(apiKey)
         
+        print("MANUAL ROUTE: \(Utils.getRouteDataForBluetooth(route: routeJsonMAN).hexEncodedString())")
+        
         return true
     }
 
@@ -32,6 +103,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        
+        // Makes sure the pi is always manually disconnected
+        sharedBluetoothManager.stopScanning()
+        sharedBluetoothManager.disconnectPi()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -44,6 +119,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        
+        // Makes sure the pi is always manually disconnected
+        sharedBluetoothManager.stopScanning()
+        sharedBluetoothManager.disconnectPi()
     }
 
 

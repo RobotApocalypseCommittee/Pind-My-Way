@@ -82,9 +82,7 @@ void webSocketEvent(WStype_t type, uint8_t* payload, size_t length) {
                         // Display some data
                         if (length == 6) {
                             disableAnimations();
-                            for (int i = 0; i < payload[2]; i++) {
-                                circleSet(payload[1] ? 5 - i : i + 6, payload[3], payload[4], payload[5]);
-                            }
+                            setData(payload[1], payload[2], payload[3], payload[4], payload[5]);
                         } else {
                             USE_SERIAL.printf("Invalid length %u for command %u\n", length, payload[0]);
                         }

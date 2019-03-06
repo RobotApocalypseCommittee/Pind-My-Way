@@ -36,6 +36,8 @@ class GoViewController: UIViewController, UITableViewDataSource, UITableViewDele
         
         sharedBluetoothManager.delegate = self
         
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        
         if !sharedBluetoothManager.startScanning() {
             startScanningScheduledTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) {_ in
                 if sharedBluetoothManager.startScanning() {
@@ -49,18 +51,26 @@ class GoViewController: UIViewController, UITableViewDataSource, UITableViewDele
             let label = view.subviews[0] as! UILabel
             
             let slider = view.subviews[1] as! UIProgressView
-            let average = pollutionDict[pollutants[n]]!["average"]! as! Float
-            label.text = pollutants[n] + " : " + String(format: "%.2f", average/3*100) + "%"
-            slider.setProgress(average/3, animated: true)
 
-            if average/3 < 0.34 {
-                slider.progressTintColor = UIColor.green
-            }
-            else if average/3 < 0.66 {
-                slider.progressTintColor = UIColor.orange
+            if type(of: pollutionDict[pollutants[n]]!["average"]!) == String.self {
+                label.text = pollutants[n] + " : N/A"
+                slider.setProgress(1.0, animated: true)
+                slider.progressTintColor = UIColor.lightGray
             }
             else {
-                slider.progressTintColor = UIColor.red
+                let average = pollutionDict[pollutants[n]]!["average"]! as! Float
+                label.text = pollutants[n] + " : " + String(format: "%.2f", average/3*100) + "%"
+                slider.setProgress(average/3, animated: true)
+                
+                if average/3 < 0.34 {
+                    slider.progressTintColor = UIColor.green
+                }
+                else if average/3 < 0.66 {
+                    slider.progressTintColor = UIColor.orange
+                }
+                else {
+                    slider.progressTintColor = UIColor.red
+                }
             }
             n += 1
         }
@@ -90,8 +100,19 @@ class GoViewController: UIViewController, UITableViewDataSource, UITableViewDele
         
     }
     
+    @objc func willEnterForeground() {
+        if !sharedBluetoothManager.startScanning() {
+            startScanningScheduledTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) {_ in
+                if sharedBluetoothManager.startScanning() {
+                    self.startScanningScheduledTimer?.invalidate()
+                }
+            }
+        }
+    }
+    
     @IBAction func sendButton_touchUpInside(_ sender: Any) {
-        // Add current location TODO
+        // If I want, add an activity indicator
+        
         let routeData: Data
         if let startLocation = currentLocation {
             routeData = Utils.getRouteDataForBluetooth(route: routeJSON, withStart: startLocation)
@@ -105,23 +126,36 @@ class GoViewController: UIViewController, UITableViewDataSource, UITableViewDele
         }
         
         let allCharacteristics = sharedBluetoothManager._selectedPi!.services![0].characteristics!
+        
+        var routeCharacteristic: CBCharacteristic? = nil
+        var controlCharacteristic: CBCharacteristic? = nil
+        
         for characteristic in allCharacteristics {
             switch characteristic.uuid {
             case routeCharacteristicUuid:
-                if sharedBluetoothManager.send(data: routeData, to: characteristic) {
-                    print("Route sent")
-                } else {
-                    print("Some error sending route")
-                }
+                routeCharacteristic = characteristic
             case controlCharacteristicUuid:
-                var num: UInt8 = 1
-                if sharedBluetoothManager.send(data: Data(bytes: &num, count: 1), to: characteristic) {
-                    print("Control written")
-                } else {
-                    print("Error in writing control")
-                }
+                controlCharacteristic = characteristic
             default:
                 _ = 2
+            }
+        }
+        
+        // Sends the route and control bit
+        if let routeCharacteristic = routeCharacteristic {
+            if sharedBluetoothManager.send(data: routeData, to: routeCharacteristic) {
+                print("Route sent")
+                
+                if let controlCharacteristic = controlCharacteristic {
+                    var num: UInt8 = 1
+                    if sharedBluetoothManager.send(data: Data(bytes: &num, count: 1), to: controlCharacteristic) {
+                        print("Control written")
+                    } else {
+                        print("Error in writing control")
+                    }
+                }
+            } else {
+                print("Some error sending route")
             }
         }
     }
@@ -174,7 +208,7 @@ extension GoViewController: BluetoothDelegate {
         defaultPeripheralFoundCallback(peripheral)
         
         // TODO fix
-        if peripheral.name == UserDefaults.standard.object(forKey: "pairedPiName") as? String || true {
+        if peripheral.name == UserDefaults.standard.object(forKey: "pairedPiName") as? String {
             print("Trying to connect")
             sharedBluetoothManager.stopScanning()
             sharedBluetoothManager.connectPiAndService(peripheral: peripheral)

@@ -8,6 +8,9 @@ var BlenoPrimaryService = bleno.PrimaryService;
 var VersionCharacteristic = require("./version_characteristic")
 var StatusCharacteristic = require("./status_characteristic")
 var ControlCharacteristic = require("./control_characteristic")
+var IdentificationCharacteristic = require("./identification_characteristic")
+var RouteUploadCharacteristic = require("./route_upload")
+
 
 winston.info('bleno - echo');
 
@@ -31,7 +34,9 @@ bleno.on('advertisingStart', function(error) {
         characteristics: [
           new VersionCharacteristic(),
           new StatusCharacteristic(),
-          new ControlCharacteristic()
+          new ControlCharacteristic(),
+          new RouteUploadCharacteristic(),
+          new IdentificationCharacteristic()
         ]
       })
     ]);
