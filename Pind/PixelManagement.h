@@ -12,6 +12,8 @@ void beginGlowAnimation(byte r, byte g, byte b, boolean circular = false);
 void disableAnimations();
 void loopAnimation();
 
+void setData(int track, int data, byte r, byte g, byte b);
+
 void beginPixels();
 
 void setArrow(int a, byte r, byte g, byte b);

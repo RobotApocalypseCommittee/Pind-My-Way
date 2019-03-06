@@ -45,6 +45,8 @@ class GlovesLink extends EventEmitter {
 
   signalDirection(direction, level) {
     // Command 1 = direction
+    //Input dir = -3 to 4, but to avoid signed thingies we scale to 0-7
+    direction = direction + 3
     let toSend = Buffer.from([0x1, direction, level])
 
     this.broadcast(toSend)
@@ -65,6 +67,30 @@ class GlovesLink extends EventEmitter {
     let toSend = Buffer.from([0x4])
     this.broadcast(toSend)
   }
+  test() {
+    var currentTest = 0
+    setInterval(()=>{
+      if (currentTest === 0) {
+        this.signalRelax()
+        console.log("Relax")
+      } else if (currentTest === 1) {
+        console.log("Neutral")
+        this.signalNeutral()
+      } else if (currentTest > 1 && currentTest < 10) {
+        console.log("Arrow", currentTest - 5, currentTest % 3)
+        this.signalDirection(currentTest - 5, currentTest % 3)
+      } else if (currentTest > 9 && currentTest < 16) {
+        console.log("Data", currentTest % 2, currentTest - 10)
+        this.signalData(currentTest % 2, currentTest - 10, 255, (currentTest %2) ? 255: 0, 0)
+      } else {
+        currentTest = -1
+      }
+      currentTest = currentTest + 1;
+    }, 2000)
+  }
 }
-
+/*
+let x = new GlovesLink()
+x.test()
+*/
 module.exports = GlovesLink
