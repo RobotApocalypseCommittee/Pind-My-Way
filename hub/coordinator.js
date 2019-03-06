@@ -60,7 +60,10 @@ class Coordinator extends EventEmitter {
         return;
       } else {
         if (this.route.points[this.currentPointID].pollution !== 0) {
-          this.leds.signalData(0, Math.round((this.route.points[this.currentPointID].pollution / 100) * 5), 255, 255, 255)
+          let pol = this.route.points[this.currentPointID].pollution
+          let r = pol <= 20 ? 0 : 255
+          let g = pol <= 20 ? 255 : (pol <= 50 ? 127 : 0)
+          this.leds.signalData(0, Math.round((this.route.points[this.currentPointID].pollution / 100) * 5), r, g, 255)
         }
       }
     } else if (currDistance < config.stageDistances[2]) {

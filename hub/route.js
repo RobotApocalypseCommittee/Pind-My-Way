@@ -114,7 +114,7 @@ class Route {
       let command = RoutePoint.getAngleIndicationFromManeuver(maneuver)
       let lat = cbuf.readDoubleLE(2)
       let lon = cbuf.readDoubleLE(10)
-      let pollution = cbuf.readDoubleLE(18)
+      let pollution = cbuf.readUInt8(18)
       this.add_point(new RoutePoint(command, lat, lon, pollution))
       offset += 26
     }
