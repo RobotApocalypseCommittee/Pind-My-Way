@@ -6,7 +6,7 @@ int arrows[8] = {0b000110000100, 0b011100001000, 0b110001000000, 0b100001000011,
 Adafruit_NeoPixel circle = Adafruit_NeoPixel(12, 13, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel center = Adafruit_NeoPixel(1, 15, NEO_GRB + NEO_KHZ800);
 #else
-Adafruit_NeoPixel circle = Adafruit_NeoPixel(12, 0, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel circle = Adafruit_NeoPixel(12, 13, NEO_GRB + NEO_KHZ800);
 #endif
 
 enum Animation {
@@ -111,6 +111,7 @@ void beginPixels() {
 #endif
     // Delay cos dodgyness
     delay(50);
+    circle.setBrightness(128);
     circle.setPixelColor(0, 0, 0, 0);
     circle.show();
 }
