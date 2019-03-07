@@ -206,8 +206,6 @@ class Utils {
                 let bearing = Int(round(getBearing(from: startStep, to: endStep)))
                 var bearingOverTwo = UInt8(bearing / 2)
                 
-                let bearingData = Data(bytes: &bearingOverTwo, count: 1)
-                
                 var maneuver = UInt8(0)
                 if let stringManeuver = step["maneuver"].string {
                     switch stringManeuver {
@@ -228,6 +226,13 @@ class Utils {
                     }
                 }
                 
+                // UInt8 is a byte, can represent 0-100
+                var pollutionValue = UInt8.init(getPointAveragePollution(coord: endStep))
+                
+                // Converting to DATA objects
+                
+                let bearingData = Data(bytes: &bearingOverTwo, count: 1)
+                
                 let maneuverData = Data(bytes: &maneuver, count: 1)
                 
                 var endStepLatitude = Double(endStep.latitude)
@@ -235,11 +240,14 @@ class Utils {
                 
                 let endStepLatitudeData = Data(bytes: &endStepLatitude, count: 8)
                 let endStepLongitudeData = Data(bytes: &endStepLongitude, count: 8)
+                
+                let pollutionData = Data(bytes: &pollutionValue, count: 1)
 
                 allStepsData.append(bearingData)
                 allStepsData.append(maneuverData)
                 allStepsData.append(endStepLatitudeData)
                 allStepsData.append(endStepLongitudeData)
+                allStepsData.append(pollutionData)
             }
         }
         
