@@ -87,9 +87,8 @@ class Utils {
         }
         
         guard !localAuthorities.isEmpty else {
-            return [:]
+            return ["O3":["available" : false, "average" : "N/A", "total" : "N/A"], "PM10":["available" : false, "average" : "N/A", "total" : "N/A"], "NO2":["available" : false, "average" : "N/A", "total" : "N/A"], "SO2":["available" : false, "average" : "N/A", "total" : "N/A"], "PM25":["available" : false, "average" : "N/A", "total" : "N/A"]]
         }
-        
         
         
         //Grabs the pollution data for every point
