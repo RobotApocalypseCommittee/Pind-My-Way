@@ -1,10 +1,12 @@
 #include "PixelManagement.h"
 #include <Adafruit_NeoPixel.h>
 
-int arrows[8] = {0b000110000100, 0b011100001000, 0b110001000000, 0b100001000011, 0b000001000110, 0b001000011100, 0b001000011100, 0b000011100001};
-Adafruit_NeoPixel circle = Adafruit_NeoPixel(12, 13, NEO_GRB + NEO_KHZ800);
+int arrows[8] = {0b000110000100, 0b011100001000, 0b110001000000, 0b100001000011, 0b000001000110, 0b001000011100, 0b010000110000, 0b000011100001};
 #ifdef LEFT_GLOVE
+Adafruit_NeoPixel circle = Adafruit_NeoPixel(12, 13, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel center = Adafruit_NeoPixel(1, 15, NEO_GRB + NEO_KHZ800);
+#else
+Adafruit_NeoPixel circle = Adafruit_NeoPixel(12, 0, NEO_GRB + NEO_KHZ800);
 #endif
 
 enum Animation {
@@ -83,8 +85,8 @@ void loopGlowAnimation(boolean circular) {
 }
 
 void disableAnimations() {
-    pixelClear();
-    currentAnimation = None;
+  pixelClear();
+  currentAnimation = None;
 }
 
 void loopAnimation() {
@@ -113,10 +115,31 @@ void beginPixels() {
     circle.show();
 }
 
+byte datar[2];
+byte datag[2];
+byte datab[2];
+byte datan[2];
+void setData(int track, int data, byte r, byte g, byte b) {
+  if (track < 2) {
+    datan[track] = data;
+    datar[track] = r;
+    datag[track] = g;
+    datab[track] = b;
+    pixelClear();
+    // Display data on track 0
+    for (int tr = 0; tr < 2; tr++) {
+      for (int i = 0; i < datan[tr]; i++) {
+        circleSet(tr ? 5 - i : i + 7, datar[tr], datag[tr], datab[tr]);
+      }
+    }
+    
+  }
+}
+
 void setArrow(int a, byte r, byte g, byte b) {
-    // Arrow can be -3 to 4
+    // Arrow can be 0 to 7
     // Array indexes 0 to 7
-    int arrow = arrows[a + 3];
+    int arrow = arrows[a];
     for (int i = 0; i < 12; i++) {
         if ((arrow >> i) & 1) {
             circleSet(i, r, g, b);
