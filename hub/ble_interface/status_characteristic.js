@@ -23,7 +23,7 @@ class StatusCharacteristic {
     coordinator.on("statusUpdate", (newStatus)=>{
       this._value = Buffer.from([coordinator.getStatus()]);
       if (this._updateValueCallback) {
-        winston.debug("StatusCharacteristic - notifying: newStatus = " + newStatus.toString('hex'));
+        winston.debug("StatusCharacteristic - notifying: newStatus = " + this._value.toString('hex'));
         this._updateValueCallback(this._value);
       }
     })

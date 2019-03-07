@@ -22,12 +22,12 @@ class IdentificationCharacteristic {
   }
 
   onReadRequest(offset, callback) {
-    winston.verbose('IdentificationCharacteristic - onReadRequest: value = ' + this._value.toString());
+    winston.verbose('IdentificationCharacteristic - onReadRequest: value = ' + this._value.toString('hex'));
 
     callback(this.RESULT_SUCCESS, this._value);
   }
   onWriteRequest(data, offset, withoutResponse, callback) {
-    winston.verbose('IdentificationCharacteristic - onWriteRequest: value = ' + this._value.toString());
+    winston.verbose('IdentificationCharacteristic - onWriteRequest: value = ' + this._value.toString('hex'));
     this._writeAssignedName(data.toString());
     this._updateName();
     callback(this.RESULT_SUCCESS)

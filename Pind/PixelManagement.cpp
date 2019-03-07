@@ -187,7 +187,11 @@ void circleSet(int i, byte r, byte g, byte b) {
         circle.setPixelColor(i - 5, r, g, b);
     }
 #else
-    circle.setPixelColor(i, r, g, b);
+    if (i < 8) {
+      circle.setPixelColor(i + 4, r, g, b);
+    } else {
+      circle.setPixelColor(i - 8, r, g, b);
+    }
 #endif
     circle.show();
 }
