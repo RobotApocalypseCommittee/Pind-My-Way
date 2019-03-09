@@ -116,7 +116,7 @@ def conf_hostapd():
                 break
         else:
             # Was not present
-            contents.append('DAEMON_CONF="/etc/hostapd/hostapd.conf"')
+            log("Did not add DAEMON_CONF setup to /etc/default/hostapd")
         contents = '\n'.join(contents)
         with open("/etc/default/hostapd", "w") as f:
             f.write(contents)
