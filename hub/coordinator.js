@@ -36,6 +36,9 @@ class Coordinator extends EventEmitter {
       this.lastLevel = 3;
       this.leds.signalNeutral()
       this.leds.signalData(0, Math.round((this.route.points[this.currentPointID].pollution/100)*5), 255, 255, 255)
+      this.totalDistance = this.route.totalLength + this.gps.location.distanceFrom(this.route.points[0].loc)
+      this.startPoint = this.gps.location
+      this.distanceLeft = this.updateDistanceLeft()
       this.emit("statusUpdate", this.getStatus())
       this.interval = setInterval(() => this.updateFollowing(), poll_period)
       winston.info("Started following")
@@ -45,26 +48,39 @@ class Coordinator extends EventEmitter {
     }
   }
 
+  updateDistanceLeft() {
+    // Distance from next point to end
+    let remainingdist = 0
+    for (let i = this.currentPointID; i < this.points.length - 1; i++) {
+      remainingdist += this.points[this.currentPointID].loc.distanceFrom(this.points[this.currentPointID+1].loc)
+    }
+    return remainingdist
+  }
+
   updateFollowing() {
     let currDistance = this.gps.location.distanceFrom(this.route.points[this.currentPointID].loc)
     winston.verbose("Update Following", {currentPoint: this.currentPointID, currDistance})
     this.geostore.logLocation(this.gps.location.lat, this.gps.location.lon);
+    let distanceToGo = this.distanceLeft + currDistance
+    let amountDone = Math.round(Math.max(Math.min(1 - (distanceToGo/this.totalDistance), 1), 0) * 5)
+    this.leds.signalData(1, amountDone, 0, 255, 0)
     if (currDistance < config.completedDistance) {
       winston.verbose("Near end, and moving away")
       // Near end, and moving away -> next point
       this.currentPointID += 1
-      winston.info("Next point", {point: this.route.points[this.currentPointID]})
       if (this.currentPointID === this.route.points.length) {
         // End has been reached
         this.endFollowing(true)
         return;
       } else {
+        winston.info("Next point", {point: this.route.points[this.currentPointID]})
         if (this.route.points[this.currentPointID].pollution !== 0) {
           let pol = this.route.points[this.currentPointID].pollution
           let r = pol <= 20 ? 0 : 255
           let g = pol <= 20 ? 255 : (pol <= 50 ? 127 : 0)
           this.leds.signalData(0, Math.round((this.route.points[this.currentPointID].pollution / 100) * 5), r, g, 255)
         }
+        this.distanceLeft = this.updateDistanceLeft()
       }
     } else if (currDistance < config.stageDistances[2]) {
       // Within thresholds

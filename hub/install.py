@@ -126,8 +126,8 @@ def conf_hostapd():
 def start_services():
     log("Enabling services")
     exec_command("systemctl", "unmask", "hostapd")
-    exec_command("systemctl", "start", "hostapd")
-    exec_command("systemctl", "start", "dnsmasq")
+    exec_command("systemctl", "enable", "hostapd")
+    exec_command("systemctl", "enable", "dnsmasq")
 
 def edit_sysctl():
     log("Editing system ctl")

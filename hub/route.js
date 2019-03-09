@@ -84,7 +84,7 @@ class Route {
     this.buffer_complete = true
     // Nothing in buffer as of yet.
     this.input_buffer = Buffer.alloc(0)
-
+    this.totalLength = 0
   }
 
   add_point(route_point) {
@@ -132,6 +132,17 @@ class Route {
         this.points[i].direction = this.points[i+1].direction
     }
     this.points[this.points.length - 1].direction = 0
+    this.calcRouteLength()
+
+  }
+  calcRouteLength() {
+    // From first to last registered point
+    let rlength = 0
+    // Start from second item
+    for (let i = 1; i < this.points.length; i++) {
+      rlength += this.points[i].loc.distanceFrom(this.points[i-1].loc)
+    }
+    this.totalLength = rlength
   }
 
 }
