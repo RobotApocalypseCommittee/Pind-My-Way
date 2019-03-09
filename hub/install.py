@@ -85,7 +85,7 @@ def conf_dhcpcd():
     try:
         with open("/etc/dhcpcd.conf", "a") as f:
             f.write("""\ninterface wlan0\n    static ip_address=192.168.4.1/24\n    nohook wpa_supplicant""")
-    except IOError:
+    except IOError as e:
         raise SetupError("Cannot change file {}".format("/etc/dhcpcd.conf")) from e
     exec_command("service", "dhcpcd", "restart")
 
@@ -93,9 +93,9 @@ def conf_dnsmasq():
     log("Configuring dnsmasq")
     try:
         shutil.move("/etc/dnsmasq.conf", "/etc/dnsmasq.conf.orig")
-        with open("/etc/dnsmasq.conf", "w"):
+        with open("/etc/dnsmasq.conf", "w") as f:
             f.write("""interface=wlan0      # Use the require wireless interface - usually wlan0\n  dhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h""")
-    except IOError:
+    except IOError as e:
         raise SetupError("Cannot change file {}".format("/etc/dnsmasq.conf")) from e
 
 def conf_hostapd():
@@ -103,7 +103,7 @@ def conf_hostapd():
     try:
         with open("/etc/hostapd/hostapd.conf", "w") as f:
             f.write(HOST_APD_CONF)
-    except IOError:
+    except IOError as e:
         raise SetupError("Cannot change file {}".format("/etc/hostapd/hostapd.conf")) from e
     try:
         with open("/etc/default/hostapd", "r") as f:
@@ -119,7 +119,7 @@ def conf_hostapd():
         contents = '\n'.join(contents)
         with open("/etc/default/hostapd", "w") as f:
             f.write(contents)
-    except IOError:
+    except IOError as e:
         raise SetupError("Cannot access file {}".format("/etc/hostapd/hostapd.conf")) from e
 
 def start_services():
@@ -143,7 +143,7 @@ def edit_sysctl():
         contents = '\n'.join(contents)
         with open("/etc/sysctl.conf", "w") as f:
             f.write(contents)
-    except IOError:
+    except IOError as e:
         raise SetupError("Cannot access file {}".format("/etc/sysctl.conf")) from e
 
 def setup_iptables():
@@ -164,7 +164,7 @@ def setup_iptables():
         contents = '\n'.join(contents)
         with open("/etc/rc.local", "w") as f:
             f.write(contents)
-    except IOError:
+    except IOError as e:
         raise SetupError("Cannot access file {}".format("/etc/rc.local")) from e
 
 
@@ -187,8 +187,9 @@ def get_stage():
         try:
             with open(filename, "r") as f:
                 stage = int(f.read())
-        except IOError, ValueError:
+        except (IOError, ValueError) as e:
             raise SetupError("Cannot read file {}".format(filename)) from e
+        return stage
     else:
         return 1
 
