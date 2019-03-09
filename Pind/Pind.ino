@@ -107,6 +107,7 @@ void setup() {
     // put your setup code here, to run once:
     Serial.begin(115200);
     beginPixels();
+    WiFi.mode(WIFI_STA);
     WiFi.begin(SSID, PASSWORD);
     beginAcInAnimation(255, 255, 255);
     while (WiFi.status() != WL_CONNECTED) {
