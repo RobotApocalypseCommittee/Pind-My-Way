@@ -69,12 +69,13 @@ def disable_services():
 
 def install_node():
     log("Checking for node")
-    try:
-        if exec_command("node", "-v").startswith("v8."):
-            log("Node already installed")
-            return
-    except SetupError:
-        pass
+    if shutil.which("npm") is not None:
+        try:
+            if exec_command("node", "-v").startswith("v8."):
+                log("Node already installed")
+                return
+        except SetupError:
+            pass
     log("Installing node")
     exec_command("curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -", shell=True)
     exec_command("apt-get", "install", "-y", "nodejs")
