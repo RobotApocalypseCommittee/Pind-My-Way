@@ -125,6 +125,7 @@ def conf_hostapd():
 
 def start_services():
     log("Enabling services")
+    exec_command("systemctl", "unmask", "hostapd")
     exec_command("systemctl", "start", "hostapd")
     exec_command("systemctl", "start", "dnsmasq")
 
@@ -149,7 +150,7 @@ def edit_sysctl():
 
 def setup_iptables():
     log("Setting up iptables")
-    exec_command("iptables", "-t", "nat", "-A", "", "POSTROUTING", "-o", "eth0", "-j", "MASQUERADE")
+    exec_command("iptables", "-t", "nat", "-A", "POSTROUTING", "-o", "eth0", "-j", "MASQUERADE")
     exec_command('sh -c "iptables-save > /etc/iptables.ipv4.nat"', shell=True)
     try:
         with open("/etc/rc.local", "r") as f:
