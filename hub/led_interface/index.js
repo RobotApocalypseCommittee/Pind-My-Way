@@ -10,9 +10,18 @@ class GlovesLink extends EventEmitter {
     this.server = new WebSocket.Server({port: 8080})
     this.server.on("connection", (ws)=>{
       winston.info("[WS] New connection")
+      this.resetCurrentData()
       ws.on("close", ()=>winston.info("[WS] Closed Connection"))
       ws.once("message", this._registerNewGlove.bind(this, ws))
     })
+    this.resetCurrentData()
+  }
+
+  resetCurrentData() {
+    this.currentData = [
+      {data: null, r: null, g: null, b: null},
+      {data: null, r: null, g: null, b: null}
+    ]
   }
 
   _registerNewGlove(ws, data) {
@@ -21,14 +30,14 @@ class GlovesLink extends EventEmitter {
     if (data[0] === 0 ){
       // Left Glove
       this.gloves.left = ws
-      console.log("[WS] New left glove");
+      winston.info("[WS] New left glove");
       ws.on("close", ()=> {
         this.gloves.left = null
         this.emit("stateChange")
       })
     } else {
       this.gloves.right = ws
-      console.log("[WS] New right glove");
+      winston.info("[WS] New right glove");
       ws.on("close", ()=> {
         this.gloves.right = null
         this.emit("stateChange")
@@ -52,12 +61,19 @@ class GlovesLink extends EventEmitter {
     this.broadcast(toSend)
   }
   signalData(track, number, r, g, b) {
-    // Command 2 = led override
-    // 0 or 1, there are two displays
-    // from 0 to 6
-    // Out of 255
-    let toSend = Buffer.from([0x2, track, number, r, g, b])
-    this.broadcast(toSend)
+    // Figure out whether an update is needed
+    if (this.currentData[track].data !== number) {
+      this.currentData[track] = {data: number, r: r, g:g, b:b}
+      let toSendArray = [0x2]
+      for (let i = 0; i < this.currentData.length; i++) {
+        toSendArray.push(this.currentData[i].data)
+        toSendArray.push(this.currentData[i].r)
+        toSendArray.push(this.currentData[i].g)
+        toSendArray.push(this.currentData[i].b)
+      }
+      let toSend = Buffer.from(toSendArray)
+      this.broadcast(toSend)
+    }
   }
   signalNeutral() {
     let toSend = Buffer.from([0x3])

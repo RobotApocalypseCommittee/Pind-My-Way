@@ -35,35 +35,39 @@ class Coordinator extends EventEmitter {
       this.running = true;
       this.lastLevel = 3;
       this.leds.signalNeutral()
-      this.leds.signalData(0, Math.round((this.route.points[this.currentPointID].pollution/100)*5), 255, 255, 255)
+      // Route distance + distance from start
       this.totalDistance = this.route.totalLength + this.gps.location.distanceFrom(this.route.points[0].loc)
-      this.startPoint = this.gps.location
-      this.distanceLeft = this.updateDistanceLeft()
       this.emit("statusUpdate", this.getStatus())
+      this.gotoPoint(0)
       this.interval = setInterval(() => this.updateFollowing(), poll_period)
       winston.info("Started following")
-      winston.info("Next point", {point: this.route.points[this.currentPointID]})
     } else {
       winston.error("System not ready to begin following",  {sysstat: this.getStatus().toString(2)})
     }
   }
 
-  updateDistanceLeft() {
-    // Distance from next point to end
-    let remainingdist = 0
-    for (let i = this.currentPointID; i < this.points.length - 1; i++) {
-      remainingdist += this.points[this.currentPointID].loc.distanceFrom(this.points[this.currentPointID+1].loc)
+  gotoPoint(point_id) {
+    this.currentPointID = point_id
+    winston.info("Next point", {point: this.route.points[this.currentPointID]})
+    this.distanceLeft = this.route.calcRouteLength(this.currentPointID)
+    if (this.route.points[this.currentPointID].pollution !== 0) {
+      let pol = this.route.points[this.currentPointID].pollution
+      let r = pol <= 20 ? 0 : 255
+      let g = pol <= 20 ? 255 : (pol <= 50 ? 100 : 0)
+      this.leds.signalData(0, Math.min(Math.round((this.route.points[this.currentPointID].pollution / 60) * 5), 5), r, g, 255)
+      winston.debug("Pollution", {value: pol, dat: Math.min(Math.round((this.route.points[this.currentPointID].pollution / 60) * 5), 5)})
     }
-    return remainingdist
   }
+
 
   updateFollowing() {
     let currDistance = this.gps.location.distanceFrom(this.route.points[this.currentPointID].loc)
-    winston.verbose("Update Following", {currentPoint: this.currentPointID, currDistance})
+    winston.verbose("Update Following", {curPt: this.currentPointID, currDistance})
     this.geostore.logLocation(this.gps.location.lat, this.gps.location.lon);
     let distanceToGo = this.distanceLeft + currDistance
     let amountDone = Math.round(Math.max(Math.min(1 - (distanceToGo/this.totalDistance), 1), 0) * 5)
     this.leds.signalData(1, amountDone, 0, 255, 0)
+    winston.debug("Amount Left", {distanceToGo, amountDone})
     if (currDistance < config.completedDistance) {
       winston.verbose("Near end, and moving away")
       // Near end, and moving away -> next point
@@ -73,14 +77,7 @@ class Coordinator extends EventEmitter {
         this.endFollowing(true)
         return;
       } else {
-        winston.info("Next point", {point: this.route.points[this.currentPointID]})
-        if (this.route.points[this.currentPointID].pollution !== 0) {
-          let pol = this.route.points[this.currentPointID].pollution
-          let r = pol <= 20 ? 0 : 255
-          let g = pol <= 20 ? 255 : (pol <= 50 ? 127 : 0)
-          this.leds.signalData(0, Math.round((this.route.points[this.currentPointID].pollution / 100) * 5), r, g, 255)
-        }
-        this.distanceLeft = this.updateDistanceLeft()
+        this.gotoPoint(this.currentPointID)
       }
     } else if (currDistance < config.stageDistances[2]) {
       // Within thresholds
@@ -98,8 +95,7 @@ class Coordinator extends EventEmitter {
         "Turn " + RoutePoint.getUserFriendlyDirection(this.route.points[this.currentPointID].direction) + " with level " + level
         )
     } else {
-      // TODO: Is there an indication of how far to go?
-      winston.verbose("Doing nothing")
+      winston.debug("Doing nothing")
       if (this.lastLevel !== 3) {
         winston.silly("Notifying neutral")
         this.lastLevel = 3

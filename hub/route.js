@@ -6,7 +6,7 @@ class RoutePoint {
     this.direction = command
     this.loc = new GeoCoord(lat, lon)
     this.pollution = pollution
-    winston.silly("Command", {command})
+    winston.silly("Command", {command: RoutePoint.getUserFriendlyDirection(this.direction)})
     winston.silly("Location", {loc: this.loc})
     winston.silly("Pollution", {pollution})
 
@@ -116,6 +116,7 @@ class Route {
       let lon = cbuf.readDoubleLE(10)
       let pollution = cbuf.readUInt8(18)
       this.add_point(new RoutePoint(command, lat, lon, pollution))
+      winston.info("Journey Point", {command: RoutePoint.getUserFriendlyDirection(command), lat, lon, pollution})
       offset += 19
     }
     if (offset !== buf.length) {
@@ -132,17 +133,17 @@ class Route {
         this.points[i].direction = this.points[i+1].direction
     }
     this.points[this.points.length - 1].direction = 0
-    this.calcRouteLength()
+    this.totalLength = this.calcRouteLength()
 
   }
-  calcRouteLength() {
+  calcRouteLength(start) {
     // From first to last registered point
     let rlength = 0
     // Start from second item
-    for (let i = 1; i < this.points.length; i++) {
-      rlength += this.points[i].loc.distanceFrom(this.points[i-1].loc)
+    for (let i = start; i < this.points.length - 1; i++) {
+      rlength += this.points[i].loc.distanceFrom(this.points[i + 1].loc)
     }
-    this.totalLength = rlength
+    return rlength
   }
 
 }
