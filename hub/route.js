@@ -106,7 +106,7 @@ class Route {
     }
     let offset = 0
     while (offset < buf.length) {
-      let cbuf = buf.slice(offset, offset+26)
+      let cbuf = buf.slice(offset, offset+19)
       // Read a byte at position 0
       let bearing = cbuf.readUInt8(0)
       let maneuver = cbuf.readUInt8(1)
@@ -116,7 +116,7 @@ class Route {
       let lon = cbuf.readDoubleLE(10)
       let pollution = cbuf.readUInt8(18)
       this.add_point(new RoutePoint(command, lat, lon, pollution))
-      offset += 26
+      offset += 19
     }
     if (offset !== buf.length) {
       this.buffer_complete = false
