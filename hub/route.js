@@ -133,7 +133,7 @@ class Route {
         this.points[i].direction = this.points[i+1].direction
     }
     this.points[this.points.length - 1].direction = 0
-    this.totalLength = this.calcRouteLength()
+    this.totalLength = this.calcRouteLength(0)
 
   }
   calcRouteLength(start) {

@@ -50,19 +50,22 @@ class Coordinator extends EventEmitter {
     this.currentPointID = point_id
     winston.info("Next point", {point: this.route.points[this.currentPointID]})
     this.distanceLeft = this.route.calcRouteLength(this.currentPointID)
+    winston.debug("Distance left", {distanceLeft: this.distanceLeft.toFixed(1)})
     if (this.route.points[this.currentPointID].pollution !== 0) {
       let pol = this.route.points[this.currentPointID].pollution
       let r = pol <= 20 ? 0 : 255
       let g = pol <= 20 ? 255 : (pol <= 50 ? 100 : 0)
       this.leds.signalData(0, Math.min(Math.round((this.route.points[this.currentPointID].pollution / 60) * 5), 5), r, g, 255)
       winston.debug("Pollution", {value: pol, dat: Math.min(Math.round((this.route.points[this.currentPointID].pollution / 60) * 5), 5)})
+    } else {
+      winston.debug("No pollution for this point")
     }
   }
 
 
   updateFollowing() {
     let currDistance = this.gps.location.distanceFrom(this.route.points[this.currentPointID].loc)
-    winston.verbose("Update Following", {curPt: this.currentPointID, currDistance})
+    winston.verbose("Update Following", {curPt: this.currentPointID, currDistance: currDistance.toFixed(2)})
     this.geostore.logLocation(this.gps.location.lat, this.gps.location.lon);
     let distanceToGo = this.distanceLeft + currDistance
     let amountDone = Math.round(Math.max(Math.min(1 - (distanceToGo/this.totalDistance), 1), 0) * 5)
