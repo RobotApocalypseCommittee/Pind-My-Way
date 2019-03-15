@@ -9,13 +9,13 @@
 import Foundation
 import CoreBluetooth
 
-let piServiceUuid = CBUUID(string: "ed00")
-let versionCharacteristicUuid = CBUUID(string: "ed01")
-let routeCharacteristicUuid = CBUUID(string: "ed02")
-let uniqueIDCharacteristicUuid = CBUUID(string: "ed03")
-let settableNameCharacteristicUuid = CBUUID(string: "ed04")
-let statusCharacteristicUuid = CBUUID(string: "ed05")
-let controlCharacteristicUuid = CBUUID(string: "ed06")
+let piServiceUuid = CBUUID(string: "ED00")
+let versionCharacteristicUuid = CBUUID(string: "ED01")
+let routeCharacteristicUuid = CBUUID(string: "ED02")
+let uniqueIDCharacteristicUuid = CBUUID(string: "ED03")
+let settableNameCharacteristicUuid = CBUUID(string: "ED04")
+let statusCharacteristicUuid = CBUUID(string: "ED05")
+let controlCharacteristicUuid = CBUUID(string: "ED06")
 
 let allCharacteristicsUuids = [versionCharacteristicUuid, routeCharacteristicUuid, uniqueIDCharacteristicUuid, settableNameCharacteristicUuid, statusCharacteristicUuid, controlCharacteristicUuid]
 

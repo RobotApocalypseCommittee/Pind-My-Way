@@ -113,21 +113,21 @@
                                                     <constraint firstAttribute="height" constant="60" id="gAt-if-BHq"/>
                                                 </constraints>
                                             </imageView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="pJh-jP-Dhl">
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="pJh-jP-Dhl">
                                                 <rect key="frame" x="70" y="0.0" width="245" height="60"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="999 hjurghugregrhjuger hjuegrghjuerghjuegr" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ip8-YL-g5y">
-                                                        <rect key="frame" x="0.0" y="0.0" width="245" height="30"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="245" height="26"/>
                                                         <color key="backgroundColor" red="0.0" green="0.78431372549019607" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                        <nil key="textColor"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Adressaaaaaaaaaaa lol    aaaaa 34089345890345890435" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mrz-mV-Mpv">
-                                                        <rect key="frame" x="0.0" y="30" width="245" height="30"/>
+                                                        <rect key="frame" x="0.0" y="34" width="245" height="26"/>
                                                         <color key="backgroundColor" red="0.0" green="0.78431372549019607" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                        <nil key="textColor"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -142,24 +142,24 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="5Qv-Py-RJQ">
-                                        <rect key="frame" x="30" y="130" width="315" height="20.333333333333343"/>
+                                        <rect key="frame" x="30" y="130" width="315" height="19.333333333333343"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Distance" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7jE-Cq-LDM">
-                                                <rect key="frame" x="0.0" y="0.0" width="157.66666666666666" height="20.333333333333332"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="157.66666666666666" height="19.333333333333332"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U0e-5C-0ne">
-                                                <rect key="frame" x="157.66666666666663" y="0.0" width="157.33333333333337" height="20.333333333333332"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
+                                                <rect key="frame" x="157.66666666666663" y="0.0" width="157.33333333333337" height="19.333333333333332"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" red="0.30840110780000002" green="0.5618229508" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.25654110249732742" green="0.72469572998781717" blue="0.078552061364316528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="160" id="6SI-yo-MbO"/>
                                     <constraint firstAttribute="trailing" secondItem="ZDi-Dg-thN" secondAttribute="trailing" constant="30" id="8lF-ZE-TO5"/>
@@ -517,13 +517,13 @@ Pind My Way Hub</string>
                         <outlet property="discoveredDevicesLabel" destination="buc-Vt-MEd" id="cQH-oP-Tah"/>
                         <outlet property="peripheralTableView" destination="duX-or-Mq6" id="EQI-zW-lFb"/>
                         <segue destination="gLB-NB-yh6" kind="custom" identifier="toConnect" customClass="HorizontalSegue" customModule="Pind_My_Way_iOS" customModuleProvider="target" id="pwn-AN-CJB"/>
-                        <segue destination="bH6-gt-5iz" kind="unwind" identifier="returnFromBluetooth" customClass="UnwindIntroSegue" customModule="Pind_My_Way_iOS" customModuleProvider="target" unwindAction="returnFromSegueActionsWithSender:" id="gWd-nL-ana"/>
+                        <segue destination="bH6-gt-5iz" kind="unwind" identifier="returnFromBluetooth" unwindAction="returnFromSegueActionsWithSender:" id="hnC-oH-m7R"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bmU-UP-k2H" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="bH6-gt-5iz" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="718" y="-695"/>
+            <point key="canvasLocation" x="748" y="-695"/>
         </scene>
         <!--Connect Bluetooth View Controller-->
         <scene sceneID="tIR-co-mW1">

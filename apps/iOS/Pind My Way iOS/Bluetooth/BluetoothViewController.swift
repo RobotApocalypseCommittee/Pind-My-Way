@@ -39,8 +39,16 @@ class BluetoothViewController: UIViewController {
         sharedBluetoothManager.stopScanning()
         sharedBluetoothManager.disconnectPi()
         
+        #if DEBUG
         UserDefaults.standard.set(true, forKey: "introDone")
         performSegue(withIdentifier: "returnFromBluetooth", sender: self)
+        #else
+        // Just leave please
+        UIControl().sendAction(#selector(NSXPCConnection.suspend), to: UIApplication.shared, for: nil)
+        Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { _ in
+            exit(0)
+        }
+        #endif
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

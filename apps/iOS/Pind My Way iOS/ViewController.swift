@@ -171,7 +171,9 @@ class ViewController: UIViewController {
     }
     
     @IBAction func goControlView_touchUpInside(_ sender: Any) {
+        #if DEBUG
         UserDefaults.standard.set(false, forKey: "introDone")
+        #endif
         
         print(Utils.getRouteDataForBluetooth(route: routeJSONs[selectedRouteIndex], withStart: currentLocation!.coordinate).hexEncodedString())
         print(Utils.getRouteDataForBluetooth(route: routeJSONs[selectedRouteIndex]).hexEncodedString())

@@ -72,7 +72,7 @@ class Utils {
         let y = sin(deltaLon) * cos(lat2)
         let x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(deltaLon)
         
-        // The + 360 mod 360 is because atan2 returns -180 to 180, and this should really be 0 to 360
+        // The +360 mod 360 is because atan2 returns -180 to 180, and this should really be 0 to 360
         // Remainder is literally just mod for floating point
         let bear = atan2(y, x).radiansToDegrees + 360
         return bear < 360 ? bear : bear - 360
@@ -82,8 +82,12 @@ class Utils {
 
         //Thins out the route, using only 50 route points
         var thinRoute : [CLLocationCoordinate2D] = []
-        for i in stride(from: 0, to: route.count, by: route.count/50) {
-            thinRoute.append(route[i])
+        if route.count > 50 {
+            for i in stride(from: 0, to: route.count, by: route.count/50) {
+                thinRoute.append(route[i])
+            }
+        } else {
+            thinRoute = route
         }
         
         guard !localAuthorities.isEmpty else {
@@ -126,6 +130,13 @@ class Utils {
     }
     
     static func getPointPollution(coord: CLLocationCoordinate2D) -> [String:Float] {
+        
+        
+        guard !localAuthorities.isEmpty else {
+            return ["O3":0, "PM10":0, "NO2":0, "SO2":0, "PM25":0]
+        }
+        
+        
         var closestAreaIndex = 0;
         var closestAreaDistance : Float = 9999.0;
         var i = 0
@@ -224,6 +235,7 @@ class Utils {
                     default: maneuver = 255
                     }
                 }
+                print(maneuver)
                 
                 // UInt8 is a byte, can represent 0-100
                 var pollutionValue = UInt8.init(getPointAveragePollution(coord: endStep))

@@ -21,7 +21,7 @@ class UnwindIntroSegue: UIStoryboardSegue {
         firstViewControllerView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         window?.insertSubview(firstViewControllerView, belowSubview: secondViewControllerView)
         
-        // Who tf knows why this is needed...
+        // Who knows why this is needed...
         window?.sendSubviewToBack(firstViewControllerView)
         
         UIView.animate(withDuration: 0.4, animations: { () -> Void in

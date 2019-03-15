@@ -29,10 +29,14 @@ class GoViewController: UIViewController, UITableViewDataSource, UITableViewDele
     @IBOutlet weak var endAdressLabel: UILabel!
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var durationLabel: UILabel!
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        startAdressLabel.layer.masksToBounds = true
+        startAdressLabel.layer.cornerRadius = 8
+        endAdressLabel.layer.masksToBounds = true
+        endAdressLabel.layer.cornerRadius = 8
         
         sharedBluetoothManager.delegate = self
         
@@ -75,8 +79,8 @@ class GoViewController: UIViewController, UITableViewDataSource, UITableViewDele
             n += 1
         }
         
-        startAdressLabel.text = String(describing: routeJSON["legs"][0]["start_address"])
-        endAdressLabel.text = String(describing: routeJSON["legs"][0]["end_address"])
+        startAdressLabel.text = "  " + String(describing: routeJSON["legs"][0]["start_address"])
+        endAdressLabel.text = "  " + String(describing: routeJSON["legs"][0]["end_address"])
         distanceLabel.text = String(describing: routeJSON["legs"][0]["distance"]["text"])
         durationLabel.text = String(describing: routeJSON["legs"][0]["duration"]["text"])
         
@@ -122,6 +126,7 @@ class GoViewController: UIViewController, UITableViewDataSource, UITableViewDele
         
         if !sharedBluetoothManager.characteristicsDiscovered {
             print("Characteristics not discovered!")
+            exitNormally()
             return
         }
         
@@ -158,6 +163,19 @@ class GoViewController: UIViewController, UITableViewDataSource, UITableViewDele
                 print("Some error sending route")
             }
         }
+        
+        exitNormally()
+    }
+    
+    func exitNormally() {
+        sharedBluetoothManager.stopScanning()
+        sharedBluetoothManager.disconnectPi()
+
+        #if DEBUG
+        UserDefaults.standard.set(true, forKey: "introDone")
+        #endif
+        
+        performSegue(withIdentifier: "returnFromGo", sender: self)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -188,6 +206,10 @@ class GoViewController: UIViewController, UITableViewDataSource, UITableViewDele
         cell.instructionLabel.attributedText = mattrStr
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
     @IBAction func backButton_touchUpInside(_ sender: Any) {

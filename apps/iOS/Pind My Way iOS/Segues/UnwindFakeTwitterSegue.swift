@@ -68,6 +68,10 @@ class UnwindFakeTwitterSegue: UIStoryboardSegue {
             mapViewController.animationView.layer.zPosition = -1
             
             self.destination.dismiss(animated: false, completion: nil)
+            
+            let alert = UIAlertController(title: "Success", message: "The route was successfully sent to the Pind My Way Hub", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            self.destination.present(alert, animated: true, completion: nil)
         })
     }
     
