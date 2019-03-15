@@ -1,9 +1,9 @@
 {
-  "loggingLevel": "silly",
+  "loggingLevel": "debug",
   "assignedName": "PIMW",
-  "stageDistances": [40, 30, 20],
+  "stageDistances": [20, 30, 40],
   "completedDistance": 15,
   "pollRate": 1,
   "port": "/dev/serial0",
-  "walk": "16000c957f2dafbe494075779d0df967c4bf42029641b5c189be4940e8f7fd9b1727c4bf700216bf29ac54be49404cfc51d4997bc4bf9c0210255af278be4940bd344580d3bbc4bf15023eaf78ea91be4940b53522180797c4bf"
+  "walk": "5900417d70e3bbbf494017a7107e9873c0bf1c5a00b08d78b29bbf49402d8320f6f873c0bf1c2d072daf5c6f9bbf494048556efd4f59c0bf1c53027c46223482bf494042b9c8981650c0bf1c4a07c1c8152873bf4940cb37914f7e41c0bf1c57079a0b5c1e6bbf494051442b9c4940c0bf1c"
 }

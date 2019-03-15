@@ -19,7 +19,7 @@ class RouteUploadCharacteristic {
 
   onWriteRequest(data, offset, withoutResponse, callback) {
     winston.info("Received route:")
-    winston.info("Data: " + data.toString())
+    winston.info("Data: " + data.toString('hex'))
     // Hoping it works
     let route = new Route()
     if (route.decode_data(data)) {

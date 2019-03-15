@@ -6,6 +6,6 @@
 
 #define SSID "PIMW-NET"
 #define PASSWORD "12345678"
-#define PI_IP "192.168.0.10"
+#define PI_IP "192.168.4.1"
 
 #endif

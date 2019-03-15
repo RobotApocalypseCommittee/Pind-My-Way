@@ -23,3 +23,5 @@ void pixelSet(int i, byte r, byte g, byte b);
 
 void circleSet(int i, byte r, byte g, byte b);
 void centreSet(byte r, byte g, byte b);
+
+void updatePixels();

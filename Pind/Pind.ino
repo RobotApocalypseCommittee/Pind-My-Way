@@ -57,7 +57,7 @@ void webSocketEvent(WStype_t type, uint8_t* payload, size_t length) {
                                     break;
                                 case 1:
                                     // Orange
-                                    setArrow(payload[1], 255, 127, 0);
+                                    setArrow(payload[1], 255, 100, 0);
                                     break;
                                 case 2:
                                     // Red
@@ -66,13 +66,17 @@ void webSocketEvent(WStype_t type, uint8_t* payload, size_t length) {
                                 default:
                                     USE_SERIAL.printf("Does not understand status %u\n", payload[2]);
                             }
+                            updatePixels();
                         } else {
                             USE_SERIAL.printf("Invalid length %u for command %u\n", length, payload[0]);
                         }
                         break;
                     case 3:
                         if (length == 1) {
-                            disableAnimations();
+                          disableAnimations();
+                            // Nowhere to go = go ahead blue
+                            setArrow(3, 0, 0, 255);
+                            updatePixels();
                         } else {
                             USE_SERIAL.printf("Invalid length %u for command %u\n", length, payload[0]);
                         }
@@ -80,9 +84,11 @@ void webSocketEvent(WStype_t type, uint8_t* payload, size_t length) {
 #else
                     case 2:
                         // Display some data
-                        if (length == 6) {
+                        if (length == 9) {
                             disableAnimations();
-                            setData(payload[1], payload[2], payload[3], payload[4], payload[5]);
+                            setData(0, payload[1], payload[2], payload[3], payload[4]);
+                            setData(1, payload[5], payload[6], payload[7], payload[8]);
+                            updatePixels();
                         } else {
                             USE_SERIAL.printf("Invalid length %u for command %u\n", length, payload[0]);
                         }
@@ -107,6 +113,7 @@ void setup() {
     // put your setup code here, to run once:
     Serial.begin(115200);
     beginPixels();
+    WiFi.mode(WIFI_STA);
     WiFi.begin(SSID, PASSWORD);
     beginAcInAnimation(255, 255, 255);
     while (WiFi.status() != WL_CONNECTED) {

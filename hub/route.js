@@ -2,11 +2,14 @@ const {GeoCoord} = require("./GeoCoords")
 const winston = require("winston")
 
 class RoutePoint {
-  constructor(command, lat, lon) {
+  constructor(command, lat, lon, pollution) {
     this.direction = command
     this.loc = new GeoCoord(lat, lon)
-    winston.silly("Command", {command})
+    this.pollution = pollution
+    winston.silly("Command", {command: RoutePoint.getUserFriendlyDirection(this.direction)})
     winston.silly("Location", {loc: this.loc})
+    winston.silly("Pollution", {pollution})
+
   }
   toJSON() {
     return { point: this.point, direction: RoutePoint.getUserFriendlyDirection(this.direction)}
@@ -81,7 +84,7 @@ class Route {
     this.buffer_complete = true
     // Nothing in buffer as of yet.
     this.input_buffer = Buffer.alloc(0)
-
+    this.totalLength = 0
   }
 
   add_point(route_point) {
@@ -103,7 +106,7 @@ class Route {
     }
     let offset = 0
     while (offset < buf.length) {
-      let cbuf = buf.slice(offset, offset+18)
+      let cbuf = buf.slice(offset, offset+19)
       // Read a byte at position 0
       let bearing = cbuf.readUInt8(0)
       let maneuver = cbuf.readUInt8(1)
@@ -111,8 +114,10 @@ class Route {
       let command = RoutePoint.getAngleIndicationFromManeuver(maneuver)
       let lat = cbuf.readDoubleLE(2)
       let lon = cbuf.readDoubleLE(10)
-      this.add_point(new RoutePoint(command, lat, lon))
-      offset += 18
+      let pollution = cbuf.readUInt8(18)
+      this.add_point(new RoutePoint(command, lat, lon, pollution))
+      winston.info("Journey Point", {command: RoutePoint.getUserFriendlyDirection(command), lat, lon, pollution})
+      offset += 19
     }
     if (offset !== buf.length) {
       this.buffer_complete = false
@@ -128,6 +133,17 @@ class Route {
         this.points[i].direction = this.points[i+1].direction
     }
     this.points[this.points.length - 1].direction = 0
+    this.totalLength = this.calcRouteLength(0)
+
+  }
+  calcRouteLength(start) {
+    // From first to last registered point
+    let rlength = 0
+    // Start from second item
+    for (let i = start; i < this.points.length - 1; i++) {
+      rlength += this.points[i].loc.distanceFrom(this.points[i + 1].loc)
+    }
+    return rlength
   }
 
 }
