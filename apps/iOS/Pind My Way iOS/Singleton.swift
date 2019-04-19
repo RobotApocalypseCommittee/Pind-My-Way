@@ -84,3 +84,5 @@ let routeJsonString = """
 }
 """
 let routeJsonMAN = JSON(parseJSON: routeJsonString)
+
+let pollutionMaximum : Float = 5.0;

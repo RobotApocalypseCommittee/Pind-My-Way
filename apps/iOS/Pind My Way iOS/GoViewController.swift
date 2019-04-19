@@ -63,13 +63,15 @@ class GoViewController: UIViewController, UITableViewDataSource, UITableViewDele
             }
             else {
                 let average = pollutionDict[pollutants[n]]!["average"]! as! Float
-                label.text = pollutants[n] + " : " + String(format: "%.2f", average/3*100) + "%"
-                slider.setProgress(average/3, animated: true)
+                let percentage = min(average/pollutionMaximum, 1);
+                print("slider percentage:", average/pollutionMaximum)
+                label.text = pollutants[n] + " : " + String(format: "%.2f", percentage*100) + "%"
+                slider.setProgress(percentage, animated: true)
                 
-                if average/3 < 0.34 {
+                if percentage < 0.34 {
                     slider.progressTintColor = UIColor.green
                 }
-                else if average/3 < 0.66 {
+                else if percentage < 0.66 {
                     slider.progressTintColor = UIColor.orange
                 }
                 else {

@@ -171,12 +171,12 @@ class Utils {
         return pollutionReading
     }
     
-    //Averages available pollution info for a point (returns general badness - technically as scale of 1-10 but haven't seen anything above 3 yet
+    //Averages available pollution info for a point (returns general badness - technically as scale of 1-10 but haven't seen anything above 5 yet
     static func getPointAveragePollution(coord: CLLocationCoordinate2D) -> Float {
         let pollutionInfo = getPointPollution(coord: coord)
         var total : Float = 0
         var count = 0
-        print(pollutionInfo)
+
         for pollutant in pollutants {
             let rating = pollutionInfo[pollutant]
             if rating != 0 {
@@ -188,7 +188,8 @@ class Utils {
             //THIS MEANS NO DATA AVAILABLE - I.E if joe gets a zero, don't update the pollution scale
             return Float(exactly: 0)!
         }
-        return (total/Float(exactly: count)!)/3.5*100
+
+        return (total/Float(exactly: count)!)/pollutionMaximum*100
     }
     
     

@@ -51,34 +51,66 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        //Fetches pollution data as part of the loading process
-        let url = URL(string: "http://api.erg.kcl.ac.uk/AirQuality/Daily/MonitoringIndex/Latest/GroupName=London/json")
-        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
-            if let data = data {
-                do {
-                    pollutionResp = try JSON(data: data)
-                    print("Info: Pollution: Data Loaded")
-                    
-                    for area in pollutionResp["DailyAirQualityIndex"]["LocalAuthority"] {
-                        if area.1["Site"].exists() {
-                            for site in area.1["Site"] {
-                                localAuthorities.append(site.1)
+        let app = UserDefaults.standard
+        
+        // Gets the interval in seconds between now and the last pollution getting of the app (O if this is the first run)
+        var interval : Int = 0;
+        if let date2 = app.object(forKey: "date") as? Date {
+            interval = Int(Date().timeIntervalSince(date2))
+        }
+
+        // Reloads pollution if it's been a week since last getting, or this is first run
+        if interval > 60*60*24*7 || interval == 0 {
+            print("Reloading pollution!")
+            
+            // Sets new last pollution getting time
+            let date = Date()
+            app.set(date, forKey: "date")
+            
+            //Fetches pollution data
+            let url = URL(string: "http://api.erg.kcl.ac.uk/AirQuality/Daily/MonitoringIndex/Latest/GroupName=London/json")
+            let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
+                if let data = data {
+                    do {
+                        pollutionResp = try JSON(data: data)
+                        print("Info: Pollution: Data Loaded")
+                        
+                        var tosave : [String] = [];
+                        
+                        for area in pollutionResp["DailyAirQualityIndex"]["LocalAuthority"] {
+                            if area.1["Site"].exists() {
+                                for site in area.1["Site"] {
+                                    // Saves locally for this run
+                                    localAuthorities.append(site.1)
+                                    // Each JSON becomes a string representation as JSON objects cannot be stored in UserDefaults just like that
+                                    tosave.append(site.1.rawString()!)
+                                }
                             }
                         }
+                        // Saves in UserDefaults
+                        app.set(tosave, forKey: "localAuthorities")
+                    }  catch let error {
+                        print("Error: Polution: \(error.localizedDescription)")
                     }
-                    
-                }  catch let error {
+                } else if let error = error {
                     print("Error: Polution: \(error.localizedDescription)")
                 }
-            } else if let error = error {
-                print("Error: Polution: \(error.localizedDescription)")
+            }
+            task.resume()
+        }
+        else {
+            // Reloads pollution from UserDefaults, re-serializing JSONs from strings
+            if let data = app.object(forKey: "localAuthorities") {
+                localAuthorities = []
+                for jsonstr in data as! [String]  {
+                    let json = JSON.init(parseJSON: jsonstr)
+                    localAuthorities.append(json)
+                }
             }
         }
-        task.resume()
         
         // This is so that it's over the GMSMapView
         goControlView.layer.zPosition = 1
-        
         bikeIcon.layer.zPosition = 2
         
         // So that it's under the map until it's needed
@@ -205,7 +237,7 @@ class ViewController: UIViewController {
         DispatchQueue.global(qos: .userInitiated).async {
             Utils.getDirections(from: startCoordinates, to: endCoordinates) { json in
                 let routes = json!["routes"].array!
-                print(routes[0])
+                //print(routes[0])
                 if routes.count == 0 {
                     self.mapView.clear()
             
@@ -459,11 +491,10 @@ extension ViewController: GMSMapViewDelegate {
         
         var descText: String = ""
         marker.snippet!.enumerateLines { line, _ in
-            if !(line.range(of:"N/A") != nil) {
-                descText = descText + line + "\n"
-            }
+
+            descText = descText + line + "\n"
+            
         }
-        
         
         desc.text = descText
         desc.lineBreakMode = .byWordWrapping
@@ -473,7 +504,7 @@ extension ViewController: GMSMapViewDelegate {
         
         return view
     }
-
+ 
 }
 
 
