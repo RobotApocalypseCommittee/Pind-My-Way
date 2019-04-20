@@ -285,6 +285,7 @@ class ViewController: UIViewController {
                     
                     self.mapView.animate(with: update)
                     
+                    self.routeJSONs = []
                     // I do these as two seperate things so the resize happens first of all
                     for i in 0...routes.count-1 {
                         self.drawRoute(route: routes[i], asSelected: i == 0, name: "Route \(i+1)")
