@@ -3,13 +3,43 @@ const EventEmitter = require("events")
 const winston = require("winston")
 const {GeoStore} = require("./logging")
 const {RoutePoint} = require("./route")
+const {GeoCoord} = require("./GeoCoords")
+const fs = require("fs");
 // Polls/second -> minimum ms per poll
 const poll_period = 1000/config.pollRate;
+
+class RouteResultsStore {
+  constructor(filename) {
+    this.filename = filename
+    if (fs.existsSync(filename)) {
+      this.load();
+    } else {
+      this.obj = {valid:false, avg_speed:0, distance:0, time:0};
+      this.save();
+    }
+  }
+  load() {
+    this.obj = JSON.parse(fs.readFileSync(this.filename, 'utf8'));
+  }
+  save() {
+    fs.writeFileSync(this.filename, JSON.stringify(this.obj), 'utf8')
+  }
+  storeRoute(speed, distance, time) {
+    this.obj = {
+      valid: true,
+      avg_speed: speed,
+      distance,
+      time
+    }
+    this.save();
+  }
+}
 
 class Coordinator extends EventEmitter {
   constructor(gps, glovesLink) {
     super()
-    this.geostore = new GeoStore("geolog.json")
+    this.geostore = new GeoStore("geolog.json");
+    this.routeresstore = new RouteResultsStore("results.json");
     this.route = null
     this.running = false
     this.gps = gps;
@@ -117,6 +147,22 @@ class Coordinator extends EventEmitter {
       this.leds.signalRelax()
       this.route = null;
       this.emit("statusUpdate", this.getStatus())
+      winston.info("Calculating Distance");
+      let points = this.geostore.obj.loggedPoints;
+      let distance = 0;
+      let lastPoint = new GeoCoord(points[0].lat, points[0].lon);
+      for (let i = 1; i < points.length; i += config.movSkip) {
+        let point = new GeoCoord(points[i].lat, points[i].lon);
+        distance += lastPoint.distanceFrom(point);
+        lastPoint = point;
+      }
+      distance = Math.round(distance);
+      let elapsed_s = Math.round((points[points.length-1].timestamp - points[0].timestamp)/1000);
+      // ms^-1 for now
+      let avg_speed = distance/elapsed_s;
+      this.routeresstore.storeRoute(avg_speed, distance, elapsed_s);
+
+
     } else {
       winston.error("Cannot end following when not already following.")
     }

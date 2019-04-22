@@ -24,6 +24,10 @@
     "control": {
       "uuid": "ed06",
       "description": "Send some control bits"
+    },
+    "lastRoute": {
+      "uuid": "ed07",
+      "description": "Send the last route completed's results."
     }
   },
   "primaryService": "ed00"
