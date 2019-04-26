@@ -16,6 +16,7 @@ let uniqueIDCharacteristicUuid = CBUUID(string: "ED03")
 let settableNameCharacteristicUuid = CBUUID(string: "ED04")
 let statusCharacteristicUuid = CBUUID(string: "ED05")
 let controlCharacteristicUuid = CBUUID(string: "ED06")
+let previousJourneyCharacteristicUuid = CBUUID(string: "ED07")
 
 let allCharacteristicsUuids = [versionCharacteristicUuid, routeCharacteristicUuid, uniqueIDCharacteristicUuid, settableNameCharacteristicUuid, statusCharacteristicUuid, controlCharacteristicUuid]
 

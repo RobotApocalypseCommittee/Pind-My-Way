@@ -11,6 +11,7 @@ import GoogleMaps
 import GooglePlaces
 import SwiftyJSON
 import Polyline
+import CoreBluetooth
 
 let spaceOnTop: CGFloat = 50.0
 // Really hacky for now to ignore the safe area
@@ -37,6 +38,9 @@ class ViewController: UIViewController {
     
     var networkCheckerTimer = Timer()
     var keepGoButtonHidden = true
+    
+    var startScanningScheduledTimer = Timer()
+    var lastTimeLatestJourneyCheckedFor = Date.init(timeIntervalSince1970: 0)
     
     @IBOutlet weak var animationView: UIView!
     @IBOutlet weak var goControlView: UIControl!
@@ -153,6 +157,14 @@ class ViewController: UIViewController {
         
         definesPresentationContext = true
         
+        // If the last check was more than 2 mins ago, go ahead and check again
+        if lastTimeLatestJourneyCheckedFor.addingTimeInterval(120) < Date() {
+            lastTimeLatestJourneyCheckedFor = Date()
+            
+            print("Info: Latest Journey: Checking again")
+            setUpLastRouteChecking()
+        }
+        
         // TODO make this better!
         networkCheckerTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
             if !Reachability.isConnectedToNetwork() {
@@ -182,6 +194,17 @@ class ViewController: UIViewController {
                 self.noWifiLabel.isHidden = true
                 self.noWifiImage.isHidden = true
                 //print("Info: Connection: The device is connected to the internet.")
+            }
+        }
+    }
+    
+    func setUpLastRouteChecking() {
+        sharedBluetoothManager.delegate = self
+        if !sharedBluetoothManager.startScanning() {
+            startScanningScheduledTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) {_ in
+                if sharedBluetoothManager.startScanning() {
+                    self.startScanningScheduledTimer.invalidate()
+                }
             }
         }
     }
@@ -218,11 +241,23 @@ class ViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toGo" {
+        sharedBluetoothManager.stopScanning()
+        sharedBluetoothManager.disconnectPi()
+        
+        switch segue.identifier {
+        case "toGo":
             let destinationVC = segue.destination as! GoViewController
             destinationVC.routeJSON = routeJSONs[selectedRouteIndex]
             destinationVC.currentLocation = currentLocation?.coordinate
             destinationVC.pollutionDict = routePollutions[selectedRouteIndex]
+        case "toLatestJourney":
+            let destinationVC = segue.destination as! LatestJourneyViewController
+            let dataArray = sender as! Array<Any>
+            destinationVC.distance = dataArray[0] as? UInt32
+            destinationVC.time = dataArray[1] as? UInt32
+            destinationVC.speed = dataArray[2] as? Double
+        default:
+            break
         }
     }
     
@@ -542,6 +577,8 @@ extension ViewController: CLLocationManagerDelegate {
         case .authorizedAlways: fallthrough
         case .authorizedWhenInUse:
             print("Info: Location: Location status is OK.")
+        default:
+            print("Warning: Location: an unknown status has been given!")
         }
     }
     
@@ -572,6 +609,62 @@ extension ViewController: GMSAutocompleteResultsViewControllerDelegate {
     
     func didUpdateAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
+    }
+}
+
+// This extension handles the "latest journey" discovery
+extension ViewController: BluetoothDelegate {
+    func peripheralFoundCallback(_ peripheral: CBPeripheral) {
+        defaultPeripheralFoundCallback(peripheral)
+
+        if peripheral.name == UserDefaults.standard.object(forKey: "pairedPiName") as? String {
+            print("Trying to connect")
+            sharedBluetoothManager.stopScanning()
+            sharedBluetoothManager.connectPiAndService(peripheral: peripheral)
+        }
+    }
+    
+    func characteristicsFoundCallback(_ characteristics: Array<CBCharacteristic>) {
+        for characteristic in characteristics {
+            if characteristic.uuid == previousJourneyCharacteristicUuid {
+                let _ = sharedBluetoothManager.updateValue(for: characteristic)
+            }
+        }
+    }
+    
+    func valueUpdatedCallback(_ characteristic: CBCharacteristic) {
+        if characteristic.uuid == previousJourneyCharacteristicUuid {
+            let value = characteristic.value!
+            
+            sharedBluetoothManager.stopScanning()
+            sharedBluetoothManager.disconnectPi()
+            
+            let valid: UInt8 = value[0]
+            
+            if valid == 1 {
+                let distanceData = value.subdata(in: 1..<5)
+                var distance: UInt32 = 0
+                let distanceBytesCopied = withUnsafeMutableBytes(of: &distance, { distanceData.copyBytes(to: $0)} )
+                assert(distanceBytesCopied == MemoryLayout.size(ofValue: distance))
+                
+                let timeData = value.subdata(in: 5..<9)
+                var time: UInt32 = 0
+                let timeBytesCopied = withUnsafeMutableBytes(of: &time, { timeData.copyBytes(to: $0)} )
+                assert(timeBytesCopied == MemoryLayout.size(ofValue: time))
+                
+                let speedData = value.subdata(in: 9..<17)
+                var speed: UInt32 = 0
+                let speedBytesCopied = withUnsafeMutableBytes(of: &speed, { speedData.copyBytes(to: $0)} )
+                assert(speedBytesCopied == MemoryLayout.size(ofValue: speed))
+                
+                // Sender for sending data
+                performSegue(withIdentifier: "toLatestJourney", sender: [distance, time, speed])
+            } else {
+                print("Info: Latest Journey: A previous journey was not found")
+            }
+        } else {
+            print("Warning: Bluetooth: Updated only latest journey characteristic, but another value was read")
+        }
     }
 }
 
