@@ -16,13 +16,12 @@
 		2942A5E2216B881C00B1FDBF /* BluetoothViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2942A5E1216B881C00B1FDBF /* BluetoothViewController.swift */; };
 		2942A5E4216BD74400B1FDBF /* BluetoothTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2942A5E3216BD74400B1FDBF /* BluetoothTableCell.swift */; };
 		294F6FB52162C5CE00A1A402 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 294F6FB42162C5CE00A1A402 /* Settings.bundle */; };
+		297A3FF72270DA7A002900D8 /* LatestJourneyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297A3FF62270DA7A002900D8 /* LatestJourneyViewController.swift */; };
 		297BBFCF2161097B00A3026E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFCE2161097B00A3026E /* AppDelegate.swift */; };
 		297BBFD12161097B00A3026E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFD02161097B00A3026E /* ViewController.swift */; };
 		297BBFD42161097B00A3026E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 297BBFD22161097B00A3026E /* Main.storyboard */; };
 		297BBFD62161097E00A3026E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 297BBFD52161097E00A3026E /* Assets.xcassets */; };
 		297BBFD92161097E00A3026E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 297BBFD72161097E00A3026E /* LaunchScreen.storyboard */; };
-		297BBFE42161097E00A3026E /* Pind_My_Way_MapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFE32161097E00A3026E /* Pind_My_Way_MapTests.swift */; };
-		297BBFEF2161097E00A3026E /* Pind_My_Way_MapUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFEE2161097E00A3026E /* Pind_My_Way_MapUITests.swift */; };
 		297BBFFD216118E900A3026E /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFFC216118E900A3026E /* Utils.swift */; };
 		297BBFFF21611B8A00A3026E /* Singleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BBFFE21611B8A00A3026E /* Singleton.swift */; };
 		29B2C2B6216D1E8C00C867B8 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B2C2B5216D1E8C00C867B8 /* Reachability.swift */; };
@@ -31,23 +30,6 @@
 		29E7A4C621A4728F00866464 /* HorizontalSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E7A4C521A4728F00866464 /* HorizontalSegue.swift */; };
 		29E7A4CA21A47BF400866464 /* UnwindIntroSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E7A4C921A47BF400866464 /* UnwindIntroSegue.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		297BBFE02161097E00A3026E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 297BBFC32161097B00A3026E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 297BBFCA2161097B00A3026E;
-			remoteInfo = "Pind-My-Way-Map";
-		};
-		297BBFEB2161097E00A3026E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 297BBFC32161097B00A3026E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 297BBFCA2161097B00A3026E;
-			remoteInfo = "Pind-My-Way-Map";
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		21DD9A8A222C6585005A6684 /* RouteInstructionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInstructionCell.swift; sourceTree = "<group>"; };
@@ -58,6 +40,7 @@
 		2942A5E1216B881C00B1FDBF /* BluetoothViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothViewController.swift; sourceTree = "<group>"; };
 		2942A5E3216BD74400B1FDBF /* BluetoothTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothTableCell.swift; sourceTree = "<group>"; };
 		294F6FB42162C5CE00A1A402 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		297A3FF62270DA7A002900D8 /* LatestJourneyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestJourneyViewController.swift; sourceTree = "<group>"; };
 		297BBFCB2161097B00A3026E /* Pind My Way iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pind My Way iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		297BBFCE2161097B00A3026E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		297BBFD02161097B00A3026E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -65,12 +48,6 @@
 		297BBFD52161097E00A3026E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		297BBFD82161097E00A3026E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		297BBFDA2161097E00A3026E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		297BBFDF2161097E00A3026E /* Pind My Way iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Pind My Way iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		297BBFE32161097E00A3026E /* Pind_My_Way_MapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pind_My_Way_MapTests.swift; sourceTree = "<group>"; };
-		297BBFE52161097E00A3026E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		297BBFEA2161097E00A3026E /* Pind My Way iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Pind My Way iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		297BBFEE2161097E00A3026E /* Pind_My_Way_MapUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pind_My_Way_MapUITests.swift; sourceTree = "<group>"; };
-		297BBFF02161097E00A3026E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		297BBFFC216118E900A3026E /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		297BBFFE21611B8A00A3026E /* Singleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Singleton.swift; sourceTree = "<group>"; };
 		29B2C2B5216D1E8C00C867B8 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -89,20 +66,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1EEB84BD8A8D2A3D806E26AA /* Pods_Pind_My_Way_iOS.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		297BBFDC2161097E00A3026E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		297BBFE72161097E00A3026E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,8 +98,6 @@
 			isa = PBXGroup;
 			children = (
 				297BBFCD2161097B00A3026E /* Pind My Way iOS */,
-				297BBFE22161097E00A3026E /* Pind My Way iOSTests */,
-				297BBFED2161097E00A3026E /* Pind My Way iOSUITests */,
 				297BBFCC2161097B00A3026E /* Products */,
 				AFAD9E22C95B0E7CDCC5FAE5 /* Pods */,
 				EC8FA8CF91CE0D538E69B7F2 /* Frameworks */,
@@ -147,8 +108,6 @@
 			isa = PBXGroup;
 			children = (
 				297BBFCB2161097B00A3026E /* Pind My Way iOS.app */,
-				297BBFDF2161097E00A3026E /* Pind My Way iOSTests.xctest */,
-				297BBFEA2161097E00A3026E /* Pind My Way iOSUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -169,28 +128,11 @@
 				297BBFD02161097B00A3026E /* ViewController.swift */,
 				297BBFD72161097E00A3026E /* LaunchScreen.storyboard */,
 				297BBFD22161097B00A3026E /* Main.storyboard */,
+				297A3FF62270DA7A002900D8 /* LatestJourneyViewController.swift */,
 				294F6FB42162C5CE00A1A402 /* Settings.bundle */,
 				297BBFDA2161097E00A3026E /* Info.plist */,
 			);
 			path = "Pind My Way iOS";
-			sourceTree = "<group>";
-		};
-		297BBFE22161097E00A3026E /* Pind My Way iOSTests */ = {
-			isa = PBXGroup;
-			children = (
-				297BBFE32161097E00A3026E /* Pind_My_Way_MapTests.swift */,
-				297BBFE52161097E00A3026E /* Info.plist */,
-			);
-			path = "Pind My Way iOSTests";
-			sourceTree = "<group>";
-		};
-		297BBFED2161097E00A3026E /* Pind My Way iOSUITests */ = {
-			isa = PBXGroup;
-			children = (
-				297BBFEE2161097E00A3026E /* Pind_My_Way_MapUITests.swift */,
-				297BBFF02161097E00A3026E /* Info.plist */,
-			);
-			path = "Pind My Way iOSUITests";
 			sourceTree = "<group>";
 		};
 		AFAD9E22C95B0E7CDCC5FAE5 /* Pods */ = {
@@ -233,42 +175,6 @@
 			productReference = 297BBFCB2161097B00A3026E /* Pind My Way iOS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		297BBFDE2161097E00A3026E /* Pind My Way iOSTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 297BBFF62161097E00A3026E /* Build configuration list for PBXNativeTarget "Pind My Way iOSTests" */;
-			buildPhases = (
-				297BBFDB2161097E00A3026E /* Sources */,
-				297BBFDC2161097E00A3026E /* Frameworks */,
-				297BBFDD2161097E00A3026E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				297BBFE12161097E00A3026E /* PBXTargetDependency */,
-			);
-			name = "Pind My Way iOSTests";
-			productName = "Pind-My-Way-MapTests";
-			productReference = 297BBFDF2161097E00A3026E /* Pind My Way iOSTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		297BBFE92161097E00A3026E /* Pind My Way iOSUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 297BBFF92161097E00A3026E /* Build configuration list for PBXNativeTarget "Pind My Way iOSUITests" */;
-			buildPhases = (
-				297BBFE62161097E00A3026E /* Sources */,
-				297BBFE72161097E00A3026E /* Frameworks */,
-				297BBFE82161097E00A3026E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				297BBFEC2161097E00A3026E /* PBXTargetDependency */,
-			);
-			name = "Pind My Way iOSUITests";
-			productName = "Pind-My-Way-MapUITests";
-			productReference = 297BBFEA2161097E00A3026E /* Pind My Way iOSUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -281,14 +187,7 @@
 				TargetAttributes = {
 					297BBFCA2161097B00A3026E = {
 						CreatedOnToolsVersion = 10.0;
-					};
-					297BBFDE2161097E00A3026E = {
-						CreatedOnToolsVersion = 10.0;
-						TestTargetID = 297BBFCA2161097B00A3026E;
-					};
-					297BBFE92161097E00A3026E = {
-						CreatedOnToolsVersion = 10.0;
-						TestTargetID = 297BBFCA2161097B00A3026E;
+						LastSwiftMigration = 1020;
 					};
 				};
 			};
@@ -306,8 +205,6 @@
 			projectRoot = "";
 			targets = (
 				297BBFCA2161097B00A3026E /* Pind My Way iOS */,
-				297BBFDE2161097E00A3026E /* Pind My Way iOSTests */,
-				297BBFE92161097E00A3026E /* Pind My Way iOSUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -321,20 +218,6 @@
 				297BBFD92161097E00A3026E /* LaunchScreen.storyboard in Resources */,
 				297BBFD62161097E00A3026E /* Assets.xcassets in Resources */,
 				297BBFD42161097B00A3026E /* Main.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		297BBFDD2161097E00A3026E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		297BBFE82161097E00A3026E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,6 +307,7 @@
 				29E7A4C421A46F9300866464 /* ConnectBluetoothViewController.swift in Sources */,
 				29E7A4C621A4728F00866464 /* HorizontalSegue.swift in Sources */,
 				2919A7D421655FBE00828104 /* Bluetooth.swift in Sources */,
+				297A3FF72270DA7A002900D8 /* LatestJourneyViewController.swift in Sources */,
 				2940D29921A71DE0002B90C7 /* FakeTwitterSegue.swift in Sources */,
 				297BBFFF21611B8A00A3026E /* Singleton.swift in Sources */,
 				21DD9A8B222C6585005A6684 /* RouteInstructionCell.swift in Sources */,
@@ -439,36 +323,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		297BBFDB2161097E00A3026E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				297BBFE42161097E00A3026E /* Pind_My_Way_MapTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		297BBFE62161097E00A3026E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				297BBFEF2161097E00A3026E /* Pind_My_Way_MapUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		297BBFE12161097E00A3026E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 297BBFCA2161097B00A3026E /* Pind My Way iOS */;
-			targetProxy = 297BBFE02161097E00A3026E /* PBXContainerItemProxy */;
-		};
-		297BBFEC2161097E00A3026E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 297BBFCA2161097B00A3026E /* Pind My Way iOS */;
-			targetProxy = 297BBFEB2161097E00A3026E /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		297BBFD22161097B00A3026E /* Main.storyboard */ = {
@@ -623,7 +478,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bekos.Pind-My-Way-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -646,90 +501,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = RELEASE;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		297BBFF72161097E00A3026E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8F276LS8S7;
-				INFOPLIST_FILE = "Pind-My-Way-MapTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bekos.Pind-My-Way-MapTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pind My Way iOS.app/Pind My Way iOS";
-			};
-			name = Debug;
-		};
-		297BBFF82161097E00A3026E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8F276LS8S7;
-				INFOPLIST_FILE = "Pind-My-Way-MapTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bekos.Pind-My-Way-MapTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pind My Way iOS.app/Pind My Way iOS";
-			};
-			name = Release;
-		};
-		297BBFFA2161097E00A3026E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8F276LS8S7;
-				INFOPLIST_FILE = "Pind-My-Way-MapUITests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bekos.Pind-My-Way-MapUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "Pind-My-Way-Map";
-			};
-			name = Debug;
-		};
-		297BBFFB2161097E00A3026E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8F276LS8S7;
-				INFOPLIST_FILE = "Pind-My-Way-MapUITests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bekos.Pind-My-Way-MapUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "Pind-My-Way-Map";
 			};
 			name = Release;
 		};
@@ -750,24 +523,6 @@
 			buildConfigurations = (
 				297BBFF42161097E00A3026E /* Debug */,
 				297BBFF52161097E00A3026E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		297BBFF62161097E00A3026E /* Build configuration list for PBXNativeTarget "Pind My Way iOSTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				297BBFF72161097E00A3026E /* Debug */,
-				297BBFF82161097E00A3026E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		297BBFF92161097E00A3026E /* Build configuration list for PBXNativeTarget "Pind My Way iOSUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				297BBFFA2161097E00A3026E /* Debug */,
-				297BBFFB2161097E00A3026E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

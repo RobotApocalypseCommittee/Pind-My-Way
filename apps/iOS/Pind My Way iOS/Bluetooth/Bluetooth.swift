@@ -16,6 +16,7 @@ let uniqueIDCharacteristicUuid = CBUUID(string: "ED03")
 let settableNameCharacteristicUuid = CBUUID(string: "ED04")
 let statusCharacteristicUuid = CBUUID(string: "ED05")
 let controlCharacteristicUuid = CBUUID(string: "ED06")
+let previousJourneyCharacteristicUuid = CBUUID(string: "ED07")
 
 let allCharacteristicsUuids = [versionCharacteristicUuid, routeCharacteristicUuid, uniqueIDCharacteristicUuid, settableNameCharacteristicUuid, statusCharacteristicUuid, controlCharacteristicUuid]
 
@@ -101,7 +102,7 @@ class BluetoothManager: NSObject {
                             var disconnectControl: UInt8 = 3
                             _ = send(data: Data(bytes: &disconnectControl, count: 1), to: characteristic)
                         default:
-                            _ = 2
+                            break
                         }
                     }
                 }
@@ -118,6 +119,24 @@ class BluetoothManager: NSObject {
     
     func disconnectPi() {
         disconnectPi(noSend: false)
+    }
+    
+    func clearLatestRoute() {
+        print("Info: Bluetooth: Clear latest route called")
+        
+        if let pi = _selectedPi {
+            if let services = pi.services, services.count > 0, let characteristics = services[0].characteristics {
+                for characteristic in characteristics {
+                    switch characteristic.uuid {
+                    case controlCharacteristicUuid:
+                        var clearControl: UInt8 = 4
+                        _ = send(data: Data(bytes: &clearControl, count: 1), to: characteristic)
+                    default:
+                        break
+                    }
+                }
+            }
+        }
     }
     
     func send(data: Data, to characteristic: CBCharacteristic) -> Bool {
