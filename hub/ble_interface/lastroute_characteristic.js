@@ -10,7 +10,7 @@ var BlenoCharacteristic = bleno.Characteristic;
 class LastRouteCharacteristic {
   constructor() {
     LastRouteCharacteristic.super_.call(this, {
-      uuid: bleConstants.characteristics.version.uuid,
+      uuid: bleConstants.characteristics.lastRoute.uuid,
       properties: ['read'],
       value: null
     });
