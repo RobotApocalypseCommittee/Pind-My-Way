@@ -657,6 +657,9 @@ extension ViewController: BluetoothDelegate {
                 let speedBytesCopied = withUnsafeMutableBytes(of: &speed, { speedData.copyBytes(to: $0)} )
                 assert(speedBytesCopied == MemoryLayout.size(ofValue: speed))
                 
+                // Clear the route so we never get it again
+                sharedBluetoothManager.clearLatestRoute()
+                
                 // Sender for sending data
                 performSegue(withIdentifier: "toLatestJourney", sender: [distance, time, speed])
             } else {
