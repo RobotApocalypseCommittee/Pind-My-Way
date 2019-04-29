@@ -9,7 +9,7 @@ var BlenoCharacteristic = bleno.Characteristic;
 
 class LastRouteCharacteristic {
   constructor() {
-    VersionCharacteristic.super_.call(this, {
+    LastRouteCharacteristic.super_.call(this, {
       uuid: bleConstants.characteristics.version.uuid,
       properties: ['read'],
       value: null
@@ -31,5 +31,5 @@ class LastRouteCharacteristic {
   }
 }
 
-util.inherits(VersionCharacteristic, BlenoCharacteristic)
-module.exports = VersionCharacteristic;
+util.inherits(LastRouteCharacteristic, BlenoCharacteristic)
+module.exports = LastRouteCharacteristic;
