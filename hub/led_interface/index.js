@@ -1,6 +1,7 @@
 const EventEmitter = require('events');
 const WebSocket = require("ws");
 const winston = require("winston")
+const readline = require("readline")
 
 
 class GlovesLink extends EventEmitter {
@@ -83,9 +84,9 @@ class GlovesLink extends EventEmitter {
     let toSend = Buffer.from([0x4])
     this.broadcast(toSend)
   }
-  test() {
+  test(cycle) {
     var currentTest = 0
-    setInterval(()=>{
+    let f = ()=>{
       if (currentTest === 0) {
         this.signalRelax()
         console.log("Relax")
@@ -93,20 +94,31 @@ class GlovesLink extends EventEmitter {
         console.log("Neutral")
         this.signalNeutral()
       } else if (currentTest > 1 && currentTest < 10) {
-        console.log("Arrow", currentTest - 5, currentTest % 3)
-        this.signalDirection(currentTest - 5, currentTest % 3)
-      } else if (currentTest > 9 && currentTest < 16) {
-        console.log("Data", currentTest % 2, currentTest - 10)
-        this.signalData(currentTest % 2, currentTest - 10, 255, (currentTest %2) ? 255: 0, 0)
-      } else {
-        currentTest = -1
+        console.log("Arrow", currentTest - 5, 0)
+        this.signalDirection(currentTest - 5, 0)
+      } else if (currentTest > 9 && currentTest < 13) {
+        console.log("Arrow", 0, (currentTest-1) % 3 )
+        this.signalDirection(0, (currentTest-1) % 3 )
+      } else if (currentTest > 12 && currentTest < 18) {
+        console.log("Data", currentTest % 2, currentTest - 12)
+        this.signalData(1, currentTest - 10, 255, (currentTest %2) ? 255: 0, 0)
       }
       currentTest = currentTest + 1;
-    }, 2000)
+      if (currentTest > 17) {
+        currentTest = 0;
+      }
+    }
+    var rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+      terminal: false
+    });
+    if (cycle > 0) {
+      setInterval(f, 1000*cycle)
+    } else {
+      rl.on('line', f)
+    }
   }
 }
-/*
-let x = new GlovesLink()
-x.test()
-*/
+
 module.exports = GlovesLink
