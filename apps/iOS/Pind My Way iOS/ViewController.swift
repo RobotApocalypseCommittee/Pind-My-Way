@@ -39,8 +39,8 @@ class ViewController: UIViewController {
     var networkCheckerTimer = Timer()
     var keepGoButtonHidden = true
     
+    var latestTimeLatestRouteChecked = Date.init(timeIntervalSince1970: 10)
     var startScanningScheduledTimer = Timer()
-    var lastTimeLatestJourneyCheckedFor = Date.init(timeIntervalSince1970: 0)
     
     @IBOutlet weak var animationView: UIView!
     @IBOutlet weak var goControlView: UIControl!
@@ -157,14 +157,6 @@ class ViewController: UIViewController {
         
         definesPresentationContext = true
         
-        // If the last check was more than 2 mins ago, go ahead and check again
-        if lastTimeLatestJourneyCheckedFor.addingTimeInterval(120) < Date() {
-            lastTimeLatestJourneyCheckedFor = Date()
-            
-            print("Info: Latest Journey: Checking again")
-            setUpLastRouteChecking()
-        }
-        
         // TODO make this better!
         networkCheckerTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
             if !Reachability.isConnectedToNetwork() {
@@ -215,6 +207,13 @@ class ViewController: UIViewController {
         // Only shows the introduction if the user has never completed it
         if !UserDefaults.standard.bool(forKey: "introDone") {
             performSegue(withIdentifier: "toIntroduction", sender: self)
+        }
+        
+        if latestTimeLatestRouteChecked.addingTimeInterval(3) < Date.init(timeIntervalSinceNow: 0) {
+            latestTimeLatestRouteChecked = Date.init(timeIntervalSinceNow: 0)
+            
+            print("Info: Latest Journey: Checking again")
+            setUpLastRouteChecking()
         }
     }
     
