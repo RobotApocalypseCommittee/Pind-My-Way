@@ -14,8 +14,7 @@ class RouteResultsStore {
     if (fs.existsSync(filename)) {
       this.load();
     } else {
-      this.obj = {valid:false, avg_speed:0, distance:0, time:0};
-      this.save();
+      this.invalidate();
     }
   }
   load() {
@@ -31,6 +30,10 @@ class RouteResultsStore {
       distance,
       time
     }
+    this.save();
+  }
+  invalidate() {
+    this.obj = {valid:false, avg_speed:0, distance:0, time:0};
     this.save();
   }
 }

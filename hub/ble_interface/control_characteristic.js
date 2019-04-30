@@ -32,6 +32,10 @@ class ControlCharacteristic {
         winston.info('ControlCharacteristic - Manual Disconnect');
         bleno.disconnect();
         break;
+      case 4:
+        winston.info('ControlCharacteristic - Wipe Last Journey');
+        coordinator.routeresstore.invalidate();
+        break;
       default:
         callback(this.RESULT_UNLIKELY_ERROR)
         return;

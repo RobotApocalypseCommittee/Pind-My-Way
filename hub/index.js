@@ -48,6 +48,20 @@ let argv = yargs.config(config).command('run [port]', 'Run the full system', {},
   } else {
     winston.error("Data provided was not correctly formed.")
   }
+}).command('demo [cycle]', 'Display a demo pattern for LEDs', (yargs) => {
+  yargs
+    .positional('cycle', {
+      describe: 'Time for auto-next(0 for no auto)',
+      default: 0
+    })}, (argv) => {
+  if (argv.cycle > 0) {
+    console.log("Auto-Timing")
+  } else {
+    argv.cycle = 0;
+    console.log("Manual Timing(press enter)")
+  }
+  let gL = new GlovesLink();
+  gL.test(argv.cycle);
 })
   .help('h')
   .alias('h', 'help')

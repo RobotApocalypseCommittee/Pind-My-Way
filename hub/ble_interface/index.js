@@ -10,6 +10,7 @@ var StatusCharacteristic = require("./status_characteristic")
 var ControlCharacteristic = require("./control_characteristic")
 var IdentificationCharacteristic = require("./identification_characteristic")
 var RouteUploadCharacteristic = require("./route_upload")
+var LastRouteCharacteristic = require("./lastroute_characteristic")
 
 
 winston.info('bleno - echo');
@@ -36,7 +37,8 @@ bleno.on('advertisingStart', function(error) {
           new StatusCharacteristic(),
           new ControlCharacteristic(),
           new RouteUploadCharacteristic(),
-          new IdentificationCharacteristic()
+          new IdentificationCharacteristic(),
+          new LastRouteCharacteristic()
         ]
       })
     ]);
