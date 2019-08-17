@@ -101,7 +101,7 @@ class GlovesLink extends EventEmitter {
         this.signalDirection(0, (currentTest-1) % 3 )
       } else if (currentTest > 12 && currentTest < 18) {
         console.log("Data", currentTest % 2, currentTest - 12)
-        this.signalData(1, currentTest - 10, 255, (currentTest %2) ? 255: 0, 0)
+        this.signalData(currentTest % 2, currentTest - 10, 255, (currentTest %2) ? 255: 0, 0)
       }
       currentTest = currentTest + 1;
       if (currentTest > 17) {

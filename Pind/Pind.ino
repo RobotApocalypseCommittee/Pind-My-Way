@@ -6,6 +6,7 @@
 #include <avr/power.h>
 #endif
 
+#include "BuzzManagement.h"
 #include "PixelManagement.h"
 #include "config.h"
 
@@ -46,9 +47,9 @@ void webSocketEvent(WStype_t type, uint8_t* payload, size_t length) {
             hexdump(payload, length);
             if (length > 0) {
                 switch (payload[0]) {
-#ifdef LEFT_GLOVE
                     case 1:
                         if (length == 3) {
+#ifdef LEFT_GLOVE
                             disableAnimations();
                             switch (payload[2]) {
                                 case 0:
@@ -67,21 +68,37 @@ void webSocketEvent(WStype_t type, uint8_t* payload, size_t length) {
                                     USE_SERIAL.printf("Does not understand status %u\n", payload[2]);
                             }
                             updatePixels();
+                            // If left glove, and left arrow -> Buzz
+                            if (payload[1] <= 3) {
+                                enable_buzzing(100, 1200 / (payload[2] + 1));
+                            } else {
+                              disable_buzzing();
+                            }
+#else
+                            if (payload[1] > 3) {
+                                enable_buzzing(100, 1200 / (payload[2] + 1));
+                            } else {
+                              disable_buzzing();
+                            }
+#endif
                         } else {
                             USE_SERIAL.printf("Invalid length %u for command %u\n", length, payload[0]);
                         }
                         break;
                     case 3:
                         if (length == 1) {
-                          disableAnimations();
+#ifdef LEFT_GLOVE
+                            disableAnimations();
                             // Nowhere to go = go ahead blue
                             setArrow(3, 0, 0, 255);
                             updatePixels();
+#endif
+                            disable_buzzing();
                         } else {
                             USE_SERIAL.printf("Invalid length %u for command %u\n", length, payload[0]);
                         }
                         break;
-#else
+#ifndef LEFT_GLOVE
                     case 2:
                         // Display some data
                         if (length == 9) {
@@ -113,6 +130,7 @@ void setup() {
     // put your setup code here, to run once:
     Serial.begin(115200);
     beginPixels();
+    init_buzzer();
     WiFi.mode(WIFI_STA);
     WiFi.begin(SSID, PASSWORD);
     beginAcInAnimation(255, 255, 255);
@@ -140,4 +158,5 @@ void setup() {
 void loop() {
     webSocket.loop();
     loopAnimation();
+    loop_buzzing();
 }

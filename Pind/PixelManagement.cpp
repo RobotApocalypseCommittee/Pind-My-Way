@@ -3,8 +3,8 @@
 
 int arrows[8] = {0b001110000100, 0b011100001000, 0b111001000000, 0b100001000011, 0b000001001110, 0b001000011100, 0b010000111000, 0b000011100001};
 #ifdef LEFT_GLOVE
-Adafruit_NeoPixel circle = Adafruit_NeoPixel(12, 13, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel center = Adafruit_NeoPixel(1, 15, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel circle = Adafruit_NeoPixel(12, 15, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel center = Adafruit_NeoPixel(1, 13, NEO_GRB + NEO_KHZ800);
 #else
 Adafruit_NeoPixel circle = Adafruit_NeoPixel(12, 13, NEO_GRB + NEO_KHZ800);
 #endif
@@ -174,17 +174,9 @@ void circleSet(int i, byte r, byte g, byte b) {
     i = i % 12;
   }
 #ifdef LEFT_GLOVE
-  if (i < 5) {
-    circle.setPixelColor(i + 7, r, g, b);
-  } else {
-    circle.setPixelColor(i - 5, r, g, b);
-  }
+  circle.setPixelColor((i + 15) % 12, r, g, b);
 #else
-  if (i < 8) {
-    circle.setPixelColor(i + 4, r, g, b);
-  } else {
-    circle.setPixelColor(i - 8, r, g, b);
-  }
+  circle.setPixelColor((i + 8) % 12, r, g, b);
 #endif
 }
 
